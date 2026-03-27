@@ -56,6 +56,7 @@
         
         .empty-state { text-align: center; padding: 40px; color: #95a5a6; }
 
+        /* Notificación Toast */
         #mensaje-alert {
             position: fixed; top: 20px; right: 20px; padding: 15px 25px;
             border-radius: 10px; color: white; display: none; z-index: 1000;
@@ -68,7 +69,7 @@
     <div id="mensaje-alert"></div>
 
     <div class="container">
-        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver a Áreas</a>
+        <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver a Áreas</a>
         
         <div class="header-flex">
             <h2>Área: <span style="color: var(--primary);">Logística</span></h2>
@@ -81,8 +82,8 @@
     </div>
 
     <script>
-        // URLs actualizadas al servidor correcto
-        const BASE_URL = "https://asistencia-recursos-1.onrender.com/api";
+        const API_URL = "https://asistencia-recursos.onrender.com/api/practicantes";
+        const ASISTENCIA_URL = "https://asistencia-recursos.onrender.com/api/asistencia";
         const AREA_PAGINA = "Logística"; 
 
         // Reloj dinámico
@@ -100,23 +101,23 @@
 
         async function cargarLista() {
             try {
-                // Traemos todos para filtrar localmente
-                const res = await fetch(`${BASE_URL}/practicantes`);
-                const todos = await res.json();
+                const res = await fetch(`${API_URL}?area=${encodeURIComponent(AREA_PAGINA)}`);
+                let data = await res.json();
                 const listaDiv = document.getElementById('lista-asistencia');
                 
-                // --- FILTRO DE ÁREA ---
-                const filtrados = todos.filter(p => p.area === AREA_PAGINA);
-
-                if(filtrados.length === 0) {
-                    listaDiv.innerHTML = `<div class="empty-state"><i class="fas fa-box-open" style="font-size:3rem;"></i><p>No hay practicantes registrados en ${AREA_PAGINA}.</p></div>`;
+                if(data.length === 0) {
+                    listaDiv.innerHTML = `<div class="empty-state"><i class="fas fa-box-open" style="font-size:3rem;"></i><p>No hay practicantes registrados en Logística.</p></div>`;
                     return;
                 }
 
-                // Ordenamiento alfabético
-                filtrados.sort((a, b) => (a.apellidos || "").localeCompare(b.apellidos || ""));
+                // --- ORDENAMIENTO ALFABÉTICO POR APELLIDOS ---
+                data.sort((a, b) => {
+                    const apellidoA = (a.apellidos || "").toLowerCase();
+                    const apellidoB = (b.apellidos || "").toLowerCase();
+                    return apellidoA.localeCompare(apellidoB);
+                });
 
-                listaDiv.innerHTML = filtrados.map(p => `
+                listaDiv.innerHTML = data.map(p => `
                     <div class="item-practicante">
                         <div>
                             <strong style="font-size: 1.1rem; display:block; color: var(--dark);">${p.apellidos}, ${p.nombres}</strong>
@@ -141,7 +142,7 @@
             try {
                 const horaLocal = new Date().toLocaleTimeString('es-PE', { hour12: true });
 
-                const res = await fetch(`${BASE_URL}/asistencia/${id}`, { 
+                const res = await fetch(`${ASISTENCIA_URL}/${id}`, { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ tipo: tipo })

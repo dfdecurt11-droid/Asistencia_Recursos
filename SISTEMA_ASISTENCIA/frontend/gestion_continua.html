@@ -56,6 +56,7 @@
         
         .empty-msg { text-align:center; color: #999; padding: 40px; }
 
+        /* Estilo para la notificación Toast */
         #toast-alert {
             position: fixed; top: 20px; right: 20px; padding: 15px 25px;
             border-radius: 12px; color: white; display: none; z-index: 1000;
@@ -74,7 +75,7 @@
     <div id="toast-alert"></div>
 
     <div class="container">
-        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver a Áreas</a>
+        <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver a Áreas</a>
         
         <div class="header-flex">
             <h2>Área: <span style="color: var(--primary);">Mejora Continua</span></h2>
@@ -87,8 +88,8 @@
     </div>
 
     <script>
-        // URLs corregidas
-        const BASE_URL = "https://asistencia-recursos-1.onrender.com/api";
+        const API_URL = "https://asistencia-recursos.onrender.com/api/practicantes";
+        const ASISTENCIA_URL = "https://asistencia-recursos.onrender.com/api/asistencia";
         const AREA_PAGINA = "Mejora Continua"; 
 
         // Reloj dinámico
@@ -96,6 +97,7 @@
             document.getElementById('reloj-lista').innerText = new Date().toLocaleTimeString('es-PE', { hour12: true });
         }, 1000);
 
+        // Función de notificación
         function showToast(msg, isError = false) {
             const toast = document.getElementById('toast-alert');
             toast.innerText = msg;
@@ -106,23 +108,23 @@
 
         async function cargarLista() {
             try {
-                // Obtenemos todos los practicantes
-                const res = await fetch(`${BASE_URL}/practicantes`);
-                const todos = await res.json();
+                const res = await fetch(`${API_URL}?area=${encodeURIComponent(AREA_PAGINA)}`);
+                let data = await res.json();
                 const listaDiv = document.getElementById('lista-asistencia');
                 
-                // --- FILTRO POR ÁREA EN EL FRONTEND ---
-                const filtrados = todos.filter(p => p.area === AREA_PAGINA);
-
-                if(filtrados.length === 0) {
+                if(data.length === 0) {
                     listaDiv.innerHTML = `<p class="empty-msg">No hay practicantes registrados en ${AREA_PAGINA}.</p>`;
                     return;
                 }
 
-                // Ordenamiento alfabético
-                filtrados.sort((a, b) => (a.apellidos || "").localeCompare(b.apellidos || ""));
+                // --- ORDENAMIENTO ALFABÉTICO POR APELLIDOS ---
+                data.sort((a, b) => {
+                    const apellidoA = (a.apellidos || "").toLowerCase();
+                    const apellidoB = (b.apellidos || "").toLowerCase();
+                    return apellidoA.localeCompare(apellidoB);
+                });
 
-                listaDiv.innerHTML = filtrados.map(p => `
+                listaDiv.innerHTML = data.map(p => `
                     <div class="item-practicante">
                         <div>
                             <strong style="font-size: 1.1rem; display:block; color: var(--dark);">${p.apellidos}, ${p.nombres}</strong>
@@ -147,7 +149,7 @@
             try {
                 const horaAhora = new Date().toLocaleTimeString('es-PE', { hour12: true });
                 
-                const res = await fetch(`${BASE_URL}/asistencia/${id}`, { 
+                const res = await fetch(`${ASISTENCIA_URL}/${id}`, { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ tipo: tipo })
@@ -158,6 +160,7 @@
                 if(res.ok) {
                     const icon = tipo === 'entrada' ? '📈' : '🏁';
                     showToast(`${icon} ${tipo.toUpperCase()} registrada a las ${horaAhora}`);
+                    // No es estrictamente necesario recargar la lista aquí, pero ayuda a la percepción de fluidez
                 } else {
                     showToast(result.message || "Error al marcar", true);
                 }

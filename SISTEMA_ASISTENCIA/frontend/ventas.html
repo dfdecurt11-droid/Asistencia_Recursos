@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RRHH - Control de Asistencia - Ventas</title>
+    <title>RRHH - Control de Asistencia</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -68,6 +68,7 @@
             background: #f0f0f0; color: #7f8c8d; margin-top: 5px; display: inline-block;
         }
 
+        /* Notificación Toast */
         #mensaje-alert {
             position: fixed; top: 20px; right: 20px; padding: 15px 25px;
             border-radius: 12px; color: white; display: none; z-index: 1000;
@@ -99,45 +100,48 @@
     </div>
 
     <script>
-        // URLs actualizadas
-        const BASE_URL = "https://asistencia-recursos-1.onrender.com/api";
-        const AREA_PAGINA = "Ventas"; 
+        // Configuración Global
+        const API_URL = "https://asistencia-recursos.onrender.com/api/practicantes";
+        const ASISTENCIA_URL = "https://asistencia-recursos.onrender.com/api/asistencia";
+        const AREA_PAGINA = "Ventas"; // Cambiar según el área de la página
 
-        // Reloj en tiempo real
+        // 1. Reloj en tiempo real
         setInterval(() => {
             document.getElementById('reloj-lista').innerText = 
                 new Date().toLocaleTimeString('es-PE', { hour12: true });
         }, 1000);
 
+        // 2. Sistema de Alertas (Toast)
         function showAlert(msg, isError = false) {
             const el = document.getElementById('mensaje-alert');
             el.innerText = msg;
             el.style.backgroundColor = isError ? "var(--danger)" : "var(--success)";
             el.style.display = "block";
-            setTimeout(() => { el.style.display = "none"; }, 4000);
+            
+            setTimeout(() => { 
+                el.style.display = "none"; 
+            }, 4000);
         }
 
+        // 3. Carga y renderizado de la lista
         async function cargarLista() {
             try {
-                const res = await fetch(`${BASE_URL}/practicantes`);
-                const todos = await res.json();
+                const res = await fetch(`${API_URL}?area=${encodeURIComponent(AREA_PAGINA)}`);
+                let data = await res.json();
                 const listaDiv = document.getElementById('lista-asistencia');
                 
-                // --- FILTRADO MANUAL POR ÁREA ---
-                const filtrados = todos.filter(p => p.area === AREA_PAGINA);
-
-                if (!filtrados || filtrados.length === 0) {
+                if (!data || data.length === 0) {
                     listaDiv.innerHTML = `<p style="text-align:center; color: #999; padding: 20px;">No hay personal registrado en ${AREA_PAGINA}.</p>`;
                     return;
                 }
 
-                // Ordenamiento A-Z
-                filtrados.sort((a, b) => (a.apellidos || "").localeCompare(b.apellidos || "", 'es', { sensitivity: 'base' }));
+                // Unificamos el ordenamiento alfabético (A-Z por Apellido)
+                data.sort((a, b) => a.apellidos.localeCompare(b.apellidos, 'es', { sensitivity: 'base' }));
 
-                listaDiv.innerHTML = filtrados.map(p => `
+                listaDiv.innerHTML = data.map(p => `
                     <div class="item-practicante">
                         <div class="info-personal">
-                            <strong>${(p.apellidos || "").toUpperCase()}, ${p.nombres}</strong>
+                            <strong>${p.apellidos.toUpperCase()}, ${p.nombres}</strong>
                             <span class="status-badge">ID: ${p.id_practicantes}</span>
                         </div>
                         <div class="btn-group">
@@ -152,16 +156,18 @@
                 `).join('');
 
             } catch (error) { 
+                console.error(error);
                 document.getElementById('lista-asistencia').innerHTML = 
-                    `<p style="text-align:center; color: var(--danger);">Error: No se pudo conectar con el servidor.</p>`;
+                    `<p style="text-align:center; color: var(--danger);">Error crítico: No se pudo conectar con el servidor.</p>`;
             }
         }
 
+        // 4. Lógica de registro (POST)
         async function marcar(id, tipo) {
             try {
                 const horaLocal = new Date().toLocaleTimeString('es-PE', { hour12: true });
                 
-                const res = await fetch(`${BASE_URL}/asistencia/${id}`, { 
+                const res = await fetch(`${ASISTENCIA_URL}/${id}`, { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ tipo: tipo })
@@ -171,7 +177,7 @@
                 
                 if (res.ok) {
                     const emoji = tipo === 'entrada' ? '🕒' : '✅';
-                    showAlert(`${emoji} Ventas: Marcación de ${tipo} exitosa (${horaLocal})`);
+                    showAlert(`${emoji} Marcación de ${tipo} exitosa (${horaLocal})`);
                 } else {
                     showAlert(result.message || "No se pudo registrar", true);
                 }
@@ -180,6 +186,7 @@
             }
         }
 
+        // Iniciar carga al abrir
         window.onload = cargarLista;
     </script>
 </body>
