@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte RRHH - Control de Asistencia</title>
+    <title>Reporte RRHH -  Control de Asistencia</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
@@ -53,7 +53,6 @@
         td { padding: 15px 12px; border-bottom: 1px solid #eee; }
 
         .row-number { font-weight: 800; color: #bdc3c7; font-size: 0.9rem; width: 30px; }
-
         .timer-box { font-family: 'JetBrains Mono', monospace; background: #eee; padding: 5px 10px; border-radius: 6px; font-weight: 600; min-width: 95px; text-align: center; display: inline-block;}
         .total-highlight { background: var(--secondary); color: white; }
         .area-badge { padding: 5px 12px; border-radius: 20px; color: white; font-size: 0.75rem; font-weight: 700; min-width: 90px; text-align: center; display: inline-block; }
@@ -64,21 +63,15 @@
 
         /* MODALES */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 3000; backdrop-filter: blur(5px); }
-        .modal-body { background: white; padding: 35px; border-radius: 25px; width: 400px; box-shadow: 0 25px 70px rgba(0,0,0,0.5); text-align: center; border: 1px solid rgba(255,255,255,0.1); animation: fadeIn 0.3s ease; }
+        .modal-body { background: white; padding: 35px; border-radius: 25px; width: 400px; box-shadow: 0 25px 70px rgba(0,0,0,0.5); text-align: center; animation: fadeIn 0.3s ease; }
         
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 
-        .modal-icon { font-size: 3.5rem; color: var(--danger); margin-bottom: 15px; }
-        .modal-title { font-weight: 800; font-size: 1.4rem; margin-bottom: 10px; color: var(--secondary); }
-        .modal-text { color: #636e72; font-size: 0.95rem; margin-bottom: 25px; line-height: 1.5; }
+        .modal-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .btn-confirm { background: var(--danger); color: white; border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-weight: 700; font-family: 'Poppins'; }
+        .btn-cancel { background: #f1f2f6; color: #2d3436; border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-weight: 700; font-family: 'Poppins'; }
 
-        .modal-buttons { display: flex; flex-direction: column; gap: 10px; }
-        .btn-confirm { background: var(--danger); color: white; border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-weight: 700; font-family: 'Poppins'; transition: 0.3s; }
-        .btn-confirm:hover { background: #c0392b; }
-        .btn-cancel { background: #f1f2f6; color: #2d3436; border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-weight: 700; font-family: 'Poppins'; transition: 0.3s; }
-        .btn-cancel:hover { background: #dfe6e9; }
-
-        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 15px 30px; border-radius: 50px; display: none; z-index: 5000; box-shadow: 0 10px 30px rgba(0,0,0,0.3); font-weight: 600; font-size: 0.9rem; }
+        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 15px 30px; border-radius: 50px; display: none; z-index: 5000; box-shadow: 0 10px 30px rgba(0,0,0,0.3); font-weight: 600; }
     </style>
 </head>
 <body>
@@ -87,15 +80,12 @@
 
 <div id="modal-delete" class="modal">
     <div class="modal-body">
-        <div class="modal-icon"><i class="fas fa-trash-alt"></i></div>
-        <div class="modal-title">¿Eliminar Practicante?</div>
-        <div class="modal-text">
-            ¿Estás seguro de eliminar a <b id="delete-nombre-display"></b>?<br>
-            Esta acción es permanente.
-        </div>
+        <div style="font-size: 3.5rem; color: var(--danger); margin-bottom: 15px;"><i class="fas fa-trash-alt"></i></div>
+        <div style="font-weight: 800; font-size: 1.4rem; color: var(--secondary);">¿Eliminar Registro?</div>
+        <p id="delete-nombre-display" style="color: #636e72; margin-bottom: 25px;"></p>
         <input type="hidden" id="delete-id">
         <div class="modal-buttons">
-            <button onclick="confirmarEliminar()" class="btn-confirm">SÍ, ELIMINAR AHORA</button>
+            <button onclick="confirmarEliminar()" class="btn-confirm">SÍ, ELIMINAR</button>
             <button onclick="cerrarModal('modal-delete')" class="btn-cancel">Cancelar</button>
         </div>
     </div>
@@ -124,27 +114,13 @@
     </div>
 </div>
 
-<div id="modal-reset" class="modal">
-    <div class="modal-body">
-        <div class="modal-icon"><i class="fas fa-history"></i></div>
-        <div class="modal-title">¿Reiniciar Quincena?</div>
-        <div class="modal-text">
-            ⚠️ Esto eliminará <b>TODAS</b> las asistencias registradas.<br>¿Deseas continuar?
-        </div>
-        <div class="modal-buttons">
-            <button onclick="confirmarReset()" class="btn-confirm">SÍ, REINICIAR TODO</button>
-            <button onclick="cerrarModal('modal-reset')" class="btn-cancel">Cancelar</button>
-        </div>
-    </div>
-</div>
-
 <div class="container">
     <div class="header">
         <div style="display:flex; align-items:center; gap:15px;">
-            <a href="index.html" style="text-decoration:none; color:var(--info); font-weight:700;"><i class="fas fa-arrow-left"></i> VOLVER</a>
-            <h2 style="margin:0">Reporte <span style="color:var(--info)">RRHH</span></h2>
+            <a href="lista.html" style="text-decoration:none; color:var(--info); font-weight:700;"><i class="fas fa-arrow-left"></i> VOLVER</a>
+            <h2 style="margin:0">Reporte <span style="color:var(--info)">D&B Live</span></h2>
         </div>
-        <button onclick="abrirModalReset()" style="background:var(--danger); color:white; border:none; padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:700;">
+        <button onclick="resetearQuincena()" style="background:var(--danger); color:white; border:none; padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:700;">
             <i class="fas fa-history"></i> NUEVA QUINCENA
         </button>
     </div>
@@ -154,7 +130,6 @@
             <i class="fas fa-search"></i>
             <input type="text" id="inputNombre" placeholder="Buscar por apellido o nombre..." onkeyup="ejecutarFiltros()">
         </div>
-        
         <div class="filter-buttons">
             <button class="btn-filter f-todos active" onclick="filtrarPorArea('Todos', this)">Todos</button>
             <button class="btn-filter f-ventas" onclick="filtrarPorArea('Ventas', this)">Ventas</button>
@@ -177,12 +152,16 @@
                 <th style="text-align:center">Acciones</th>
             </tr>
         </thead>
-        <tbody id="tabla-body"></tbody>
+        <tbody id="tabla-body">
+            </tbody>
     </table>
 </div>
 
 <script>
-        const API_URL = "https://asistencia-recursos.onrender.com/api/practicantes";
+    // URL UNIFICADA (Usa la de Render para producción)
+    const API_URL = "https://asistencia-recursos.onrender.com/api/practicantes";
+    const RESET_URL = "https://asistencia-recursos.onrender.com/api/reset";
+
     let practicantes = [];
     let filtroAreaActual = "Todos";
 
@@ -191,18 +170,20 @@
         "Logística": "var(--logistica)", "Mejora Continua": "var(--mejora)"
     };
 
-    const normalizar = (t) => t ? t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
-
-    function formatearTiempo(tiempo) {
-        if (!tiempo || tiempo === "0" || tiempo === "00:00:00") return "00:00:00";
-        const partes = tiempo.split(':');
-        return partes.length === 3 ? tiempo : (partes.length === 2 ? `${tiempo}:00` : `${tiempo}:00:00`);
+    // Formatea la hora de la base de datos (ISO) a formato legible
+    function formatearHora(fecha) {
+        if (!fecha || fecha === "00:00:00") return '--:--';
+        try {
+            const f = new Date(fecha);
+            if (isNaN(f.getTime())) return fecha; // Si ya viene como string de hora
+            return f.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+        } catch (e) { return '--:--'; }
     }
 
-    function formatearHora(fecha) {
-        if (!fecha) return '--:--';
-        const f = new Date(fecha);
-        return isNaN(f.getTime()) ? fecha : f.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    // Formatea el acumulado de horas
+    function formatearTotal(tiempo) {
+        if (!tiempo || tiempo === "0" || tiempo === "00:00:00") return "00:00:00";
+        return tiempo;
     }
 
     async function cargarDatos() {
@@ -210,44 +191,56 @@
             const res = await fetch(API_URL);
             practicantes = await res.json();
             ejecutarFiltros();
-        } catch (e) { console.error("Error cargando datos:", e); }
-    }
-
-    // --- LÓGICA DE ELIMINACIÓN ---
-    function abrirModalDelete(id) {
-        const p = practicantes.find(x => x.id_practicantes === id);
-        if (p) {
-            document.getElementById('delete-id').value = id;
-            document.getElementById('delete-nombre-display').innerText = `${p.apellidos}, ${p.nombres}`;
-            document.getElementById('modal-delete').style.display = 'flex';
+        } catch (e) {
+            console.error("Error:", e);
+            mostrarToast("❌ Error al conectar con el servidor");
         }
     }
 
-    async function confirmarEliminar() {
-        const id = document.getElementById('delete-id').value;
-        try {
-            await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-            cerrarModal('modal-delete');
-            mostrarToast("🗑️ Registro eliminado");
-            cargarDatos();
-        } catch (e) { console.error(e); }
+    function ejecutarFiltros() {
+        const busqueda = document.getElementById('inputNombre').value.toLowerCase();
+        let filtrados = practicantes.filter(p => {
+            const nombreCompleto = `${p.nombres} ${p.apellidos}`.toLowerCase();
+            const coincideNombre = nombreCompleto.includes(busqueda);
+            const coincideArea = (filtroAreaActual === "Todos" || p.area === filtroAreaActual);
+            return coincideNombre && coincideArea;
+        });
+
+        filtrados.sort((a, b) => (a.apellidos || "").localeCompare(b.apellidos || ""));
+        renderizarTabla(filtrados);
     }
 
-    // --- LÓGICA DE RESET ---
-    function abrirModalReset() { document.getElementById('modal-reset').style.display = 'flex'; }
+    function renderizarTabla(lista) {
+        const tbody = document.getElementById('tabla-body');
+        if (lista.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px;">No se encontraron registros</td></tr>';
+            return;
+        }
 
-    async function confirmarReset() {
-        try {
-            const res = await fetch("http://localhost:3000/api/reset", { method: "DELETE" });
-            if (res.ok) {
-                cerrarModal('modal-reset');
-                mostrarToast("🔄 Nueva quincena iniciada");
-                cargarDatos();
-            }
-        } catch (e) { mostrarToast("Error de conexión"); }
+        tbody.innerHTML = lista.map((p, index) => `
+            <tr>
+                <td class="row-number">${index + 1}</td>
+                <td><strong>${p.apellidos}, ${p.nombres}</strong></td>
+                <td><span class="area-badge" style="background-color: ${areaColors[p.area] || '#95a5a6'}">${p.area}</span></td>
+                <td><span class="timer-box">${formatearHora(p.hora_entrada)}</span></td>
+                <td><span class="timer-box">${formatearHora(p.hora_salida)}</span></td>
+                <td><span class="timer-box total-highlight">${formatearTotal(p.horas_acumuladas)}</span></td>
+                <td style="text-align:center">
+                    <button class="btn-action btn-edit" onclick="abrirModalEdit(${p.id_practicantes})"><i class="fas fa-edit"></i></button>
+                    <button class="btn-action btn-delete" onclick="abrirModalDelete(${p.id_practicantes})"><i class="fas fa-trash-alt"></i></button>
+                </td>
+            </tr>
+        `).join('');
     }
 
-    // --- LÓGICA DE EDICIÓN ---
+    // --- ACCIONES ---
+    function filtrarPorArea(area, btn) {
+        document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        filtroAreaActual = area;
+        ejecutarFiltros();
+    }
+
     function abrirModalEdit(id) {
         const p = practicantes.find(x => x.id_practicantes === id);
         document.getElementById('edit-id').value = id;
@@ -274,6 +267,30 @@
         cargarDatos();
     }
 
+    function abrirModalDelete(id) {
+        const p = practicantes.find(x => x.id_practicantes === id);
+        document.getElementById('delete-id').value = id;
+        document.getElementById('delete-nombre-display').innerText = `¿Estás seguro de eliminar a ${p.apellidos}, ${p.nombres}?`;
+        document.getElementById('modal-delete').style.display = 'flex';
+    }
+
+    async function confirmarEliminar() {
+        const id = document.getElementById('delete-id').value;
+        await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+        cerrarModal('modal-delete');
+        mostrarToast("🗑️ Registro eliminado");
+        cargarDatos();
+    }
+
+    async function resetearQuincena() {
+        if (!confirm("⚠️ ¿REINICIAR TODO? Se borrarán todas las horas de esta quincena.")) return;
+        try {
+            await fetch(RESET_URL, { method: 'DELETE' });
+            mostrarToast("🔄 Sistema reiniciado");
+            cargarDatos();
+        } catch (e) { mostrarToast("❌ Error al reiniciar"); }
+    }
+
     function cerrarModal(id) { document.getElementById(id).style.display = 'none'; }
 
     function mostrarToast(msj) {
@@ -281,42 +298,6 @@
         t.innerText = msj;
         t.style.display = 'block';
         setTimeout(() => t.style.display = 'none', 3000);
-    }
-
-    function filtrarPorArea(area, btn) {
-        document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        filtroAreaActual = area;
-        ejecutarFiltros();
-    }
-
-    function ejecutarFiltros() {
-        const busqueda = normalizar(document.getElementById('inputNombre').value);
-        let filtrados = practicantes.filter(p => {
-            const coincideNombre = normalizar(`${p.nombres} ${p.apellidos}`).includes(busqueda);
-            const coincideArea = (filtroAreaActual === "Todos" || p.area === filtroAreaActual);
-            return coincideNombre && coincideArea;
-        });
-        filtrados.sort((a, b) => (a.apellidos || "").localeCompare(b.apellidos || ""));
-        renderizarTabla(filtrados);
-    }
-
-    function renderizarTabla(lista) {
-        const tbody = document.getElementById('tabla-body');
-        tbody.innerHTML = lista.map((p, index) => `
-            <tr>
-                <td class="row-number">${index + 1}</td>
-                <td><strong>${p.apellidos}, ${p.nombres}</strong></td>
-                <td><span class="area-badge" style="background-color: ${areaColors[p.area] || '#95a5a6'}">${p.area}</span></td>
-                <td><span class="timer-box">${formatearHora(p.hora_entrada)}</span></td>
-                <td><span class="timer-box">${formatearHora(p.hora_salida)}</span></td>
-                <td><span class="timer-box total-highlight">${formatearTiempo(p.horas_acumuladas)}</span></td>
-                <td style="text-align:center">
-                    <button class="btn-action btn-edit" onclick="abrirModalEdit(${p.id_practicantes})"><i class="fas fa-edit"></i></button>
-                    <button class="btn-action btn-delete" onclick="abrirModalDelete(${p.id_practicantes})"><i class="fas fa-trash-alt"></i></button>
-                </td>
-            </tr>
-        `).join('');
     }
 
     window.onload = cargarDatos;
