@@ -28,7 +28,6 @@
         .btn-filter { padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.75rem; color: white; opacity: 0.7; transition: 0.3s; }
         .btn-filter.active { opacity: 1; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        /* TABLA */
         .table-wrapper { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; min-width: 600px; }
         th { text-align: left; padding: 12px; background: #f8f9fa; color: #7f8c8d; font-size: 0.7rem; text-transform: uppercase; }
@@ -39,41 +38,10 @@
         .area-badge { padding: 4px 10px; border-radius: 15px; color: white; font-size: 0.7rem; font-weight: 700; display: inline-block; }
 
         /* MODALES */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); display: none; justify-content: center;
-            align-items: center; z-index: 9999; backdrop-filter: blur(8px);
-        }
-        .modal-content {
-            background: white; padding: 25px; border-radius: 20px; text-align: center;
-            max-width: 450px; width: 90%; transform: scale(0.8); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(8px); }
+        .modal-content { background: white; padding: 25px; border-radius: 20px; text-align: center; max-width: 450px; width: 90%; transform: scale(0.8); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .modal-content.show { transform: scale(1); }
-        .modal-icon { font-size: 2.5rem; color: var(--info); margin-bottom: 15px; }
         
-        /* FORMULARIO DE EDICIÓN */
-        .edit-form { text-align: left; margin-top: 15px; }
-        .edit-form label { font-size: 0.8rem; font-weight: 700; color: #7f8c8d; display: block; margin-bottom: 5px; }
-        .edit-form input, .edit-form select {
-            width: 100%; padding: 10px; border-radius: 8px; border: 2px solid #eee;
-            margin-bottom: 15px; font-family: inherit; font-size: 0.9rem; box-sizing: border-box;
-        }
-        .edit-form input:focus { border-color: var(--info); outline: none; }
-
-        .modal-btns { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
-        .btn-m { padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; flex: 1; }
-        .btn-cancel { background: #eee; color: #333; }
-        .btn-confirm { background: var(--info); color: white; }
-        .btn-danger-confirm { background: var(--danger); color: white; }
-
-        @media screen and (max-width: 768px) {
-            table, thead, tbody, th, td, tr { display: block; }
-            thead tr { position: absolute; top: -9999px; left: -9999px; }
-            tr { border: 1px solid #eee; border-radius: 12px; margin-bottom: 15px; padding: 10px; background: #fff; }
-            td { border: none; position: relative; padding-left: 50%; text-align: right; border-bottom: 1px solid #f9f9f9; }
-            td::before { content: attr(data-label); position: absolute; left: 12px; width: 45%; text-align: left; font-weight: 800; color: #7f8c8d; font-size: 0.7rem; }
-        }
-
         .btn-action { border: none; background: none; cursor: pointer; font-size: 1.1rem; margin: 0 8px; }
         .btn-edit { color: var(--info); }
         .btn-delete { color: var(--danger); }
@@ -82,61 +50,35 @@
 </head>
 <body>
 
+<div id="toast"></div>
+
 <div class="modal-overlay" id="modalOverlay">
     <div class="modal-content" id="modalContent">
-        <i id="mainIcon" class="fas fa-exclamation-triangle modal-icon" style="color:var(--danger)"></i>
+        <i id="mainIcon" class="fas fa-exclamation-triangle modal-icon" style="color:var(--danger); font-size: 3rem; margin-bottom: 15px;"></i>
         <h3 id="modalTitle">¿Estás seguro?</h3>
         <p id="modalText">Esta acción no se puede deshacer.</p>
-        <div class="modal-btns">
-            <button class="btn-m btn-cancel" onclick="cerrarModal()">Cancelar</button>
-            <button class="btn-m btn-danger-confirm" id="btnConfirmarAction">Confirmar</button>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button onclick="cerrarModal()" style="flex:1; padding:10px; border-radius:8px; border:none; cursor:pointer;">Cancelar</button>
+            <button id="btnConfirmarAction" style="flex:1; padding:10px; border-radius:8px; border:none; cursor:pointer; background:var(--danger); color:white; font-weight:bold;">Confirmar</button>
         </div>
     </div>
 </div>
-
-<div class="modal-overlay" id="modalEditOverlay">
-    <div class="modal-content" id="modalEditContent">
-        <i class="fas fa-user-edit modal-icon"></i>
-        <h3>Editar Practicante</h3>
-        <div class="edit-form">
-            <input type="hidden" id="editId">
-            <label>Nombres</label>
-            <input type="text" id="editNombres" placeholder="Ej. Juan">
-            <label>Apellidos</label>
-            <input type="text" id="editApellidos" placeholder="Ej. Pérez">
-            <label>Área de Trabajo</label>
-            <select id="editArea">
-                <option value="Ventas">Ventas</option>
-                <option value="Finanzas">Finanzas</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Logística">Logística</option>
-                <option value="Mejora Continua">Mejora Continua</option>
-            </select>
-        </div>
-        <div class="modal-btns">
-            <button class="btn-m btn-cancel" onclick="cerrarModalEdit()">Cerrar</button>
-            <button class="btn-m btn-confirm" onclick="guardarEdicion()">Guardar Cambios</button>
-        </div>
-    </div>
-</div>
-
-<div id="toast"></div>
 
 <div class="container">
     <div class="header">
         <div style="display:flex; align-items:center; gap:10px;">
-            <a href="index.html" style="text-decoration:none; color:var(--info); font-weight:700;"><i class="fas fa-arrow-left"></i></a>
+            <a href="index.html" style="text-decoration:none; color:var(--info); font-weight:700;"><i class="fas fa-arrow-left"></i> Volver</a>
             <h2>Reporte <span style="color:var(--info)">RRHH</span></h2>
         </div>
-        <button onclick="abrirModalReset()" style="background:var(--danger); color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer; font-weight:700; font-size: 0.8rem;">
-            <i class="fas fa-history"></i> REINICIAR
+        <button onclick="abrirModalReset()" style="background:var(--danger); color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer; font-weight:700;">
+            <i class="fas fa-history"></i> REINICIAR QUINCENA
         </button>
     </div>
 
     <div class="controls-wrapper">
         <div class="search-container">
             <i class="fas fa-search"></i>
-            <input type="text" id="inputNombre" placeholder="Buscar practicante..." onkeyup="ejecutarFiltros()">
+            <input type="text" id="inputNombre" placeholder="Buscar por nombre o apellido..." onkeyup="ejecutarFiltros()">
         </div>
         <div class="filter-buttons">
             <button class="btn-filter active" style="background:var(--secondary)" onclick="filtrar('Todos', this)">Todos</button>
@@ -144,7 +86,7 @@
             <button class="btn-filter" style="background:var(--finanzas)" onclick="filtrar('Finanzas', this)">Finanzas</button>
             <button class="btn-filter" style="background:var(--marketing)" onclick="filtrar('Marketing', this)">Marketing</button>
             <button class="btn-filter" style="background:var(--logística)" onclick="filtrar('Logística', this)">Logística</button>
-            <button class="btn-filter" style="background:var(--mejora)" onclick="filtrar('Mejora Continua', this)">Gestión</button>
+            <button class="btn-filter" style="background:var(--mejora)" onclick="filtrar('Mejora Continua', this)">Mejora</button>
         </div>
     </div>
 
@@ -155,39 +97,47 @@
                     <th>N°</th>
                     <th>Practicante</th>
                     <th>Área</th>
-                    <th>Entrada</th>
-                    <th>Salida</th>
-                    <th>Total Horas</th>
-                    <th style="text-align:center">Acciones</th>
+                    <th>Última Entrada</th>
+                    <th>Última Salida</th>
+                    <th>Total Acumulado</th>
                 </tr>
             </thead>
-            <tbody id="tabla-body"></tbody>
+            <tbody id="tabla-body">
+                <tr><td colspan="6" style="text-align:center; padding:50px;">Cargando datos del servidor...</td></tr>
+            </tbody>
         </table>
     </div>
 </div>
 
 <script>
-    const API_URL = "https://asistencia-recursos.onrender.com/api/practicantes";
+    const REPORTE_URL = "https://asistencia-recursos.onrender.com/api/reporte";
     let practicantes = [];
     let filtroArea = "Todos";
 
+    // Formatea la hora de PostgreSQL a algo legible (12h)
     function mostrarHora(h) {
         if (!h || h === "00:00:00") return "--:--";
-        return h.length > 8 ? new Date(h).toLocaleTimeString('es-PE', {hour:'2-digit', minute:'2-digit', hour12:true}) : h;
+        try {
+            // Si es un objeto Date completo
+            const d = new Date(h);
+            if(!isNaN(d.getTime())) return d.toLocaleTimeString('es-PE', {hour:'2-digit', minute:'2-digit', hour12:true});
+            return h; // Si ya es un string formateado
+        } catch(e) { return h; }
     }
 
     async function cargarDatos() {
         try {
-            const res = await fetch(API_URL);
+            const res = await fetch(REPORTE_URL);
             practicantes = await res.json();
             ejecutarFiltros();
-        } catch (e) { mostrarToast("❌ Error de conexión"); }
+        } catch (e) { mostrarToast("❌ Error al conectar con el servidor"); }
     }
 
     function ejecutarFiltros() {
         const busqueda = document.getElementById('inputNombre').value.toLowerCase();
         const filtrados = practicantes.filter(p => {
-            const matchNom = `${p.nombres} ${p.apellidos}`.toLowerCase().includes(busqueda);
+            const nombreCompleto = `${p.nombres} ${p.apellidos}`.toLowerCase();
+            const matchNom = nombreCompleto.includes(busqueda);
             const matchArea = filtroArea === "Todos" || p.area.trim() === filtroArea;
             return matchNom && matchArea;
         });
@@ -196,18 +146,18 @@
 
     function renderizar(lista) {
         const tbody = document.getElementById('tabla-body');
+        if(lista.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:30px;">No se encontraron resultados</td></tr>';
+            return;
+        }
         tbody.innerHTML = lista.map((p, i) => `
             <tr>
-                <td data-label="N°"><b>${i + 1}</b></td>
-                <td data-label="Practicante"><strong>${p.apellidos}, ${p.nombres}</strong></td>
-                <td data-label="Área"><span class="area-badge" style="background:var(--${p.area.toLowerCase().split(' ')[0]})">${p.area}</span></td>
-                <td data-label="Entrada"><span class="timer-box">${mostrarHora(p.hora_entrada)}</span></td>
-                <td data-label="Salida"><span class="timer-box">${mostrarHora(p.hora_salida)}</span></td>
-                <td data-label="Total Horas"><span class="timer-box total-highlight">${p.horas_acumuladas || '00:00:00'}</span></td>
-                <td data-label="Acciones" style="text-align:center">
-                    <button class="btn-action btn-edit" onclick="abrirModalEdit(${JSON.stringify(p).replace(/"/g, '&quot;')})"><i class="fas fa-edit"></i></button>
-                    <button class="btn-action btn-delete" onclick="abrirModalEliminar(${p.id_practicantes})"><i class="fas fa-trash-alt"></i></button>
-                </td>
+                <td><b>${i + 1}</b></td>
+                <td><strong>${p.apellidos}, ${p.nombres}</strong></td>
+                <td><span class="area-badge" style="background:var(--${p.area.toLowerCase().split(' ')[0]})">${p.area}</span></td>
+                <td><span class="timer-box">${mostrarHora(p.hora_entrada)}</span></td>
+                <td><span class="timer-box">${mostrarHora(p.hora_salida)}</span></td>
+                <td><span class="timer-box total-highlight">${p.horas_acumuladas}</span></td>
             </tr>
         `).join('');
     }
@@ -219,71 +169,19 @@
         ejecutarFiltros();
     }
 
-    /* LÓGICA MODAL EDICIÓN */
-    function abrirModalEdit(p) {
-        document.getElementById('editId').value = p.id_practicantes;
-        document.getElementById('editNombres').value = p.nombres;
-        document.getElementById('editApellidos').value = p.apellidos;
-        document.getElementById('editArea').value = p.area;
-
-        const modal = document.getElementById('modalEditOverlay');
-        modal.style.display = 'flex';
-        setTimeout(() => document.getElementById('modalEditContent').classList.add('show'), 10);
-    }
-
-    async function guardarEdicion() {
-        const id = document.getElementById('editId').value;
-        const data = {
-            nombres: document.getElementById('editNombres').value,
-            apellidos: document.getElementById('editApellidos').value,
-            area: document.getElementById('editArea').value
-        };
-
-        try {
-            const res = await fetch(`${API_URL}/${id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            if (res.ok) {
-                cerrarModalEdit();
-                cargarDatos();
-                mostrarToast("✅ Datos actualizados correctamente");
-            }
-        } catch (e) { mostrarToast("❌ Error al actualizar"); }
-    }
-
-    function cerrarModalEdit() {
-        document.getElementById('modalEditContent').classList.remove('show');
-        setTimeout(() => document.getElementById('modalEditOverlay').style.display = 'none', 300);
-    }
-
-    /* MODALES DE CONFIRMACIÓN */
-    function abrirModalEliminar(id) {
-        const modal = document.getElementById('modalOverlay');
-        document.getElementById('modalTitle').innerText = "¿Eliminar Registro?";
-        document.getElementById('modalText').innerText = "Se borrará permanentemente a este practicante.";
-        modal.style.display = 'flex';
-        setTimeout(() => document.getElementById('modalContent').classList.add('show'), 10);
-        
-        document.getElementById('btnConfirmarAction').onclick = async () => {
-            await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-            cerrarModal(); cargarDatos();
-            mostrarToast("🗑️ Registro eliminado");
-        };
-    }
-
     function abrirModalReset() {
         const modal = document.getElementById('modalOverlay');
-        document.getElementById('modalTitle').innerText = "¿Reiniciar Sistema?";
-        document.getElementById('modalText').innerText = "Se limpiarán todas las horas de la quincena actual.";
+        document.getElementById('modalTitle').innerText = "¿Reiniciar Horas?";
+        document.getElementById('modalText').innerText = "Esto borrará todas las asistencias registradas hasta hoy.";
         modal.style.display = 'flex';
         setTimeout(() => document.getElementById('modalContent').classList.add('show'), 10);
 
         document.getElementById('btnConfirmarAction').onclick = async () => {
-            await fetch("https://asistencia-recursos.onrender.com/api/reset", { method: 'DELETE' });
-            cerrarModal(); cargarDatos();
-            mostrarToast("🔄 Sistema reiniciado");
+            try {
+                await fetch("https://asistencia-recursos.onrender.com/api/reset", { method: 'DELETE' });
+                cerrarModal(); cargarDatos();
+                mostrarToast("🔄 Sistema reiniciado correctamente");
+            } catch(e) { mostrarToast("❌ Error al reiniciar"); }
         };
     }
 

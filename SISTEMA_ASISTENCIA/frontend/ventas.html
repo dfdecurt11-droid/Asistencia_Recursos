@@ -3,141 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RRHH - Control de Asistencia</title>
+    <title>RRHH - Control de Asistencia (Ventas)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --primary: #e67e22; 
-            --success: #27ae60; 
-            --danger: #e74c3c;
-            --dark: #2c3e50; 
-            --bg: #f4f7f6; 
-        }
-        
+        :root { --primary: #e67e22; --success: #27ae60; --danger: #e74c3c; --dark: #2c3e50; --bg: #f4f7f6; }
         body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-
-        .container { 
-            max-width: 800px; margin: auto; background: white; 
-            padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-        }
-
-        .header-flex { 
-            display: flex; justify-content: space-between; align-items: center; 
-            border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px; 
-        }
-
-        #reloj-lista { 
-            font-weight: 800; color: var(--primary); font-size: 1.3rem; 
-            background: #f8f9fa; padding: 8px 18px; border-radius: 12px; border: 1px solid #eee; 
-        }
-
-        .item-practicante { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 18px; border-bottom: 1px solid #eee; transition: all 0.3s ease; 
-        }
-
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .header-flex { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
+        #reloj-lista { font-weight: 800; color: var(--primary); font-size: 1.3rem; background: #f8f9fa; padding: 8px 18px; border-radius: 12px; border: 1px solid #eee; }
+        .item-practicante { display: flex; justify-content: space-between; align-items: center; padding: 18px; border-bottom: 1px solid #eee; transition: all 0.3s ease; }
         .item-practicante:hover { background: #fffcf9; transform: scale(1.01); }
-
         .info-personal strong { font-size: 1.1rem; display: block; color: var(--dark); }
-
         .btn-group { display: flex; gap: 12px; }
-
-        .btn-asistencia { 
-            padding: 10px 18px; border-radius: 10px; border: none; 
-            cursor: pointer; font-weight: 600; color: white; transition: 0.3s; 
-            display: flex; align-items: center; gap: 8px; font-family: 'Poppins'; font-size: 0.85rem;
-        }
-
+        .btn-asistencia { padding: 10px 18px; border-radius: 10px; border: none; cursor: pointer; font-weight: 600; color: white; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-family: 'Poppins'; font-size: 0.85rem; }
         .btn-entrada { background: var(--success); }
         .btn-salida { background: var(--primary); }
-
-        .btn-asistencia:hover { 
-            filter: brightness(1.1); 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transform: translateY(-2px);
-        }
-
-        .btn-back { 
-            text-decoration: none; color: #3498db; font-weight: 600; 
-            margin-bottom: 15px; display: inline-flex; align-items: center; gap: 5px; 
-        }
-
-        .status-badge { 
-            font-size: 0.75rem; padding: 3px 10px; border-radius: 20px; 
-            background: #f0f0f0; color: #7f8c8d; margin-top: 5px; display: inline-block;
-        }
-
-        /* Notificación Toast */
-        #mensaje-alert {
-            position: fixed; top: 20px; right: 20px; padding: 15px 25px;
-            border-radius: 12px; color: white; display: none; z-index: 1000;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2); font-weight: 600;
-            animation: slideIn 0.4s ease-out;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
+        .btn-asistencia:hover { filter: brightness(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.15); transform: translateY(-2px); }
+        .btn-back { text-decoration: none; color: #3498db; font-weight: 600; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 5px; }
+        .status-badge { font-size: 0.75rem; padding: 3px 10px; border-radius: 20px; background: #f0f0f0; color: #7f8c8d; margin-top: 5px; display: inline-block; }
+        #mensaje-alert { position: fixed; top: 20px; right: 20px; padding: 15px 25px; border-radius: 12px; color: white; display: none; z-index: 1000; box-shadow: 0 8px 20px rgba(0,0,0,0.2); font-weight: 600; animation: slideIn 0.4s ease-out; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     </style>
 </head>
 <body>
-
     <div id="mensaje-alert"></div>
-
     <div class="container">
         <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver a Áreas</a>
-        
         <div class="header-flex">
             <h2>Área: <span id="nombre-area" style="color: var(--primary);">Ventas</span></h2>
             <div id="reloj-lista">00:00:00</div>
         </div>
-
         <div id="lista-asistencia">
             <p style="text-align:center; color:#888;"><i class="fas fa-spinner fa-spin"></i> Cargando personal...</p>
         </div>
     </div>
 
     <script>
-        // Configuración Global
         const API_URL = "https://asistencia-recursos.onrender.com/api/practicantes";
         const ASISTENCIA_URL = "https://asistencia-recursos.onrender.com/api/asistencia";
-        const AREA_PAGINA = "Ventas"; // Cambiar según el área de la página
+        const AREA_PAGINA = "Ventas";
 
-        // 1. Reloj en tiempo real
         setInterval(() => {
-            document.getElementById('reloj-lista').innerText = 
-                new Date().toLocaleTimeString('es-PE', { hour12: true });
+            document.getElementById('reloj-lista').innerText = new Date().toLocaleTimeString('es-PE', { hour12: true });
         }, 1000);
 
-        // 2. Sistema de Alertas (Toast)
         function showAlert(msg, isError = false) {
             const el = document.getElementById('mensaje-alert');
             el.innerText = msg;
             el.style.backgroundColor = isError ? "var(--danger)" : "var(--success)";
             el.style.display = "block";
-            
-            setTimeout(() => { 
-                el.style.display = "none"; 
-            }, 4000);
+            setTimeout(() => { el.style.display = "none"; }, 4000);
         }
 
-        // 3. Carga y renderizado de la lista
         async function cargarLista() {
             try {
                 const res = await fetch(`${API_URL}?area=${encodeURIComponent(AREA_PAGINA)}`);
                 let data = await res.json();
                 const listaDiv = document.getElementById('lista-asistencia');
-                
                 if (!data || data.length === 0) {
                     listaDiv.innerHTML = `<p style="text-align:center; color: #999; padding: 20px;">No hay personal registrado en ${AREA_PAGINA}.</p>`;
                     return;
                 }
-
-                // Unificamos el ordenamiento alfabético (A-Z por Apellido)
                 data.sort((a, b) => a.apellidos.localeCompare(b.apellidos, 'es', { sensitivity: 'base' }));
-
                 listaDiv.innerHTML = data.map(p => `
                     <div class="item-practicante">
                         <div class="info-personal">
@@ -154,27 +82,20 @@
                         </div>
                     </div>
                 `).join('');
-
-            } catch (error) { 
-                console.error(error);
-                document.getElementById('lista-asistencia').innerHTML = 
-                    `<p style="text-align:center; color: var(--danger);">Error crítico: No se pudo conectar con el servidor.</p>`;
+            } catch (error) {
+                document.getElementById('lista-asistencia').innerHTML = `<p style="text-align:center; color: var(--danger);">Error crítico: No se pudo conectar con el servidor.</p>`;
             }
         }
 
-        // 4. Lógica de registro (POST)
         async function marcar(id, tipo) {
             try {
                 const horaLocal = new Date().toLocaleTimeString('es-PE', { hour12: true });
-                
                 const res = await fetch(`${ASISTENCIA_URL}/${id}`, { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ tipo: tipo })
+                    body: JSON.stringify({ tipo_registro: tipo }) // CORREGIDO
                 });
-                
                 const result = await res.json();
-                
                 if (res.ok) {
                     const emoji = tipo === 'entrada' ? '🕒' : '✅';
                     showAlert(`${emoji} Marcación de ${tipo} exitosa (${horaLocal})`);
@@ -185,8 +106,6 @@
                 showAlert("Error de red: El servidor no responde", true);
             }
         }
-
-        // Iniciar carga al abrir
         window.onload = cargarLista;
     </script>
 </body>

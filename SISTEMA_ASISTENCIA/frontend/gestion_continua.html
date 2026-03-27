@@ -117,7 +117,6 @@
                     return;
                 }
 
-                // --- ORDENAMIENTO ALFABÉTICO POR APELLIDOS ---
                 data.sort((a, b) => {
                     const apellidoA = (a.apellidos || "").toLowerCase();
                     const apellidoB = (b.apellidos || "").toLowerCase();
@@ -152,7 +151,8 @@
                 const res = await fetch(`${ASISTENCIA_URL}/${id}`, { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ tipo: tipo })
+                    // CORRECCIÓN: Se cambió 'tipo' por 'tipo_registro'
+                    body: JSON.stringify({ tipo_registro: tipo })
                 });
                 
                 const result = await res.json();
@@ -160,7 +160,6 @@
                 if(res.ok) {
                     const icon = tipo === 'entrada' ? '📈' : '🏁';
                     showToast(`${icon} ${tipo.toUpperCase()} registrada a las ${horaAhora}`);
-                    // No es estrictamente necesario recargar la lista aquí, pero ayuda a la percepción de fluidez
                 } else {
                     showToast(result.message || "Error al marcar", true);
                 }

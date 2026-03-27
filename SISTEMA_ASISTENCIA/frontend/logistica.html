@@ -56,7 +56,6 @@
         
         .empty-state { text-align: center; padding: 40px; color: #95a5a6; }
 
-        /* Notificación Toast */
         #mensaje-alert {
             position: fixed; top: 20px; right: 20px; padding: 15px 25px;
             border-radius: 10px; color: white; display: none; z-index: 1000;
@@ -86,7 +85,6 @@
         const ASISTENCIA_URL = "https://asistencia-recursos.onrender.com/api/asistencia";
         const AREA_PAGINA = "Logística"; 
 
-        // Reloj dinámico
         setInterval(() => {
             document.getElementById('reloj-lista').innerText = new Date().toLocaleTimeString('es-PE', { hour12: true });
         }, 1000);
@@ -110,7 +108,6 @@
                     return;
                 }
 
-                // --- ORDENAMIENTO ALFABÉTICO POR APELLIDOS ---
                 data.sort((a, b) => {
                     const apellidoA = (a.apellidos || "").toLowerCase();
                     const apellidoB = (b.apellidos || "").toLowerCase();
@@ -145,7 +142,8 @@
                 const res = await fetch(`${ASISTENCIA_URL}/${id}`, { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ tipo: tipo })
+                    // CAMBIO REALIZADO: tipo -> tipo_registro
+                    body: JSON.stringify({ tipo_registro: tipo })
                 });
                 
                 const result = await res.json();
