@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistencia RRHH - Registro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4776E6; --secondary: #8E54E9; --success: #00b894;
+            --warning: #fdcb6e; --error: #ff7675; --dark: #2d3436; --light: #f5f6fa;
+        }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(-45deg, #4158D0, #C850C0, #FFCC70);
+            background-size: 400% 400%; animation: gradient 15s ease infinite;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; margin: 0; padding: 20px;
+        }
+
+        @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        .card { 
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px);
+            padding: 40px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); 
+            width: 100%; max-width: 420px; border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        h2 { text-align: center; color: var(--dark); font-weight: 800; margin: 0 0 10px 0; font-size: 1.6rem; }
+        
+        #reloj { 
+            text-align: center; font-size: 1.5rem; color: var(--primary); margin-bottom: 25px; font-weight: 800; 
+            background: var(--light); padding: 10px; border-radius: 15px; box-shadow: inset 4px 4px 10px #e2e2e2;
+        }
+
+        .form-group { position: relative; margin-bottom: 20px; }
+        .form-group i { position: absolute; left: 15px; top: 42px; color: var(--primary); transition: 0.3s; }
+        
+        label { display: block; font-weight: 600; color: var(--dark); margin-bottom: 8px; font-size: 0.85rem; opacity: 0.8; }
+        
+        input, select { 
+            width: 100%; padding: 14px 14px 14px 45px; border: 2px solid transparent; 
+            border-radius: 12px; box-sizing: border-box; outline: none; transition: 0.3s; 
+            font-size: 0.95rem; font-family: 'Poppins'; background: var(--light);
+        }
+
+        input:focus, select:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(71, 118, 230, 0.1); }
+        input:focus + i { color: var(--secondary); }
+
+        .button-group { display: flex; flex-direction: column; gap: 12px; margin-top: 30px; }
+        
+        button { 
+            width: 100%; padding: 15px; border: none; border-radius: 14px; color: white; 
+            font-weight: 600; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 12px;
+        }
+
+        .btn-add { background: linear-gradient(to right, #4776E6, #8E54E9); box-shadow: 0 4px 15px rgba(71, 118, 230, 0.3); }
+        .btn-list { background: #636e72; color: #fff; }
+        .btn-report { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+        
+        button:hover { transform: translateY(-3px); filter: brightness(1.1); }
+        button:active { transform: translateY(0); }
+        .btn-report:hover { background: var(--primary); color: white; }
+
+        /* Toast Styles */
+        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
+        .toast { 
+            background: var(--dark); color: white; padding: 16px 24px; border-radius: 15px; 
+            margin-bottom: 10px; display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: slideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border-left: 6px solid var(--success);
+        }
+        .toast.error { border-left-color: var(--error); }
+        @keyframes slideIn { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Loading Spinner */
+        .spinner { animation: rotate 2s linear infinite; display: none; width: 20px; height: 20px; }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<div class="card">
+    <h2><i class="fas fa-users-cog"></i> Registro D&B Live</h2>
+    <div id="reloj">00:00:00 p. m.</div>
+    
+    <div class="form-group">
+        <label>Nombres Completos</label>
+        <i class="fas fa-user"></i>
+        <input type="text" id="txtNombres" placeholder="Ej: Alvaro Fabian" spellcheck="false">
+    </div>
+    
+    <div class="form-group">
+        <label>Apellidos Completos</label>
+        <i class="fas fa-id-card"></i>
+        <input type="text" id="txtApellidos" placeholder="Ej: Alvites Merino" spellcheck="false">
+    </div>
+
+    <div class="form-group">
+        <label>Área Asignada</label>
+        <i class="fas fa-layer-group"></i>
+        <select id="selArea">
+            <option value="" disabled selected>Seleccione área de trabajo...</option>
+            <option value="Ventas">Ventas</option>
+            <option value="Finanzas">Finanzas</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Logística">Logística</option>
+            <option value="Mejora Continua">Mejora Continua</option>
+            <option value="Gestión">Gestión</option>
+        </select>
+    </div>
+
+    <div class="button-group">
+        <button class="btn-add" id="btnGuardar" onclick="registrar()">
+            <i class="fas fa-paper-plane" id="btnIcon"></i>
+            <i class="fas fa-circle-notch spinner" id="btnSpinner"></i>
+            <span>Guardar Practicante</span>
+        </button>
+        
+        <button class="btn-list" onclick="location.href='lista.html'">
+            <i class="fas fa-list-ul"></i> Ver Áreas
+        </button>
+
+        <button class="btn-report" onclick="location.href='reporte.html'">
+            <i class="fas fa-chart-line"></i> Reporte de Asistencia
+        </button>
+    </div>
+</div>
+
+<script>
+    const API_URL = "http://localhost:3000/api/practicantes";
+
+    // Reloj dinámico
+    setInterval(() => {
+        document.getElementById('reloj').innerText = new Date().toLocaleTimeString('es-PE', { 
+            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
+        });
+    }, 1000);
+
+    function mostrarToast(mensaje, tipo = 'success') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast ${tipo}`;
+        const icon = tipo === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle';
+        toast.innerHTML = `<i class="fas ${icon}"></i> <span>${mensaje}</span>`;
+        container.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(20px)';
+            setTimeout(() => toast.remove(), 500);
+        }, 3500);
+    }
+
+    async function registrar() {
+        const btn = document.getElementById('btnGuardar');
+        const icon = document.getElementById('btnIcon');
+        const spinner = document.getElementById('btnSpinner');
+        const txtBtn = btn.querySelector('span');
+
+        const nom = document.getElementById('txtNombres').value.trim();
+        const ape = document.getElementById('txtApellidos').value.trim();
+        const are = document.getElementById('selArea').value;
+
+        if(!nom || !ape || !are) {
+            mostrarToast("Por favor, llena todos los campos", "error");
+            return;
+        }
+
+        // Estado de carga
+        btn.disabled = true;
+        icon.style.display = 'none';
+        spinner.style.display = 'block';
+        txtBtn.innerText = "Guardando...";
+
+        try {
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nombres: nom, apellidos: ape, area: are })
+            });
+            
+            if(res.ok) {
+                mostrarToast(`¡${nom} ha sido registrado con éxito!`);
+                // Limpiar formulario
+                document.getElementById('txtNombres').value = "";
+                document.getElementById('txtApellidos').value = "";
+                document.getElementById('selArea').value = "";
+            } else {
+                mostrarToast("Hubo un problema al guardar los datos", "error");
+            }
+        } catch (e) { 
+            mostrarToast("Servidor fuera de línea", "error"); 
+        } finally {
+            // Restaurar botón
+            btn.disabled = false;
+            icon.style.display = 'block';
+            spinner.style.display = 'none';
+            txtBtn.innerText = "Guardar Practicante";
+        }
+    }
+</script>
+</body>
+</html>

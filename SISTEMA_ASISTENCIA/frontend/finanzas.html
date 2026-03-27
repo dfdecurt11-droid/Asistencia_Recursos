@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&B - Área de Finanzas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --primary: #27ae60; 
+            --secondary: #2ecc71;
+            --dark: #2c3e50; 
+            --bg: #f4f7f6; 
+        }
+        
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+
+        .container { 
+            max-width: 800px; margin: auto; background: white; 
+            padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+        }
+
+        .header-flex { 
+            display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; 
+        }
+
+        #reloj-lista { 
+            font-weight: 800; color: var(--primary); font-size: 1.3rem; 
+            background: #f8f9fa; padding: 5px 15px; border-radius: 10px; border: 1px solid #eee;
+        }
+
+        .item-practicante { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 18px; border-bottom: 1px solid #eee; transition: 0.3s; 
+        }
+
+        .item-practicante:hover { background: #fafffb; }
+
+        .btn-group { display: flex; gap: 10px; }
+
+        .btn-asistencia { 
+            padding: 10px 18px; border-radius: 10px; border: none; 
+            cursor: pointer; font-weight: 600; color: white; transition: 0.3s; 
+            display: flex; align-items: center; gap: 8px; font-family: 'Poppins'; font-size: 0.85rem;
+        }
+
+        .btn-entrada { background: #27ae60; }
+        .btn-salida { background: #2980b9; } 
+
+        .btn-asistencia:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .btn-asistencia:active { transform: scale(0.95); }
+
+        .btn-back { text-decoration: none; color: #3498db; font-weight: 600; display: inline-block; margin-bottom: 15px; }
+        
+        .empty-state { text-align: center; padding: 40px; color: #95a5a6; }
+
+        /* Notificación Toast */
+        #mensaje-alert {
+            position: fixed; top: 20px; right: 20px; padding: 15px 25px;
+            border-radius: 10px; color: white; display: none; z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2); font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="mensaje-alert"></div>
+
+    <div class="container">
+        <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver a Áreas</a>
+        
+        <div class="header-flex">
+            <h2>Área: <span style="color: var(--primary);">Finanzas</span></h2>
+            <div id="reloj-lista">00:00:00</div>
+        </div>
+
+        <div id="lista-asistencia">
+            <p style="text-align:center;">Buscando personal de finanzas...</p>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:3000/api/practicantes";
+        const ASISTENCIA_URL = "http://localhost:3000/api/asistencia";
+        const AREA_PAGINA = "Finanzas"; 
+
+        // Reloj dinámico
+        setInterval(() => {
+            document.getElementById('reloj-lista').innerText = new Date().toLocaleTimeString('es-PE', { hour12: true });
+        }, 1000);
+
+        function showAlert(msg, isError = false) {
+            const el = document.getElementById('mensaje-alert');
+            el.innerText = msg;
+            el.style.backgroundColor = isError ? "#e74c3c" : "#27ae60";
+            el.style.display = "block";
+            setTimeout(() => { el.style.display = "none"; }, 4000);
+        }
+
+        async function cargarLista() {
+            try {
+                const res = await fetch(`${API_URL}?area=${encodeURIComponent(AREA_PAGINA)}`);
+                let data = await res.json();
+                const listaDiv = document.getElementById('lista-asistencia');
+                
+                if(data.length === 0) {
+                    listaDiv.innerHTML = `<div class="empty-state"><i class="fas fa-users-slash" style="font-size:3rem;"></i><p>No hay practicantes registrados en Finanzas.</p></div>`;
+                    return;
+                }
+
+                // --- ORDENAMIENTO ALFABÉTICO POR APELLIDOS ---
+                data.sort((a, b) => {
+                    const apellidoA = (a.apellidos || "").toLowerCase();
+                    const apellidoB = (b.apellidos || "").toLowerCase();
+                    return apellidoA.localeCompare(apellidoB);
+                });
+
+                listaDiv.innerHTML = data.map(p => `
+                    <div class="item-practicante">
+                        <div>
+                            <strong style="font-size: 1.1rem; display:block; color: var(--dark);">${p.apellidos}, ${p.nombres}</strong>
+                            <small style="color: #7f8c8d;">ID: ${p.id_practicantes}</small>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn-asistencia btn-entrada" onclick="marcar(${p.id_practicantes}, 'entrada')">
+                                <i class="fas fa-sign-in-alt"></i> Entrada
+                            </button>
+                            <button class="btn-asistencia btn-salida" onclick="marcar(${p.id_practicantes}, 'salida')">
+                                <i class="fas fa-sign-out-alt"></i> Salida
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                document.getElementById('lista-asistencia').innerHTML = "Error al conectar con el servidor.";
+            }
+        }
+
+        async function marcar(id, tipo) {
+            try {
+                const horaActual = new Date().toLocaleTimeString('es-PE', { hour12: true });
+
+                const res = await fetch(`${ASISTENCIA_URL}/${id}`, { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tipo: tipo })
+                });
+                
+                const result = await res.json();
+                
+                if (res.ok) {
+                    const emoji = tipo === 'entrada' ? '🕒' : '✅';
+                    showAlert(`${emoji} Marcación de ${tipo} exitosa a las ${horaActual}`);
+                } else {
+                    showAlert(result.message || "Error al procesar", true);
+                }
+            } catch (e) {
+                showAlert("Error de conexión con el servidor.", true);
+            }
+        }
+
+        window.onload = cargarLista;
+    </script>
+
+</body>
+</html>
