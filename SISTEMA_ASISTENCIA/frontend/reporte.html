@@ -62,6 +62,7 @@
         .btn-edit { color: var(--info); }
         .btn-delete { color: var(--danger); }
 
+        /* MODALES */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 3000; backdrop-filter: blur(5px); }
         .modal-body { background: white; padding: 35px; border-radius: 25px; width: 400px; box-shadow: 0 25px 70px rgba(0,0,0,0.5); text-align: center; border: 1px solid rgba(255,255,255,0.1); animation: fadeIn 0.3s ease; }
         
@@ -181,9 +182,7 @@
 </div>
 
 <script>
-    // URL BASE de tu API en Render
-    const BASE_URL = "https://asistencia-recursos-1.onrender.com/api";
-    
+        const API_URL = "https://asistencia-recursos.onrender.com/api/practicantes";
     let practicantes = [];
     let filtroAreaActual = "Todos";
 
@@ -196,7 +195,8 @@
 
     function formatearTiempo(tiempo) {
         if (!tiempo || tiempo === "0" || tiempo === "00:00:00") return "00:00:00";
-        return tiempo;
+        const partes = tiempo.split(':');
+        return partes.length === 3 ? tiempo : (partes.length === 2 ? `${tiempo}:00` : `${tiempo}:00:00`);
     }
 
     function formatearHora(fecha) {
@@ -207,14 +207,13 @@
 
     async function cargarDatos() {
         try {
-            // Usamos el endpoint /reporte que devuelve las horas calculadas
-            const res = await fetch(`${BASE_URL}/reporte`);
+            const res = await fetch(API_URL);
             practicantes = await res.json();
             ejecutarFiltros();
         } catch (e) { console.error("Error cargando datos:", e); }
     }
 
-    // --- ELIMINAR ---
+    // --- LÓGICA DE ELIMINACIÓN ---
     function abrirModalDelete(id) {
         const p = practicantes.find(x => x.id_practicantes === id);
         if (p) {
@@ -227,19 +226,19 @@
     async function confirmarEliminar() {
         const id = document.getElementById('delete-id').value;
         try {
-            await fetch(`${BASE_URL}/practicantes/${id}`, { method: 'DELETE' });
+            await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
             cerrarModal('modal-delete');
             mostrarToast("🗑️ Registro eliminado");
             cargarDatos();
         } catch (e) { console.error(e); }
     }
 
-    // --- RESET ---
+    // --- LÓGICA DE RESET ---
     function abrirModalReset() { document.getElementById('modal-reset').style.display = 'flex'; }
 
     async function confirmarReset() {
         try {
-            const res = await fetch(`${BASE_URL}/reset`, { method: "DELETE" });
+            const res = await fetch("http://localhost:3000/api/reset", { method: "DELETE" });
             if (res.ok) {
                 cerrarModal('modal-reset');
                 mostrarToast("🔄 Nueva quincena iniciada");
@@ -248,7 +247,7 @@
         } catch (e) { mostrarToast("Error de conexión"); }
     }
 
-    // --- EDITAR ---
+    // --- LÓGICA DE EDICIÓN ---
     function abrirModalEdit(id) {
         const p = practicantes.find(x => x.id_practicantes === id);
         document.getElementById('edit-id').value = id;
@@ -265,7 +264,7 @@
             apellidos: document.getElementById('edit-apellidos').value,
             area: document.getElementById('edit-area').value
         };
-        await fetch(`${BASE_URL}/practicantes/${id}`, {
+        await fetch(`${API_URL}/${id}`, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(datos)
