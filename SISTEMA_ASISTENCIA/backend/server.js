@@ -6,12 +6,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// --- CONFIGURACIÓN DE CONEXIÓN (Render + Supabase) ---
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'asistencia_RRHH',
-    password: 'database',
-    port: 5432,
+    // Usa la URL de Supabase desde las variables de entorno
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false // Obligatorio para conexiones seguras externas
+    }
 });
 
 // --- 1. OBTENER PRACTICANTES ---
@@ -26,15 +27,31 @@ app.get('/api/practicantes', async (req, res) => {
             params.push(area);
         }
 
-        query += ' ORDER BY nombres ASC';
+        query += ' ORDER BY apellidos ASC';
         const result = await pool.query(query, params);
         res.json(result.rows);
     } catch (error) {
+        console.error("ERROR AL OBTENER:", error);
         res.status(500).json({ error: 'Error al obtener datos' });
     }
 });
 
-// --- 2. REGISTRAR ASISTENCIA ---
+// --- 2. REGISTRAR NUEVO PRACTICANTE ---
+app.post('/api/practicantes', async (req, res) => {
+    const { nombres, apellidos, area } = req.body;
+    try {
+        const result = await pool.query(
+            'INSERT INTO practicantes (nombres, apellidos, area) VALUES ($1, $2, $3) RETURNING *',
+            [nombres, apellidos, area]
+        );
+        res.status(201).json({ message: '✅ Practicante registrado', practicante: result.rows[0] });
+    } catch (error) {
+        console.error("ERROR AL GUARDAR:", error);
+        res.status(500).json({ error: 'Error al guardar en la base de datos' });
+    }
+});
+
+// --- 3. REGISTRAR ASISTENCIA (ENTRADA/SALIDA) ---
 app.post('/api/asistencia/:id', async (req, res) => {
     const { id } = req.params;
     const { tipo } = req.body;
@@ -62,12 +79,12 @@ app.post('/api/asistencia/:id', async (req, res) => {
             res.json({ message: '✅ Salida registrada con éxito' });
         }
     } catch (error) {
-        console.error(error);
+        console.error("ERROR ASISTENCIA:", error);
         res.status(500).json({ error: 'Error en el servidor' });
     }
 });
 
-// --- 3. REPORTE ---
+// --- 4. REPORTE GENERAL ---
 app.get('/api/reporte', async (req, res) => {
     try {
         const result = await pool.query(`
@@ -76,10 +93,8 @@ app.get('/api/reporte', async (req, res) => {
                 p.nombres,
                 p.apellidos,
                 p.area,
-
                 MAX(a.hora_entrada) AS hora_entrada,
                 MAX(a.hora_salida) AS hora_salida,
-
                 COALESCE(
                     TO_CHAR(
                         SUM(
@@ -93,15 +108,11 @@ app.get('/api/reporte', async (req, res) => {
                     ),
                     '00:00:00'
                 ) AS horas_acumuladas
-
             FROM practicantes p
-            LEFT JOIN asistencia a 
-                ON p.id_practicantes = a.id_practicantes
-
+            LEFT JOIN asistencia a ON p.id_practicantes = a.id_practicantes
             GROUP BY p.id_practicantes
             ORDER BY p.apellidos ASC
         `);
-
         res.json(result.rows);
     } catch (error) {
         console.error("ERROR REPORTE:", error);
@@ -109,61 +120,45 @@ app.get('/api/reporte', async (req, res) => {
     }
 });
 
-// --- 4. EDITAR ---
+// --- 5. EDITAR PRACTICANTE ---
 app.put('/api/practicantes/:id', async (req, res) => {
     const { id } = req.params;
     const { nombres, apellidos, area } = req.body;
-
     try {
         await pool.query(
             'UPDATE practicantes SET nombres=$1, apellidos=$2, area=$3 WHERE id_practicantes=$4',
             [nombres, apellidos, area, id]
         );
-        res.json({ message: 'Actualizado' });
-    } catch {
+        res.json({ message: 'Actualizado correctamente' });
+    } catch (error) {
         res.status(500).json({ error: 'Error al actualizar' });
     }
 });
 
-// --- 5. RESET HORAS ---
-app.put('/api/practicantes/reset-horas/:id', async (req, res) => {
-    const { id } = req.params;
-
-    try {
-        await pool.query(
-            "UPDATE practicantes SET horas_acumuladas='00:00:00' WHERE id_practicantes=$1",
-            [id]
-        );
-        res.json({ message: 'Horas reiniciadas' });
-    } catch {
-        res.status(500).json({ error: 'Error' });
-    }
-});
-
-// --- 6. ELIMINAR ---
+// --- 6. ELIMINAR PRACTICANTE ---
 app.delete('/api/practicantes/:id', async (req, res) => {
     const { id } = req.params;
-
     try {
+        // Al usar ON DELETE CASCADE en la base de datos, esto es más seguro
         await pool.query('DELETE FROM asistencia WHERE id_practicantes=$1', [id]);
         await pool.query('DELETE FROM practicantes WHERE id_practicantes=$1', [id]);
-        res.json({ message: 'Eliminado' });
-    } catch {
-        res.status(500).json({ error: 'Error' });
+        res.json({ message: 'Eliminado correctamente' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al eliminar' });
     }
 });
 
-// --- 7. RESETEAR TODO (NUEVA QUINCENA) ---
+// --- 7. NUEVA QUINCENA (RESET TOTAL) ---
 app.delete('/api/reset', async (req, res) => {
     try {
-        // Solo borra asistencia (aquí están las horas reales)
         await pool.query('DELETE FROM asistencia');
-
         res.json({ message: '🔄 Nueva quincena iniciada correctamente' });
     } catch (error) {
         console.error("ERROR RESET:", error);
-        res.status(500).json({ error: 'Error al reiniciar' });
+        res.status(500).json({ error: 'Error al reiniciar la quincena' });
     }
 });
 
-app.listen(3000, () => console.log('🚀 Servidor corriendo en http://localhost:3000'));
+// Escuchar en el puerto definido por Render o 3000 por defecto
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`🚀 Servidor corriendo en puerto ${PORT}`));
