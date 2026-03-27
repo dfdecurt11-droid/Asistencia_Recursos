@@ -37,14 +37,20 @@
         .total-highlight { background: var(--secondary); color: white; }
         .area-badge { padding: 4px 10px; border-radius: 15px; color: white; font-size: 0.7rem; font-weight: 700; display: inline-block; }
 
+        .btn-action { border: none; background: none; cursor: pointer; font-size: 1.1rem; margin: 0 5px; transition: 0.2s; }
+        .btn-edit { color: var(--info); }
+        .btn-delete { color: var(--danger); }
+        .btn-action:hover { transform: scale(1.2); }
+
         /* MODALES */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(8px); }
         .modal-content { background: white; padding: 25px; border-radius: 20px; text-align: center; max-width: 450px; width: 90%; transform: scale(0.8); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .modal-content.show { transform: scale(1); }
         
-        .btn-action { border: none; background: none; cursor: pointer; font-size: 1.1rem; margin: 0 8px; }
-        .btn-edit { color: var(--info); }
-        .btn-delete { color: var(--danger); }
+        .edit-form { text-align: left; margin-top: 15px; }
+        .edit-form label { font-size: 0.8rem; font-weight: 700; color: #7f8c8d; display: block; margin-bottom: 5px; }
+        .edit-form input, .edit-form select { width: 100%; padding: 10px; border-radius: 8px; border: 2px solid #eee; margin-bottom: 15px; font-family: inherit; box-sizing: border-box; }
+        
         #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 25px; border-radius: 50px; display: none; z-index: 5000; font-size: 0.85rem; }
     </style>
 </head>
@@ -58,8 +64,34 @@
         <h3 id="modalTitle">¿Estás seguro?</h3>
         <p id="modalText">Esta acción no se puede deshacer.</p>
         <div style="display: flex; gap: 10px; margin-top: 20px;">
-            <button onclick="cerrarModal()" style="flex:1; padding:10px; border-radius:8px; border:none; cursor:pointer;">Cancelar</button>
+            <button onclick="cerrarModal()" style="flex:1; padding:10px; border-radius:8px; border:none; cursor:pointer; font-weight:bold;">Cancelar</button>
             <button id="btnConfirmarAction" style="flex:1; padding:10px; border-radius:8px; border:none; cursor:pointer; background:var(--danger); color:white; font-weight:bold;">Confirmar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modalEditOverlay">
+    <div class="modal-content" id="modalEditContent">
+        <i class="fas fa-user-edit" style="color:var(--info); font-size: 3rem; margin-bottom: 15px;"></i>
+        <h3>Editar Practicante</h3>
+        <div class="edit-form">
+            <input type="hidden" id="editId">
+            <label>Nombres</label>
+            <input type="text" id="editNombres">
+            <label>Apellidos</label>
+            <input type="text" id="editApellidos">
+            <label>Área</label>
+            <select id="editArea">
+                <option value="Ventas">Ventas</option>
+                <option value="Finanzas">Finanzas</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Logística">Logística</option>
+                <option value="Mejora Continua">Mejora Continua</option>
+            </select>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <button onclick="cerrarModalEdit()" style="flex:1; padding:10px; border-radius:8px; border:none; cursor:pointer; font-weight:bold;">Cerrar</button>
+            <button onclick="guardarEdicion()" style="flex:1; padding:10px; border-radius:8px; border:none; cursor:pointer; background:var(--info); color:white; font-weight:bold;">Guardar</button>
         </div>
     </div>
 </div>
@@ -97,47 +129,42 @@
                     <th>N°</th>
                     <th>Practicante</th>
                     <th>Área</th>
-                    <th>Última Entrada</th>
-                    <th>Última Salida</th>
-                    <th>Total Acumulado</th>
+                    <th>Entrada</th>
+                    <th>Salida</th>
+                    <th>Total</th>
+                    <th style="text-align:center">Acciones</th>
                 </tr>
             </thead>
             <tbody id="tabla-body">
-                <tr><td colspan="6" style="text-align:center; padding:50px;">Cargando datos del servidor...</td></tr>
+                <tr><td colspan="7" style="text-align:center; padding:50px;">Cargando datos...</td></tr>
             </tbody>
         </table>
     </div>
 </div>
 
 <script>
-    const REPORTE_URL = "https://asistencia-recursos.onrender.com/api/reporte";
+    const BASE_URL = "https://asistencia-recursos.onrender.com/api";
     let practicantes = [];
     let filtroArea = "Todos";
 
-    // Formatea la hora de PostgreSQL a algo legible (12h)
     function mostrarHora(h) {
         if (!h || h === "00:00:00") return "--:--";
-        try {
-            // Si es un objeto Date completo
-            const d = new Date(h);
-            if(!isNaN(d.getTime())) return d.toLocaleTimeString('es-PE', {hour:'2-digit', minute:'2-digit', hour12:true});
-            return h; // Si ya es un string formateado
-        } catch(e) { return h; }
+        const d = new Date(h);
+        return !isNaN(d.getTime()) ? d.toLocaleTimeString('es-PE', {hour:'2-digit', minute:'2-digit', hour12:true}) : h;
     }
 
     async function cargarDatos() {
         try {
-            const res = await fetch(REPORTE_URL);
+            const res = await fetch(`${BASE_URL}/reporte`);
             practicantes = await res.json();
             ejecutarFiltros();
-        } catch (e) { mostrarToast("❌ Error al conectar con el servidor"); }
+        } catch (e) { mostrarToast("❌ Error de conexión"); }
     }
 
     function ejecutarFiltros() {
         const busqueda = document.getElementById('inputNombre').value.toLowerCase();
         const filtrados = practicantes.filter(p => {
-            const nombreCompleto = `${p.nombres} ${p.apellidos}`.toLowerCase();
-            const matchNom = nombreCompleto.includes(busqueda);
+            const matchNom = `${p.nombres} ${p.apellidos}`.toLowerCase().includes(busqueda);
             const matchArea = filtroArea === "Todos" || p.area.trim() === filtroArea;
             return matchNom && matchArea;
         });
@@ -146,10 +173,6 @@
 
     function renderizar(lista) {
         const tbody = document.getElementById('tabla-body');
-        if(lista.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:30px;">No se encontraron resultados</td></tr>';
-            return;
-        }
         tbody.innerHTML = lista.map((p, i) => `
             <tr>
                 <td><b>${i + 1}</b></td>
@@ -157,7 +180,11 @@
                 <td><span class="area-badge" style="background:var(--${p.area.toLowerCase().split(' ')[0]})">${p.area}</span></td>
                 <td><span class="timer-box">${mostrarHora(p.hora_entrada)}</span></td>
                 <td><span class="timer-box">${mostrarHora(p.hora_salida)}</span></td>
-                <td><span class="timer-box total-highlight">${p.horas_acumuladas}</span></td>
+                <td><span class="timer-box total-highlight">${p.horas_acumuladas || '00:00:00'}</span></td>
+                <td style="text-align:center">
+                    <button class="btn-action btn-edit" onclick='abrirModalEdit(${JSON.stringify(p)})'><i class="fas fa-edit"></i></button>
+                    <button class="btn-action btn-delete" onclick="abrirModalEliminar(${p.id_practicantes})"><i class="fas fa-trash-alt"></i></button>
+                </td>
             </tr>
         `).join('');
     }
@@ -169,19 +196,67 @@
         ejecutarFiltros();
     }
 
-    function abrirModalReset() {
+    // --- LÓGICA EDITAR ---
+    function abrirModalEdit(p) {
+        document.getElementById('editId').value = p.id_practicantes;
+        document.getElementById('editNombres').value = p.nombres;
+        document.getElementById('editApellidos').value = p.apellidos;
+        document.getElementById('editArea').value = p.area;
+        const modal = document.getElementById('modalEditOverlay');
+        modal.style.display = 'flex';
+        setTimeout(() => document.getElementById('modalEditContent').classList.add('show'), 10);
+    }
+
+    async function guardarEdicion() {
+        const id = document.getElementById('editId').value;
+        const data = {
+            nombres: document.getElementById('editNombres').value,
+            apellidos: document.getElementById('editApellidos').value,
+            area: document.getElementById('editArea').value
+        };
+        try {
+            const res = await fetch(`${BASE_URL}/practicantes/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (res.ok) { cerrarModalEdit(); cargarDatos(); mostrarToast("✅ Actualizado"); }
+        } catch (e) { mostrarToast("❌ Error al guardar"); }
+    }
+
+    function cerrarModalEdit() {
+        document.getElementById('modalEditContent').classList.remove('show');
+        setTimeout(() => document.getElementById('modalEditOverlay').style.display = 'none', 300);
+    }
+
+    // --- LÓGICA ELIMINAR / RESET ---
+    function abrirModalEliminar(id) {
         const modal = document.getElementById('modalOverlay');
-        document.getElementById('modalTitle').innerText = "¿Reiniciar Horas?";
-        document.getElementById('modalText').innerText = "Esto borrará todas las asistencias registradas hasta hoy.";
+        document.getElementById('modalTitle').innerText = "¿Eliminar Practicante?";
+        document.getElementById('modalText').innerText = "Se borrarán todos sus datos y asistencias.";
         modal.style.display = 'flex';
         setTimeout(() => document.getElementById('modalContent').classList.add('show'), 10);
 
         document.getElementById('btnConfirmarAction').onclick = async () => {
             try {
-                await fetch("https://asistencia-recursos.onrender.com/api/reset", { method: 'DELETE' });
-                cerrarModal(); cargarDatos();
-                mostrarToast("🔄 Sistema reiniciado correctamente");
-            } catch(e) { mostrarToast("❌ Error al reiniciar"); }
+                await fetch(`${BASE_URL}/practicantes/${id}`, { method: 'DELETE' });
+                cerrarModal(); cargarDatos(); mostrarToast("🗑️ Eliminado");
+            } catch (e) { mostrarToast("❌ Error"); }
+        };
+    }
+
+    function abrirModalReset() {
+        const modal = document.getElementById('modalOverlay');
+        document.getElementById('modalTitle').innerText = "¿Reiniciar Quincena?";
+        document.getElementById('modalText').innerText = "Todas las horas acumuladas volverán a cero.";
+        modal.style.display = 'flex';
+        setTimeout(() => document.getElementById('modalContent').classList.add('show'), 10);
+
+        document.getElementById('btnConfirmarAction').onclick = async () => {
+            try {
+                await fetch(`${BASE_URL}/reset`, { method: 'DELETE' });
+                cerrarModal(); cargarDatos(); mostrarToast("🔄 Sistema Reiniciado");
+            } catch (e) { mostrarToast("❌ Error"); }
         };
     }
 
