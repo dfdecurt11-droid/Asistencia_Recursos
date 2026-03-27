@@ -15,67 +15,38 @@
             --bg: #f4f7f6; 
         }
         
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 10px; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
 
         .container { 
-            width: 95%;
-            max-width: 850px; 
-            margin: 15px auto; 
-            background: white; 
-            padding: 25px; 
-            border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            max-width: 800px; margin: auto; background: white; 
+            padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
         }
 
         .header-flex { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 2px solid #eee; 
-            padding-bottom: 15px; 
-            margin-bottom: 20px; 
+            display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px; 
         }
 
         #reloj-lista { 
-            font-weight: 800; 
-            color: var(--primary); 
-            font-size: 1.2rem; 
-            background: #f8f9fa; 
-            padding: 8px 18px; 
-            border-radius: 12px; 
-            border: 1px solid #eee; 
+            font-weight: 800; color: var(--primary); font-size: 1.3rem; 
+            background: #f8f9fa; padding: 8px 18px; border-radius: 12px; border: 1px solid #eee; 
         }
 
         .item-practicante { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 18px; 
-            border-bottom: 1px solid #eee; 
-            transition: all 0.3s ease;
-            gap: 15px;
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 18px; border-bottom: 1px solid #eee; transition: all 0.3s ease; 
         }
 
-        .item-practicante:hover { background: #fffcf9; }
+        .item-practicante:hover { background: #fffcf9; transform: scale(1.01); }
 
-        .info-personal strong { font-size: 1.05rem; display: block; color: var(--dark); }
+        .info-personal strong { font-size: 1.1rem; display: block; color: var(--dark); }
 
-        .btn-group { display: flex; gap: 10px; }
+        .btn-group { display: flex; gap: 12px; }
 
         .btn-asistencia { 
-            padding: 10px 16px; 
-            border-radius: 10px; 
-            border: none; 
-            cursor: pointer; 
-            font-weight: 600; 
-            color: white; 
-            transition: 0.3s; 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
-            font-family: 'Poppins'; 
-            font-size: 0.85rem;
-            white-space: nowrap;
+            padding: 10px 18px; border-radius: 10px; border: none; 
+            cursor: pointer; font-weight: 600; color: white; transition: 0.3s; 
+            display: flex; align-items: center; gap: 8px; font-family: 'Poppins'; font-size: 0.85rem;
         }
 
         .btn-entrada { background: var(--success); }
@@ -83,27 +54,18 @@
 
         .btn-asistencia:hover { 
             filter: brightness(1.1); 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             transform: translateY(-2px);
         }
 
         .btn-back { 
-            text-decoration: none; 
-            color: #3498db; 
-            font-weight: 600; 
-            margin-bottom: 15px; 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 5px; 
+            text-decoration: none; color: #3498db; font-weight: 600; 
+            margin-bottom: 15px; display: inline-flex; align-items: center; gap: 5px; 
         }
 
         .status-badge { 
-            font-size: 0.75rem; 
-            padding: 3px 10px; 
-            border-radius: 20px; 
-            background: #f0f0f0; 
-            color: #7f8c8d; 
-            margin-top: 5px; 
-            display: inline-block;
+            font-size: 0.75rem; padding: 3px 10px; border-radius: 20px; 
+            background: #f0f0f0; color: #7f8c8d; margin-top: 5px; display: inline-block;
         }
 
         #mensaje-alert {
@@ -111,31 +73,6 @@
             border-radius: 12px; color: white; display: none; z-index: 1000;
             box-shadow: 0 8px 20px rgba(0,0,0,0.2); font-weight: 600;
             animation: slideIn 0.4s ease-out;
-        }
-
-        /* --- RESPONSIVE (Celulares) --- */
-        @media (max-width: 650px) {
-            .header-flex {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
-
-            .item-practicante {
-                flex-direction: column;
-                text-align: center;
-                padding: 20px 10px;
-            }
-
-            .btn-group {
-                width: 100%;
-            }
-
-            .btn-asistencia {
-                flex: 1;
-                justify-content: center;
-                padding: 12px;
-            }
         }
 
         @keyframes slideIn {
@@ -162,10 +99,11 @@
     </div>
 
     <script>
+        // URLs actualizadas
         const BASE_URL = "https://asistencia-recursos-1.onrender.com/api";
         const AREA_PAGINA = "Ventas"; 
 
-        // Reloj
+        // Reloj en tiempo real
         setInterval(() => {
             document.getElementById('reloj-lista').innerText = 
                 new Date().toLocaleTimeString('es-PE', { hour12: true });
@@ -181,20 +119,19 @@
 
         async function cargarLista() {
             try {
-                // El servidor puede tardar en despertar (Render Free Tier)
                 const res = await fetch(`${BASE_URL}/practicantes`);
-                if (!res.ok) throw new Error("Error en respuesta");
-                
                 const todos = await res.json();
                 const listaDiv = document.getElementById('lista-asistencia');
                 
+                // --- FILTRADO MANUAL POR ÁREA ---
                 const filtrados = todos.filter(p => p.area === AREA_PAGINA);
 
-                if (filtrados.length === 0) {
+                if (!filtrados || filtrados.length === 0) {
                     listaDiv.innerHTML = `<p style="text-align:center; color: #999; padding: 20px;">No hay personal registrado en ${AREA_PAGINA}.</p>`;
                     return;
                 }
 
+                // Ordenamiento A-Z
                 filtrados.sort((a, b) => (a.apellidos || "").localeCompare(b.apellidos || "", 'es', { sensitivity: 'base' }));
 
                 listaDiv.innerHTML = filtrados.map(p => `
@@ -215,17 +152,15 @@
                 `).join('');
 
             } catch (error) { 
-                console.error(error);
                 document.getElementById('lista-asistencia').innerHTML = 
-                    `<div style="text-align:center;">
-                        <p style="color: var(--danger);">Error: No se pudo conectar con el servidor.</p>
-                        <button onclick="cargarLista()" style="padding:8px 15px; border-radius:8px; border:none; background:#3498db; color:white; cursor:pointer;">Reintentar</button>
-                    </div>`;
+                    `<p style="text-align:center; color: var(--danger);">Error: No se pudo conectar con el servidor.</p>`;
             }
         }
 
         async function marcar(id, tipo) {
             try {
+                const horaLocal = new Date().toLocaleTimeString('es-PE', { hour12: true });
+                
                 const res = await fetch(`${BASE_URL}/asistencia/${id}`, { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -236,12 +171,12 @@
                 
                 if (res.ok) {
                     const emoji = tipo === 'entrada' ? '🕒' : '✅';
-                    showAlert(`${emoji} Marcación exitosa (${new Date().toLocaleTimeString('es-PE', { hour12: true })})`);
+                    showAlert(`${emoji} Ventas: Marcación de ${tipo} exitosa (${horaLocal})`);
                 } else {
-                    showAlert(result.message || "Error al registrar", true);
+                    showAlert(result.message || "No se pudo registrar", true);
                 }
             } catch (e) {
-                showAlert("El servidor no responde", true);
+                showAlert("Error de red: El servidor no responde", true);
             }
         }
 
