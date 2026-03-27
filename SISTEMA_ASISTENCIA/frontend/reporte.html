@@ -9,33 +9,23 @@
     <style>
         :root {
             --primary: #9b59b6; --secondary: #2c3e50; --success: #27ae60; --danger: #e74c3c; --info: #3498db; 
-            --ventas: #e67e22; --finanzas: #2ecc71; --marketing: #9b59b6; --logistica: #34495e; --mejora: #f1c40f;
+            --ventas: #e67e22; --finanzas: #2ecc71; --marketing: #9b59b6; --logística: #34495e; --mejora: #f1c40f;
         }
 
         body { font-family: 'Poppins', sans-serif; margin: 0; padding: 10px; background-color: #1a1a2e; color: var(--secondary); }
         .container { width: 100%; max-width: 1200px; margin: auto; background: white; border-radius: 15px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); box-sizing: border-box; }
         
-        /* HEADER RESPONSIVE */
         .header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
         .header h2 { margin: 0; font-size: 1.4rem; }
 
-        .controls-wrapper {
-            display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px;
-            background: #f8f9fa; padding: 15px; border-radius: 12px; border: 1px solid #eee;
-        }
+        .controls-wrapper { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; background: #f8f9fa; padding: 15px; border-radius: 12px; border: 1px solid #eee; }
 
         .search-container { position: relative; width: 100%; }
-        .search-container input {
-            width: 100%; padding: 12px 15px 12px 40px; border-radius: 10px;
-            border: 2px solid #dfe6e9; outline: none; font-size: 1rem; box-sizing: border-box;
-        }
+        .search-container input { width: 100%; padding: 12px 15px 12px 40px; border-radius: 10px; border: 2px solid #dfe6e9; outline: none; font-size: 1rem; box-sizing: border-box; }
         .search-container i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--info); }
 
         .filter-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
-        .btn-filter {
-            padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer;
-            font-weight: 600; font-size: 0.75rem; color: white; opacity: 0.7; transition: 0.3s;
-        }
+        .btn-filter { padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.75rem; color: white; opacity: 0.7; transition: 0.3s; }
         .btn-filter.active { opacity: 1; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
         /* TABLA RESPONSIVA */
@@ -44,35 +34,54 @@
         th { text-align: left; padding: 12px; background: #f8f9fa; color: #7f8c8d; font-size: 0.7rem; text-transform: uppercase; }
         td { padding: 12px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
 
-        /* BADGES Y CAJAS DE HORA */
         .timer-box { font-family: 'JetBrains Mono', monospace; background: #f0f0f0; padding: 4px 8px; border-radius: 5px; font-weight: 600; font-size: 0.85rem; display: inline-block; }
         .total-highlight { background: var(--secondary); color: white; }
         .area-badge { padding: 4px 10px; border-radius: 15px; color: white; font-size: 0.7rem; font-weight: 700; display: inline-block; }
 
-        /* DISEÑO PARA MÓVILES (Menos de 768px) */
+        /* MODAL PERSONALIZADO */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); display: none; justify-content: center;
+            align-items: center; z-index: 9999; backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: white; padding: 30px; border-radius: 20px; text-align: center;
+            max-width: 400px; width: 90%; transform: scale(0.8); transition: 0.3s;
+        }
+        .modal-content.show { transform: scale(1); }
+        .modal-icon { font-size: 3rem; color: var(--danger); margin-bottom: 15px; }
+        .modal-btns { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
+        .btn-m { padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; }
+        .btn-cancel { background: #eee; color: #333; }
+        .btn-confirm { background: var(--danger); color: white; }
+
         @media screen and (max-width: 768px) {
             table, thead, tbody, th, td, tr { display: block; }
             thead tr { position: absolute; top: -9999px; left: -9999px; }
-            tr { border: 1px solid #eee; border-radius: 12px; margin-bottom: 15px; padding: 10px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+            tr { border: 1px solid #eee; border-radius: 12px; margin-bottom: 15px; padding: 10px; background: #fff; }
             td { border: none; position: relative; padding-left: 50%; text-align: right; border-bottom: 1px solid #f9f9f9; }
-            td:last-child { border-bottom: none; text-align: center; padding-left: 12px; }
-            td::before {
-                content: attr(data-label);
-                position: absolute; left: 12px; width: 45%; text-align: left;
-                font-weight: 800; color: #7f8c8d; font-size: 0.7rem; text-transform: uppercase;
-            }
-            .header { flex-direction: column; text-align: center; }
+            td::before { content: attr(data-label); position: absolute; left: 12px; width: 45%; text-align: left; font-weight: 800; color: #7f8c8d; font-size: 0.7rem; }
         }
 
-        /* BOTONES DE ACCIÓN */
         .btn-action { border: none; background: none; cursor: pointer; font-size: 1.1rem; margin: 0 8px; }
         .btn-edit { color: var(--info); }
         .btn-delete { color: var(--danger); }
-
-        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 25px; border-radius: 50px; display: none; z-index: 5000; font-size: 0.85rem; }
+        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 25px; border-radius: 50px; display: none; z-index: 5000; }
     </style>
 </head>
 <body>
+
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content" id="modalContent">
+        <i class="fas fa-exclamation-triangle modal-icon"></i>
+        <h3 id="modalTitle">¿Estás seguro?</h3>
+        <p id="modalText">Esta acción no se puede deshacer.</p>
+        <div class="modal-btns">
+            <button class="btn-m btn-cancel" onclick="cerrarModal()">Cancelar</button>
+            <button class="btn-m btn-confirm" id="btnConfirmarAction">Confirmar</button>
+        </div>
+    </div>
+</div>
 
 <div id="toast"></div>
 
@@ -82,7 +91,7 @@
             <a href="index.html" style="text-decoration:none; color:var(--info); font-weight:700;"><i class="fas fa-arrow-left"></i></a>
             <h2>Reporte <span style="color:var(--info)">RRHH</span></h2>
         </div>
-        <button onclick="confirmarReset()" style="background:var(--danger); color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer; font-weight:700; font-size: 0.8rem;">
+        <button onclick="abrirModalReset()" style="background:var(--danger); color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer; font-weight:700; font-size: 0.8rem;">
             <i class="fas fa-history"></i> REINICIAR
         </button>
     </div>
@@ -97,7 +106,7 @@
             <button class="btn-filter" style="background:var(--ventas)" onclick="filtrar('Ventas', this)">Ventas</button>
             <button class="btn-filter" style="background:var(--finanzas)" onclick="filtrar('Finanzas', this)">Finanzas</button>
             <button class="btn-filter" style="background:var(--marketing)" onclick="filtrar('Marketing', this)">Marketing</button>
-            <button class="btn-filter" style="background:var(--logistica)" onclick="filtrar('Logística', this)">Logística</button>
+            <button class="btn-filter" style="background:var(--logística)" onclick="filtrar('Logística', this)">Logística</button>
             <button class="btn-filter" style="background:var(--mejora)" onclick="filtrar('Mejora Continua', this)">Gestión</button>
         </div>
     </div>
@@ -115,8 +124,7 @@
                     <th style="text-align:center">Acciones</th>
                 </tr>
             </thead>
-            <tbody id="tabla-body">
-                </tbody>
+            <tbody id="tabla-body"></tbody>
         </table>
     </div>
 </div>
@@ -126,10 +134,8 @@
     let practicantes = [];
     let filtroArea = "Todos";
 
-    // Función para formatear las horas que vienen del servidor
     function mostrarHora(h) {
         if (!h || h === "00:00:00") return "--:--";
-        // Si h es una fecha ISO, extrae la hora, si es string de hora, úsalo
         return h.length > 8 ? new Date(h).toLocaleTimeString('es-PE', {hour:'2-digit', minute:'2-digit', hour12:true}) : h;
     }
 
@@ -145,7 +151,7 @@
         const busqueda = document.getElementById('inputNombre').value.toLowerCase();
         const filtrados = practicantes.filter(p => {
             const matchNom = `${p.nombres} ${p.apellidos}`.toLowerCase().includes(busqueda);
-            const matchArea = filtroArea === "Todos" || p.area === filtroArea;
+            const matchArea = filtroArea === "Todos" || p.area.trim() === filtroArea;
             return matchNom && matchArea;
         });
         renderizar(filtrados);
@@ -163,7 +169,7 @@
                 <td data-label="Total Horas"><span class="timer-box total-highlight">${p.horas_acumuladas || '00:00:00'}</span></td>
                 <td data-label="Acciones" style="text-align:center">
                     <button class="btn-action btn-edit" onclick="alert('Editar ID: '+${p.id_practicantes})"><i class="fas fa-edit"></i></button>
-                    <button class="btn-action btn-delete" onclick="eliminar(${p.id_practicantes})"><i class="fas fa-trash-alt"></i></button>
+                    <button class="btn-action btn-delete" onclick="abrirModalEliminar(${p.id_practicantes})"><i class="fas fa-trash-alt"></i></button>
                 </td>
             </tr>
         `).join('');
@@ -176,18 +182,40 @@
         ejecutarFiltros();
     }
 
-    async function eliminar(id) {
-        if(!confirm("¿Eliminar este registro?")) return;
-        await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-        cargarDatos();
-        mostrarToast("🗑️ Registro eliminado");
+    /* LÓGICA DEL MODAL BONITO */
+    function abrirModalEliminar(id) {
+        const modal = document.getElementById('modalOverlay');
+        document.getElementById('modalTitle').innerText = "¿Eliminar Registro?";
+        document.getElementById('modalText').innerText = "Esta acción eliminará permanentemente al practicante del reporte.";
+        modal.style.display = 'flex';
+        setTimeout(() => document.getElementById('modalContent').classList.add('show'), 10);
+        
+        document.getElementById('btnConfirmarAction').onclick = async () => {
+            await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+            cerrarModal();
+            cargarDatos();
+            mostrarToast("🗑️ Registro eliminado correctamente");
+        };
     }
 
-    async function confirmarReset() {
-        if(!confirm("⚠️ ¿Reiniciar quincena? Se borrarán todas las horas.")) return;
-        await fetch("https://asistencia-recursos.onrender.com/api/reset", { method: 'DELETE' });
-        cargarDatos();
-        mostrarToast("🔄 Sistema reiniciado");
+    function abrirModalReset() {
+        const modal = document.getElementById('modalOverlay');
+        document.getElementById('modalTitle').innerText = "¿Reiniciar Quincena?";
+        document.getElementById('modalText').innerText = "Se borrarán todas las horas acumuladas de todos los practicantes.";
+        modal.style.display = 'flex';
+        setTimeout(() => document.getElementById('modalContent').classList.add('show'), 10);
+
+        document.getElementById('btnConfirmarAction').onclick = async () => {
+            await fetch("https://asistencia-recursos.onrender.com/api/reset", { method: 'DELETE' });
+            cerrarModal();
+            cargarDatos();
+            mostrarToast("🔄 Sistema reiniciado con éxito");
+        };
+    }
+
+    function cerrarModal() {
+        document.getElementById('modalContent').classList.remove('show');
+        setTimeout(() => document.getElementById('modalOverlay').style.display = 'none', 300);
     }
 
     function mostrarToast(m) {
