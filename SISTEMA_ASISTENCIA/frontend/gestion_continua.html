@@ -11,63 +11,149 @@
             --primary: #FFA502; 
             --success: #2ecc71; 
             --dark: #2c3e50; 
-            --bg: #f4f7f6; 
+            /* Gradiente dinámico para Mejora Continua (Naranja/Oro) */
+            --bg-gradient: linear-gradient(-45deg, #e67e22, #f1c40f, #ff9f43, #ffca28);
         }
         
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Fondo Animado */
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .container { 
-            max-width: 800px; margin: auto; background: white; 
-            padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            max-width: 850px; 
+            width: 100%;
+            margin: auto; 
+            background: rgba(255, 255, 255, 0.92); 
+            padding: 40px; 
+            border-radius: 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
         .header-flex { 
-            display: flex; justify-content: space-between; align-items: center; 
-            border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 2px solid rgba(255, 165, 2, 0.1); 
+            padding-bottom: 15px; 
+            margin-bottom: 25px; 
         }
+
+        .header-flex h2 { margin: 0; font-size: 1.8rem; color: var(--dark); }
 
         #reloj-lista { 
-            font-weight: 800; color: var(--primary); font-size: 1.3rem; 
-            background: #f8f9fa; padding: 5px 15px; border-radius: 10px; border: 1px solid #eee;
+            font-weight: 800; 
+            color: #d35400; 
+            font-size: 1.4rem; 
+            background: #fff; 
+            padding: 8px 22px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 15px rgba(211, 84, 0, 0.15);
+            border: 1px solid #fce4ec;
         }
+
+        #lista-asistencia { display: grid; gap: 15px; }
 
         .item-practicante { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 20px; border-bottom: 1px solid #eee; transition: 0.3s; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 20px; 
+            background: #fff;
+            border-radius: 20px;
+            border: 1px solid #f1f1f1;
+            transition: all 0.3s ease; 
         }
 
-        .item-practicante:hover { background: #fffcf5; }
+        .item-practicante:hover { 
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(230, 126, 34, 0.1);
+            border-color: var(--primary);
+        }
 
-        .btn-group { display: flex; gap: 10px; }
+        .info-user strong { font-size: 1.15rem; color: var(--dark); display: block; }
+        .info-user small { color: #95a5a6; font-weight: 600; letter-spacing: 0.5px; }
+
+        .btn-group { display: flex; gap: 12px; }
 
         .btn-asistencia { 
-            padding: 10px 18px; border-radius: 12px; border: none; 
-            cursor: pointer; font-weight: 600; color: white; transition: 0.3s; 
-            display: flex; align-items: center; gap: 8px; font-family: 'Poppins'; font-size: 0.85rem;
+            padding: 12px 24px; 
+            border-radius: 14px; 
+            border: none; 
+            cursor: pointer; 
+            font-weight: 700; 
+            color: white; 
+            transition: all 0.3s; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            font-family: 'Poppins'; 
+            font-size: 0.85rem;
+            text-transform: uppercase;
         }
 
-        .btn-entrada { background: var(--success); }
-        .btn-salida { background: var(--primary); }
+        .btn-entrada { 
+            background: var(--success); 
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.2);
+        }
         
-        .btn-asistencia:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .btn-asistencia:active { transform: scale(0.95); }
+        .btn-salida { 
+            background: var(--primary); 
+            box-shadow: 0 4px 12px rgba(255, 165, 2, 0.2);
+        }
 
-        .btn-back { text-decoration: none; color: #3498db; font-weight: 600; margin-bottom: 15px; display: inline-block; }
+        .btn-asistencia:hover { 
+            transform: scale(1.05); 
+            filter: brightness(1.1); 
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1); 
+        }
+
+        .btn-back { 
+            text-decoration: none; 
+            color: var(--dark); 
+            font-weight: 600; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px;
+            margin-bottom: 20px; 
+            background: rgba(255, 255, 255, 0.5);
+            padding: 8px 15px;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
         
-        .empty-msg { text-align:center; color: #999; padding: 40px; }
+        .btn-back:hover { background: #fff; color: var(--primary); }
 
-        /* Estilo para la notificación Toast */
         #toast-alert {
-            position: fixed; top: 20px; right: 20px; padding: 15px 25px;
-            border-radius: 12px; color: white; display: none; z-index: 1000;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2); font-weight: 600;
-            animation: slideIn 0.5s ease;
+            position: fixed; top: 20px; right: 20px; padding: 18px 30px;
+            border-radius: 15px; color: white; display: none; z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); font-weight: 700;
+            animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+
+        .loading-icon { color: var(--primary); font-size: 2rem; }
     </style>
 </head>
 <body>
@@ -78,12 +164,18 @@
         <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver a Áreas</a>
         
         <div class="header-flex">
-            <h2>Área: <span style="color: var(--primary);">Mejora Continua</span></h2>
+            <div>
+                <p style="margin:0; color: #7f8c8d; font-weight: 600; font-size: 0.85rem;">Gestión de Asistencia</p>
+                <h2>Área: <span style="color: var(--primary);">Mejora Continua</span></h2>
+            </div>
             <div id="reloj-lista">00:00:00</div>
         </div>
 
         <div id="lista-asistencia">
-            <p style="text-align:center;">Buscando personal de mejora continua...</p>
+            <div style="text-align:center; padding: 40px;">
+                <i class="fas fa-sync fa-spin loading-icon"></i>
+                <p style="margin-top:10px; color:#7f8c8d;">Buscando personal activo...</p>
+            </div>
         </div>
     </div>
 
@@ -97,11 +189,11 @@
             document.getElementById('reloj-lista').innerText = new Date().toLocaleTimeString('es-PE', { hour12: true });
         }, 1000);
 
-        // Función de notificación
+        // Función de notificación mejorada
         function showToast(msg, isError = false) {
             const toast = document.getElementById('toast-alert');
-            toast.innerText = msg;
-            toast.style.backgroundColor = isError ? "#e74c3c" : "#FFA502";
+            toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${msg}`;
+            toast.style.backgroundColor = isError ? "#e74c3c" : "#e67e22";
             toast.style.display = "block";
             setTimeout(() => { toast.style.display = "none"; }, 4000);
         }
@@ -113,21 +205,21 @@
                 const listaDiv = document.getElementById('lista-asistencia');
                 
                 if(data.length === 0) {
-                    listaDiv.innerHTML = `<p class="empty-msg">No hay practicantes registrados en ${AREA_PAGINA}.</p>`;
+                    listaDiv.innerHTML = `
+                        <div style="text-align:center; padding:50px; opacity:0.5;">
+                            <i class="fas fa-folder-open" style="font-size:3rem;"></i>
+                            <p>No hay practicantes registrados aquí.</p>
+                        </div>`;
                     return;
                 }
 
-                data.sort((a, b) => {
-                    const apellidoA = (a.apellidos || "").toLowerCase();
-                    const apellidoB = (b.apellidos || "").toLowerCase();
-                    return apellidoA.localeCompare(apellidoB);
-                });
+                data.sort((a, b) => (a.apellidos || "").localeCompare(b.apellidos || ""));
 
                 listaDiv.innerHTML = data.map(p => `
                     <div class="item-practicante">
-                        <div>
-                            <strong style="font-size: 1.1rem; display:block; color: var(--dark);">${p.apellidos}, ${p.nombres}</strong>
-                            <small style="color: #7f8c8d;">ID: ${p.id_practicantes}</small>
+                        <div class="info-user">
+                            <strong>${p.apellidos}, ${p.nombres}</strong>
+                            <small><i class="fas fa-id-badge"></i> ID: ${p.id_practicantes}</small>
                         </div>
                         <div class="btn-group">
                             <button class="btn-asistencia btn-entrada" onclick="marcar(${p.id_practicantes}, 'entrada')">
@@ -140,31 +232,29 @@
                     </div>
                 `).join('');
             } catch (e) { 
-                document.getElementById('lista-asistencia').innerHTML = "Error al conectar con el servidor.";
+                document.getElementById('lista-asistencia').innerHTML = "<p style='text-align:center; color:red;'>Error de conexión.</p>";
             }
         }
 
         async function marcar(id, tipo) {
             try {
                 const horaAhora = new Date().toLocaleTimeString('es-PE', { hour12: true });
-                
                 const res = await fetch(`${ASISTENCIA_URL}/${id}`, { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    // CORRECCIÓN: Se cambió 'tipo' por 'tipo_registro'
                     body: JSON.stringify({ tipo_registro: tipo })
                 });
                 
                 const result = await res.json();
                 
                 if(res.ok) {
-                    const icon = tipo === 'entrada' ? '📈' : '🏁';
-                    showToast(`${icon} ${tipo.toUpperCase()} registrada a las ${horaAhora}`);
+                    const icon = tipo === 'entrada' ? '🚀' : '🏁';
+                    showToast(`${icon} ${tipo.toUpperCase()} confirmada: ${horaAhora}`);
                 } else {
                     showToast(result.message || "Error al marcar", true);
                 }
             } catch (e) {
-                showToast("Error de conexión con el backend.", true);
+                showToast("Error de conexión con el servidor.", true);
             }
         }
 

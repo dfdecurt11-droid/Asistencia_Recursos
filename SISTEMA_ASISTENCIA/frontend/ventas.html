@@ -7,35 +7,185 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #e67e22; --success: #27ae60; --danger: #e74c3c; --dark: #2c3e50; --bg: #f4f7f6; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .header-flex { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
-        #reloj-lista { font-weight: 800; color: var(--primary); font-size: 1.3rem; background: #f8f9fa; padding: 8px 18px; border-radius: 12px; border: 1px solid #eee; }
-        .item-practicante { display: flex; justify-content: space-between; align-items: center; padding: 18px; border-bottom: 1px solid #eee; transition: all 0.3s ease; }
-        .item-practicante:hover { background: #fffcf9; transform: scale(1.01); }
-        .info-personal strong { font-size: 1.1rem; display: block; color: var(--dark); }
+        :root { 
+            --primary: #e67e22; 
+            --success: #27ae60; 
+            --danger: #e74c3c; 
+            --dark: #2c3e50; 
+            /* Gradiente enérgico para Ventas */
+            --bg-gradient: linear-gradient(-45deg, #d35400, #e67e22, #f39c12, #ff9f43);
+        }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Fondo Animado */
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container { 
+            max-width: 850px; 
+            width: 100%;
+            margin: auto; 
+            background: rgba(255, 255, 255, 0.92); 
+            padding: 40px; 
+            border-radius: 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3); 
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .header-flex { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 2px solid rgba(230, 126, 34, 0.1); 
+            padding-bottom: 15px; 
+            margin-bottom: 25px; 
+        }
+
+        .header-flex h2 { margin: 0; font-size: 1.8rem; color: var(--dark); }
+
+        #reloj-lista { 
+            font-weight: 800; 
+            color: #d35400; 
+            font-size: 1.4rem; 
+            background: #fff; 
+            padding: 8px 22px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 15px rgba(211, 84, 0, 0.15);
+            border: 1px solid #fde3cf;
+        }
+
+        #lista-asistencia { display: grid; gap: 15px; }
+
+        .item-practicante { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 20px; 
+            background: #fff;
+            border-radius: 20px;
+            border: 1px solid #f1f1f1;
+            transition: all 0.3s ease; 
+        }
+
+        .item-practicante:hover { 
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px rgba(211, 84, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .info-personal strong { font-size: 1.15rem; color: var(--dark); display: block; }
+        .status-badge { 
+            font-size: 0.75rem; 
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            background: #fdf2e9; 
+            color: #d35400; 
+            font-weight: 700;
+            margin-top: 5px; 
+            display: inline-block;
+            border: 1px solid #fae5d3;
+        }
+
         .btn-group { display: flex; gap: 12px; }
-        .btn-asistencia { padding: 10px 18px; border-radius: 10px; border: none; cursor: pointer; font-weight: 600; color: white; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-family: 'Poppins'; font-size: 0.85rem; }
-        .btn-entrada { background: var(--success); }
-        .btn-salida { background: var(--primary); }
-        .btn-asistencia:hover { filter: brightness(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.15); transform: translateY(-2px); }
-        .btn-back { text-decoration: none; color: #3498db; font-weight: 600; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 5px; }
-        .status-badge { font-size: 0.75rem; padding: 3px 10px; border-radius: 20px; background: #f0f0f0; color: #7f8c8d; margin-top: 5px; display: inline-block; }
-        #mensaje-alert { position: fixed; top: 20px; right: 20px; padding: 15px 25px; border-radius: 12px; color: white; display: none; z-index: 1000; box-shadow: 0 8px 20px rgba(0,0,0,0.2); font-weight: 600; animation: slideIn 0.4s ease-out; }
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        .btn-asistencia { 
+            padding: 12px 24px; 
+            border-radius: 14px; 
+            border: none; 
+            cursor: pointer; 
+            font-weight: 700; 
+            color: white; 
+            transition: all 0.3s; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            font-family: 'Poppins'; 
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .btn-entrada { 
+            background: var(--success); 
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.2);
+        }
+        
+        .btn-salida { 
+            background: var(--primary); 
+            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.2);
+        }
+
+        .btn-asistencia:hover { 
+            transform: translateY(-3px); 
+            filter: brightness(1.1); 
+        }
+
+        .btn-back { 
+            text-decoration: none; 
+            color: #d35400; 
+            font-weight: 600; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px;
+            margin-bottom: 20px; 
+            background: rgba(255, 255, 255, 0.6);
+            padding: 8px 15px;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+        
+        .btn-back:hover { background: #fff; color: var(--primary); }
+
+        #mensaje-alert {
+            position: fixed; top: 20px; right: 20px; padding: 18px 30px;
+            border-radius: 15px; color: white; display: none; z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); font-weight: 700;
+            animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .loader-ventas { color: var(--primary); font-size: 2rem; }
     </style>
 </head>
 <body>
+
     <div id="mensaje-alert"></div>
+
     <div class="container">
         <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver a Áreas</a>
+        
         <div class="header-flex">
-            <h2>Área: <span id="nombre-area" style="color: var(--primary);">Ventas</span></h2>
+            <div>
+                <p style="margin:0; color: #7f8c8d; font-weight: 600; font-size: 0.85rem;">Dashboard de Ventas</p>
+                <h2>Área: <span style="color: var(--primary);">Ventas</span></h2>
+            </div>
             <div id="reloj-lista">00:00:00</div>
         </div>
+
         <div id="lista-asistencia">
-            <p style="text-align:center; color:#888;"><i class="fas fa-spinner fa-spin"></i> Cargando personal...</p>
+            <div style="text-align:center; padding: 40px;">
+                <i class="fas fa-chart-line fa-spin loader-ventas"></i>
+                <p style="margin-top:10px; color:#7f8c8d; font-weight: 600;">Sincronizando equipo comercial...</p>
+            </div>
         </div>
     </div>
 
@@ -50,7 +200,7 @@
 
         function showAlert(msg, isError = false) {
             const el = document.getElementById('mensaje-alert');
-            el.innerText = msg;
+            el.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-double'}"></i> ${msg}`;
             el.style.backgroundColor = isError ? "var(--danger)" : "var(--success)";
             el.style.display = "block";
             setTimeout(() => { el.style.display = "none"; }, 4000);
@@ -61,29 +211,36 @@
                 const res = await fetch(`${API_URL}?area=${encodeURIComponent(AREA_PAGINA)}`);
                 let data = await res.json();
                 const listaDiv = document.getElementById('lista-asistencia');
+                
                 if (!data || data.length === 0) {
-                    listaDiv.innerHTML = `<p style="text-align:center; color: #999; padding: 20px;">No hay personal registrado en ${AREA_PAGINA}.</p>`;
+                    listaDiv.innerHTML = `
+                        <div style="text-align:center; padding:50px; opacity:0.6;">
+                            <i class="fas fa-handshake-slash" style="font-size:3.5rem; color:#bdc3c7;"></i>
+                            <p>No hay asesores registrados en el sistema.</p>
+                        </div>`;
                     return;
                 }
+
                 data.sort((a, b) => a.apellidos.localeCompare(b.apellidos, 'es', { sensitivity: 'base' }));
+
                 listaDiv.innerHTML = data.map(p => `
                     <div class="item-practicante">
                         <div class="info-personal">
                             <strong>${p.apellidos.toUpperCase()}, ${p.nombres}</strong>
-                            <span class="status-badge">ID: ${p.id_practicantes}</span>
+                            <span class="status-badge"><i class="fas fa-user-tie"></i> Agente ID: ${p.id_practicantes}</span>
                         </div>
                         <div class="btn-group">
                             <button class="btn-asistencia btn-entrada" onclick="marcar(${p.id_practicantes}, 'entrada')">
-                                <i class="fas fa-sign-in-alt"></i> Entrada
+                                <i class="fas fa-door-open"></i> Entrada
                             </button>
                             <button class="btn-asistencia btn-salida" onclick="marcar(${p.id_practicantes}, 'salida')">
-                                <i class="fas fa-sign-out-alt"></i> Salida
+                                <i class="fas fa-briefcase"></i> Salida
                             </button>
                         </div>
                     </div>
                 `).join('');
             } catch (error) {
-                document.getElementById('lista-asistencia').innerHTML = `<p style="text-align:center; color: var(--danger);">Error crítico: No se pudo conectar con el servidor.</p>`;
+                document.getElementById('lista-asistencia').innerHTML = `<p style="text-align:center; color: var(--danger);">Error de conexión con la base comercial.</p>`;
             }
         }
 
@@ -93,17 +250,17 @@
                 const res = await fetch(`${ASISTENCIA_URL}/${id}`, { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ tipo_registro: tipo }) // CORREGIDO
+                    body: JSON.stringify({ tipo_registro: tipo })
                 });
                 const result = await res.json();
                 if (res.ok) {
-                    const emoji = tipo === 'entrada' ? '🕒' : '✅';
-                    showAlert(`${emoji} Marcación de ${tipo} exitosa (${horaLocal})`);
+                    const emoji = tipo === 'entrada' ? '🎯' : '💰';
+                    showAlert(`${emoji} ¡Ventas! ${tipo.toUpperCase()} confirmada: ${horaLocal}`);
                 } else {
-                    showAlert(result.message || "No se pudo registrar", true);
+                    showAlert(result.message || "Error de registro", true);
                 }
             } catch (e) {
-                showAlert("Error de red: El servidor no responde", true);
+                showAlert("Error crítico: Servidor fuera de línea", true);
             }
         }
         window.onload = cargarLista;

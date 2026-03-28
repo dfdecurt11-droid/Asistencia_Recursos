@@ -10,57 +10,151 @@
         :root { 
             --primary: #34495e; 
             --secondary: #2c3e50;
-            --dark: #2c3e50; 
-            --bg: #f4f7f6; 
+            --success: #27ae60;
+            --dark: #1a252f; 
+            /* Gradiente dinámico para Logística (Azules Industriales) */
+            --bg-gradient: linear-gradient(-45deg, #2c3e50, #34495e, #4b6584, #2f3640);
         }
         
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Fondo Animado */
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
         .container { 
-            max-width: 800px; margin: auto; background: white; 
-            padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            max-width: 850px; 
+            width: 100%;
+            margin: auto; 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 40px; 
+            border-radius: 25px; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4); 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .header-flex { 
-            display: flex; justify-content: space-between; align-items: center; 
-            border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 2px solid #f1f2f6; 
+            padding-bottom: 15px; 
+            margin-bottom: 25px; 
         }
+
+        .header-flex h2 { margin: 0; font-size: 1.8rem; color: var(--dark); }
 
         #reloj-lista { 
-            font-weight: 800; color: var(--primary); font-size: 1.3rem; 
-            background: #f8f9fa; padding: 5px 15px; border-radius: 10px; border: 1px solid #eee;
+            font-weight: 800; 
+            color: var(--primary); 
+            font-size: 1.4rem; 
+            background: #fff; 
+            padding: 8px 20px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(52, 73, 94, 0.1);
+            border: 1px solid #dcdde1;
         }
+
+        #lista-asistencia { display: grid; gap: 15px; }
 
         .item-practicante { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 18px; border-bottom: 1px solid #eee; transition: 0.3s; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 20px; 
+            background: #fff;
+            border-radius: 15px;
+            border: 1px solid #f1f2f6;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
         }
 
-        .item-practicante:hover { background: #f9f9f9; }
+        .item-practicante:hover { 
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--primary);
+        }
 
-        .btn-group { display: flex; gap: 10px; }
+        .info-user strong { font-size: 1.15rem; color: var(--dark); display: block; }
+        .info-user small { color: #7f8c8d; font-weight: 600; }
+
+        .btn-group { display: flex; gap: 12px; }
 
         .btn-asistencia { 
-            padding: 10px 18px; border-radius: 10px; border: none; 
-            cursor: pointer; font-weight: 600; color: white; transition: 0.3s; 
-            display: flex; align-items: center; gap: 8px; font-family: 'Poppins'; font-size: 0.85rem;
+            padding: 12px 22px; 
+            border-radius: 10px; 
+            border: none; 
+            cursor: pointer; 
+            font-weight: 700; 
+            color: white; 
+            transition: all 0.3s; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            font-family: 'Poppins'; 
+            font-size: 0.9rem;
+            text-transform: uppercase;
         }
 
-        .btn-entrada { background: #27ae60; }
-        .btn-salida { background: var(--primary); }
-
-        .btn-asistencia:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .btn-asistencia:active { transform: scale(0.95); }
-
-        .btn-back { text-decoration: none; color: #3498db; font-weight: 600; display: inline-block; margin-bottom: 15px; }
+        .btn-entrada { 
+            background: var(--success); 
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.2);
+        }
         
-        .empty-state { text-align: center; padding: 40px; color: #95a5a6; }
+        .btn-salida { 
+            background: var(--primary); 
+            box-shadow: 0 4px 12px rgba(52, 73, 94, 0.2);
+        } 
+
+        .btn-asistencia:hover { 
+            transform: translateY(-3px); 
+            filter: brightness(1.1); 
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15); 
+        }
+
+        .btn-back { 
+            text-decoration: none; 
+            color: var(--primary); 
+            font-weight: 600; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px;
+            margin-bottom: 20px; 
+            padding: 8px 15px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            transition: 0.3s;
+        }
+        
+        .btn-back:hover { background: #dfe4ea; }
 
         #mensaje-alert {
-            position: fixed; top: 20px; right: 20px; padding: 15px 25px;
-            border-radius: 10px; color: white; display: none; z-index: 1000;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2); font-weight: 600;
+            position: fixed; top: 20px; right: 20px; padding: 18px 30px;
+            border-radius: 15px; color: white; display: none; z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); font-weight: 700;
+            animation: slideIn 0.5s ease-out;
         }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .empty-state { text-align: center; padding: 40px; color: #bdc3c7; }
     </style>
 </head>
 <body>
@@ -68,15 +162,21 @@
     <div id="mensaje-alert"></div>
 
     <div class="container">
-        <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver a Áreas</a>
+        <a href="lista.html" class="btn-back"><i class="fas fa-boxes-stacked"></i> Volver a Áreas</a>
         
         <div class="header-flex">
-            <h2>Área: <span style="color: var(--primary);">Logística</span></h2>
+            <div>
+                <p style="margin:0; color: #95a5a6; font-weight: 600; font-size: 0.85rem;">Control de Flujos</p>
+                <h2>Área: <span style="color: var(--primary);">Logística</span></h2>
+            </div>
             <div id="reloj-lista">00:00:00</div>
         </div>
 
         <div id="lista-asistencia">
-            <p style="text-align:center;">Cargando personal de logística...</p>
+            <div style="text-align:center; padding: 30px;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+                <p>Sincronizando personal de Logística...</p>
+            </div>
         </div>
     </div>
 
@@ -91,7 +191,7 @@
 
         function showAlert(msg, isError = false) {
             const el = document.getElementById('mensaje-alert');
-            el.innerText = msg;
+            el.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${msg}`;
             el.style.backgroundColor = isError ? "#e74c3c" : "#34495e";
             el.style.display = "block";
             setTimeout(() => { el.style.display = "none"; }, 4000);
@@ -104,58 +204,56 @@
                 const listaDiv = document.getElementById('lista-asistencia');
                 
                 if(data.length === 0) {
-                    listaDiv.innerHTML = `<div class="empty-state"><i class="fas fa-box-open" style="font-size:3rem;"></i><p>No hay practicantes registrados en Logística.</p></div>`;
+                    listaDiv.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-box-open" style="font-size:4rem; margin-bottom:15px;"></i>
+                            <p>No hay personal registrado en esta ruta.</p>
+                        </div>`;
                     return;
                 }
 
-                data.sort((a, b) => {
-                    const apellidoA = (a.apellidos || "").toLowerCase();
-                    const apellidoB = (b.apellidos || "").toLowerCase();
-                    return apellidoA.localeCompare(apellidoB);
-                });
+                data.sort((a, b) => (a.apellidos || "").localeCompare(b.apellidos || ""));
 
                 listaDiv.innerHTML = data.map(p => `
                     <div class="item-practicante">
-                        <div>
-                            <strong style="font-size: 1.1rem; display:block; color: var(--dark);">${p.apellidos}, ${p.nombres}</strong>
-                            <small style="color: #7f8c8d;">ID: ${p.id_practicantes}</small>
+                        <div class="info-user">
+                            <strong>${p.apellidos}, ${p.nombres}</strong>
+                            <small><i class="fas fa-barcode"></i> SKU: ${p.id_practicantes}</small>
                         </div>
                         <div class="btn-group">
                             <button class="btn-asistencia btn-entrada" onclick="marcar(${p.id_practicantes}, 'entrada')">
-                                <i class="fas fa-sign-in-alt"></i> Entrada
+                                <i class="fas fa-dolly"></i> Entrada
                             </button>
                             <button class="btn-asistencia btn-salida" onclick="marcar(${p.id_practicantes}, 'salida')">
-                                <i class="fas fa-sign-out-alt"></i> Salida
+                                <i class="fas fa-truck-loading"></i> Salida
                             </button>
                         </div>
                     </div>
                 `).join('');
             } catch (e) {
-                document.getElementById('lista-asistencia').innerHTML = "Error al conectar con el servidor.";
+                document.getElementById('lista-asistencia').innerHTML = "Error de conexión con la central.";
             }
         }
 
         async function marcar(id, tipo) {
             try {
                 const horaLocal = new Date().toLocaleTimeString('es-PE', { hour12: true });
-
                 const res = await fetch(`${ASISTENCIA_URL}/${id}`, { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    // CAMBIO REALIZADO: tipo -> tipo_registro
                     body: JSON.stringify({ tipo_registro: tipo })
                 });
                 
                 const result = await res.json();
                 
                 if (res.ok) {
-                    const icono = tipo === 'entrada' ? '📦' : '🚛';
-                    showAlert(`${icono} Logística: ${tipo} registrada a las ${horaLocal}`);
+                    const icono = tipo === 'entrada' ? '📥' : '📤';
+                    showAlert(`${icono} Registro de ${tipo} exitoso: ${horaLocal}`);
                 } else {
-                    showAlert(result.message || "Error al registrar", true);
+                    showAlert(result.message || "Fallo en el registro", true);
                 }
             } catch (e) {
-                showAlert("Error de conexión con el servidor.", true);
+                showAlert("Error crítico de red.", true);
             }
         }
 

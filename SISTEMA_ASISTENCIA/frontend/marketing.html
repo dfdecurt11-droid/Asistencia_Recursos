@@ -7,33 +7,175 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #9b59b6; --secondary: #8e44ad; --dark: #2c3e50; --bg: #f4f7f6; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .header-flex { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
-        #reloj-lista { font-weight: 800; color: var(--primary); font-size: 1.3rem; background: #f8f9fa; padding: 5px 15px; border-radius: 10px; border: 1px solid #eee; }
-        .item-practicante { display: flex; justify-content: space-between; align-items: center; padding: 18px; border-bottom: 1px solid #eee; transition: 0.3s; }
-        .item-practicante:hover { background: #fdfaff; }
-        .btn-group { display: flex; gap: 10px; }
-        .btn-asistencia { padding: 10px 18px; border-radius: 10px; border: none; cursor: pointer; font-weight: 600; color: white; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-family: 'Poppins'; font-size: 0.85rem; }
-        .btn-entrada { background: #27ae60; }
-        .btn-salida { background: var(--primary); }
-        .btn-asistencia:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .btn-back { text-decoration: none; color: #3498db; font-weight: 600; display: inline-block; margin-bottom: 15px; }
-        .empty-state { text-align: center; padding: 40px; color: #95a5a6; }
-        #mensaje-alert { position: fixed; top: 20px; right: 20px; padding: 15px 25px; border-radius: 10px; color: white; display: none; z-index: 1000; box-shadow: 0 5px 20px rgba(0,0,0,0.2); font-weight: 600; }
+        :root { 
+            --primary: #9b59b6; 
+            --secondary: #8e44ad; 
+            --accent: #fd79a8;
+            --dark: #2c3e50; 
+            /* Gradiente creativo para Marketing */
+            --bg-gradient: linear-gradient(-45deg, #6c5ce7, #a29bfe, #9b59b6, #fd79a8);
+        }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Fondo Animado */
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container { 
+            max-width: 850px; 
+            width: 100%;
+            margin: auto; 
+            background: rgba(255, 255, 255, 0.9); 
+            padding: 40px; 
+            border-radius: 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .header-flex { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 2px solid rgba(155, 89, 182, 0.1); 
+            padding-bottom: 15px; 
+            margin-bottom: 25px; 
+        }
+
+        .header-flex h2 { margin: 0; font-size: 1.8rem; color: var(--dark); }
+
+        #reloj-lista { 
+            font-weight: 800; 
+            color: var(--secondary); 
+            font-size: 1.4rem; 
+            background: #ffffff; 
+            padding: 8px 22px; 
+            border-radius: 20px; 
+            box-shadow: 0 8px 20px rgba(142, 68, 173, 0.15);
+            border: 1px solid #f3e5f5;
+        }
+
+        #lista-asistencia { display: grid; gap: 15px; }
+
+        .item-practicante { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 20px; 
+            background: #fff;
+            border-radius: 20px;
+            border: 1px solid #f1f1f1;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+
+        .item-practicante:hover { 
+            transform: scale(1.03);
+            box-shadow: 0 15px 30px rgba(155, 89, 182, 0.1);
+            border-color: var(--accent);
+        }
+
+        .info-user strong { font-size: 1.15rem; color: var(--dark); display: block; }
+        .info-user small { color: #95a5a6; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+        .btn-group { display: flex; gap: 12px; }
+
+        .btn-asistencia { 
+            padding: 12px 24px; 
+            border-radius: 15px; 
+            border: none; 
+            cursor: pointer; 
+            font-weight: 700; 
+            color: white; 
+            transition: all 0.3s; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            font-family: 'Poppins'; 
+            font-size: 0.85rem;
+        }
+
+        .btn-entrada { 
+            background: #27ae60; 
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+        
+        .btn-salida { 
+            background: var(--primary); 
+            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+        } 
+
+        .btn-asistencia:hover { 
+            transform: translateY(-3px) rotate(-1deg); 
+            filter: brightness(1.1); 
+        }
+
+        .btn-back { 
+            text-decoration: none; 
+            color: var(--secondary); 
+            font-weight: 600; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px;
+            margin-bottom: 20px; 
+            background: rgba(255, 255, 255, 0.6);
+            padding: 8px 18px;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+        
+        .btn-back:hover { background: #fff; color: var(--accent); }
+
+        #mensaje-alert {
+            position: fixed; top: 20px; right: 20px; padding: 18px 30px;
+            border-radius: 18px; color: white; display: none; z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); font-weight: 700;
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .loader-marketing { color: var(--accent); font-size: 2.5rem; }
     </style>
 </head>
 <body>
+
     <div id="mensaje-alert"></div>
+
     <div class="container">
-        <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver a Áreas</a>
+        <a href="lista.html" class="btn-back"><i class="fas fa-palette"></i> Ver Áreas</a>
+        
         <div class="header-flex">
-            <h2>Área: <span style="color: var(--primary);">Marketing</span></h2>
+            <div>
+                <p style="margin:0; color: #7f8c8d; font-weight: 600; font-size: 0.85rem;">Creatividad y Estrategia</p>
+                <h2>Área: <span style="color: var(--primary);">Marketing</span></h2>
+            </div>
             <div id="reloj-lista">00:00:00</div>
         </div>
+
         <div id="lista-asistencia">
-            <p style="text-align:center;">Cargando personal de marketing...</p>
+            <div style="text-align:center; padding: 50px;">
+                <i class="fas fa-wand-magic-sparkles fa-spin loader-marketing"></i>
+                <p style="margin-top:15px; color:#7f8c8d; font-weight: 600;">Iniciando campaña de asistencia...</p>
+            </div>
         </div>
     </div>
 
@@ -48,8 +190,8 @@
 
         function showAlert(msg, isError = false) {
             const el = document.getElementById('mensaje-alert');
-            el.innerText = msg;
-            el.style.backgroundColor = isError ? "#e74c3c" : "#9b59b6";
+            el.innerHTML = `<i class="fas ${isError ? 'fa-bolt' : 'fa-star'}"></i> ${msg}`;
+            el.style.backgroundColor = isError ? "#e74c3c" : "#8e44ad";
             el.style.display = "block";
             setTimeout(() => { el.style.display = "none"; }, 4000);
         }
@@ -59,29 +201,36 @@
                 const res = await fetch(`${API_URL}?area=${encodeURIComponent(AREA_PAGINA)}`);
                 let data = await res.json();
                 const listaDiv = document.getElementById('lista-asistencia');
+                
                 if(data.length === 0) {
-                    listaDiv.innerHTML = `<div class="empty-state"><i class="fas fa-users-slash" style="font-size:3rem;"></i><p>No hay practicantes en el área de Marketing.</p></div>`;
+                    listaDiv.innerHTML = `
+                        <div style="text-align:center; padding:50px; opacity:0.6;">
+                            <i class="fas fa-lightbulb" style="font-size:4rem; color:var(--accent);"></i>
+                            <p style="font-weight:600;">No se encontró talento registrado en Marketing.</p>
+                        </div>`;
                     return;
                 }
-                data.sort((a, b) => (a.apellidos || "").toLowerCase().localeCompare((b.apellidos || "").toLowerCase()));
+
+                data.sort((a, b) => (a.apellidos || "").localeCompare(b.apellidos || ""));
+
                 listaDiv.innerHTML = data.map(p => `
                     <div class="item-practicante">
-                        <div>
-                            <strong style="font-size: 1.1rem; display:block; color: var(--dark);">${p.apellidos}, ${p.nombres}</strong>
-                            <small style="color: #7f8c8d;">ID: ${p.id_practicantes}</small>
+                        <div class="info-user">
+                            <strong>${p.apellidos}, ${p.nombres}</strong>
+                            <small><i class="fas fa-star"></i> Brand ID: ${p.id_practicantes}</small>
                         </div>
                         <div class="btn-group">
                             <button class="btn-asistencia btn-entrada" onclick="marcar(${p.id_practicantes}, 'entrada')">
-                                <i class="fas fa-sign-in-alt"></i> Entrada
+                                <i class="fas fa-rocket"></i> Entrada
                             </button>
                             <button class="btn-asistencia btn-salida" onclick="marcar(${p.id_practicantes}, 'salida')">
-                                <i class="fas fa-sign-out-alt"></i> Salida
+                                <i class="fas fa-magic"></i> Salida
                             </button>
                         </div>
                     </div>
                 `).join('');
             } catch (e) {
-                document.getElementById('lista-asistencia').innerHTML = "Error al conectar con el servidor.";
+                document.getElementById('lista-asistencia').innerHTML = "Error al conectar con la agencia creativa.";
             }
         }
 
@@ -91,19 +240,22 @@
                 const res = await fetch(`${ASISTENCIA_URL}/${id}`, { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ tipo_registro: tipo }) // CORREGIDO
+                    body: JSON.stringify({ tipo_registro: tipo })
                 });
+                
                 const result = await res.json();
+                
                 if (res.ok) {
                     const icon = tipo === 'entrada' ? '🚀' : '✨';
-                    showAlert(`${icon} Marketing: Registro de ${tipo} exitoso a las ${horaLocal}`);
+                    showAlert(`${icon} Registro de ${tipo} impactante a las ${horaLocal}`);
                 } else {
-                    showAlert(result.message || "Error al registrar", true);
+                    showAlert(result.message || "Fallo en la conversión", true);
                 }
             } catch (e) {
-                showAlert("Error de conexión con el servidor local.", true);
+                showAlert("Error de conexión con el servidor creativo.", true);
             }
         }
+
         window.onload = cargarLista;
     </script>
 </body>

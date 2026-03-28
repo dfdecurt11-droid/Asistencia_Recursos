@@ -38,6 +38,7 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* Burbujas de fondo */
         .bubbles {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -69,25 +70,34 @@
         }
 
         .header h1 {
-            font-size: 3rem;
+            font-size: 2.8rem;
             font-weight: 800;
             text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            font-weight: 600;
+            opacity: 0.9;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
         }
 
         .grid-menu {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
             max-width: 1200px;
             width: 100%;
             z-index: 2;
         }
 
         .menu-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(15px);
-            border-radius: 30px;
-            padding: 45px 20px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 35px;
+            padding: 40px 25px;
             text-align: center;
             text-decoration: none;
             color: var(--dark);
@@ -95,34 +105,98 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-            border: 1px solid rgba(255,255,255,0.4);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.5);
+            position: relative;
+            overflow: hidden;
         }
 
-        .menu-card i { font-size: 4rem; margin-bottom: 25px; }
+        .menu-card i { 
+            font-size: 3.5rem; 
+            margin-bottom: 20px; 
+            transition: transform 0.4s ease;
+        }
 
+        .menu-card h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .menu-card p {
+            font-size: 0.9rem;
+            color: #636e72;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        /* Botón interno "Tomar Asistencia" */
+        .btn-action {
+            background: var(--dark);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Efectos Hover */
         .menu-card:hover {
-            transform: translateY(-15px);
+            transform: translateY(-12px);
             background: white;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
         }
 
-        /* Colores vivos */
+        .menu-card:hover i {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .menu-card:hover .btn-action {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Colores por departamento */
         .ventas i { color: #FF4757; }
+        .ventas .btn-action { background: #FF4757; }
+        
         .finanzas i { color: #2ED573; }
+        .finanzas .btn-action { background: #2ED573; }
+
         .marketing i { color: #1E90FF; }
+        .marketing .btn-action { background: #1E90FF; }
+
         .logistica i { color: #3742FA; }
+        .logistica .btn-action { background: #3742FA; }
+
         .gestion i { color: #FFA502; }
+        .gestion .btn-action { background: #FFA502; }
 
         .btn-back {
             margin-top: 50px;
             text-decoration: none;
             color: white;
-            background: rgba(0,0,0,0.2);
-            padding: 12px 25px;
+            background: rgba(0,0,0,0.3);
+            padding: 14px 30px;
             border-radius: 50px;
             z-index: 2;
             transition: 0.3s;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-back:hover {
+            background: rgba(0,0,0,0.5);
+            transform: translateX(-5px);
         }
     </style>
 </head>
@@ -132,7 +206,7 @@
 
 <div class="header">
     <h1>Control de Asistencia RRHH</h1>
-    <p>ASISTENCIA POR AREAS</p>
+    <p>Selecciona un área para comenzar</p>
 </div>
 
 <div class="grid-menu">
@@ -140,30 +214,45 @@
         <i class="fas fa-shopping-cart"></i>
         <h3>Ventas</h3>
         <p>Asesores Comerciales</p>
+        <div class="btn-action">
+            Tomar Asistencia <i class="fas fa-chevron-right"></i>
+        </div>
     </a>
 
     <a href="finanzas.html" class="menu-card finanzas">
         <i class="fas fa-file-invoice-dollar"></i>
         <h3>Finanzas</h3>
         <p>Contabilidad y Tesorería</p>
+        <div class="btn-action">
+            Tomar Asistencia <i class="fas fa-chevron-right"></i>
+        </div>
     </a>
 
     <a href="marketing.html" class="menu-card marketing">
         <i class="fas fa-bullhorn"></i>
         <h3>Marketing</h3>
         <p>Publicidad y Estrategia</p>
+        <div class="btn-action">
+            Tomar Asistencia <i class="fas fa-chevron-right"></i>
+        </div>
     </a>
 
     <a href="logistica.html" class="menu-card logistica">
         <i class="fas fa-truck"></i>
         <h3>Logística</h3>
         <p>Almacén y Distribución</p>
+        <div class="btn-action">
+            Tomar Asistencia <i class="fas fa-chevron-right"></i>
+        </div>
     </a>
 
     <a href="gestion_continua.html" class="menu-card gestion">
         <i class="fas fa-chart-line"></i>
         <h3>Mejora Continua</h3>
         <p>Procesos y Calidad</p>
+        <div class="btn-action">
+            Tomar Asistencia <i class="fas fa-chevron-right"></i>
+        </div>
     </a>
 </div>
 
@@ -177,7 +266,7 @@
         for (let i = 0; i < 15; i++) {
             const bubble = document.createElement('div');
             bubble.className = 'bubble';
-            const size = Math.random() * 100 + 50 + 'px';
+            const size = Math.random() * 80 + 40 + 'px';
             bubble.style.width = size;
             bubble.style.height = size;
             bubble.style.left = Math.random() * 100 + '%';
