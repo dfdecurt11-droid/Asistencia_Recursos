@@ -69,9 +69,14 @@ app.post('/api/asistencia/:id', async (req, res) => {
     }
 });
 
-// --- 4. REPORTE GENERAL (CORREGIDO PARA REDONDEO DE MINUTOS) ---
+// --- 4. REPORTE GENERAL (CORREGIDO PARA REDONDEO DE MINUTOS HACIA ARRIBA) ---
 app.get('/api/reporte', async (req, res) => {
     try {
+        // Explicación de la lógica SQL:
+        // 1. Calculamos la diferencia en segundos (EPOCH).
+        // 2. Dividimos por 60 para tener minutos decimales.
+        // 3. CEIL eleva al entero superior (ej: 1.1 min -> 2 min).
+        // 4. Multiplicamos por 60 para volver a segundos y convertimos a intervalo para formatear.
         const result = await pool.query(`
             SELECT 
                 p.id_practicantes, 
@@ -82,14 +87,16 @@ app.get('/api/reporte', async (req, res) => {
                 MAX(a.hora_salida) AS hora_salida,
                 COALESCE(
                     TO_CHAR(
-                        (CEIL(EXTRACT(EPOCH FROM SUM(CASE WHEN a.hora_salida IS NOT NULL THEN a.hora_salida - a.hora_entrada ELSE INTERVAL '0' END)) / 60) * 60) * INTERVAL '1 second', 
+                        (SUM(
+                            CEIL(EXTRACT(EPOCH FROM (COALESCE(a.hora_salida, a.hora_entrada) - a.hora_entrada)) / 60)
+                        ) * INTERVAL '1 minute'), 
                         'HH24:MI:SS'
                     ), 
                     '00:00:00'
                 ) AS horas_acumuladas
             FROM practicantes p 
             LEFT JOIN asistencia a ON p.id_practicantes = a.id_practicantes
-            GROUP BY p.id_practicantes 
+            GROUP BY p.id_practicantes, p.nombres, p.apellidos, p.area
             ORDER BY p.apellidos ASC`);
         res.json(result.rows);
     } catch (error) {
