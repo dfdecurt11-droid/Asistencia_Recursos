@@ -69,17 +69,31 @@ app.post('/api/asistencia/:id', async (req, res) => {
     }
 });
 
-// --- 4. REPORTE GENERAL ---
+// --- 4. REPORTE GENERAL (CORREGIDO PARA REDONDEO DE MINUTOS) ---
 app.get('/api/reporte', async (req, res) => {
     try {
         const result = await pool.query(`
-            SELECT p.id_practicantes, p.nombres, p.apellidos, p.area,
-            MAX(a.hora_entrada) AS hora_entrada, MAX(a.hora_salida) AS hora_salida,
-            COALESCE(TO_CHAR(SUM(CASE WHEN a.hora_salida IS NOT NULL THEN a.hora_salida - a.hora_entrada ELSE INTERVAL '0' END), 'HH24:MI:SS'), '00:00:00') AS horas_acumuladas
-            FROM practicantes p LEFT JOIN asistencia a ON p.id_practicantes = a.id_practicantes
-            GROUP BY p.id_practicantes ORDER BY p.apellidos ASC`);
+            SELECT 
+                p.id_practicantes, 
+                p.nombres, 
+                p.apellidos, 
+                p.area,
+                MAX(a.hora_entrada) AS hora_entrada, 
+                MAX(a.hora_salida) AS hora_salida,
+                COALESCE(
+                    TO_CHAR(
+                        (CEIL(EXTRACT(EPOCH FROM SUM(CASE WHEN a.hora_salida IS NOT NULL THEN a.hora_salida - a.hora_entrada ELSE INTERVAL '0' END)) / 60) * 60) * INTERVAL '1 second', 
+                        'HH24:MI:SS'
+                    ), 
+                    '00:00:00'
+                ) AS horas_acumuladas
+            FROM practicantes p 
+            LEFT JOIN asistencia a ON p.id_practicantes = a.id_practicantes
+            GROUP BY p.id_practicantes 
+            ORDER BY p.apellidos ASC`);
         res.json(result.rows);
     } catch (error) {
+        console.error("Error en reporte SQL:", error);
         res.status(500).json({ error: 'Error en reporte' });
     }
 });
@@ -108,10 +122,9 @@ app.delete('/api/practicantes/:id', async (req, res) => {
     }
 });
 
-// --- 7. RESET (CORREGIDO) ---
+// --- 7. RESET ---
 app.delete('/api/reset', async (req, res) => {
     try {
-        // Se usa TRUNCATE para asegurar la limpieza total de la tabla de asistencia
         await pool.query('TRUNCATE TABLE asistencia RESTART IDENTITY CASCADE');
         res.json({ message: '🔄 Reiniciado' });
     } catch (error) {
