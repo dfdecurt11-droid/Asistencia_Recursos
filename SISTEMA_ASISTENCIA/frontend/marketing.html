@@ -3,178 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RRHH - Área de Marketing</title>
+    <title>RRHH - Marketing</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --primary: #9b59b6; 
-            --secondary: #8e44ad; 
-            --accent: #fd79a8;
-            --dark: #2c3e50; 
-            /* Gradiente creativo para Marketing */
-            --bg-gradient: linear-gradient(-45deg, #6c5ce7, #a29bfe, #9b59b6, #fd79a8);
+            /* Color Púrpura/Fucsia de Marketing */
+            --primary: #d946ef; 
+            --primary-glow: rgba(217, 70, 239, 0.4);
+            --success: #10b981; 
+            --dark-bg: #020617;
+            /* Gradiente animado con tonos violetas y azul profundo */
+            --bg-gradient: linear-gradient(-45deg, #020617, #2e1065, #4c1d95, #020617);
         }
         
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body { 
-            font-family: 'Poppins', sans-serif; 
-            margin: 0; 
-            padding: 20px; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            /* Fondo Animado */
             background: var(--bg-gradient);
             background-size: 400% 400%;
-            animation: gradientBG 10s ease infinite;
+            animation: gradientMove 12s ease infinite;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        @keyframes gradientBG {
+        @keyframes gradientMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
+        /* Orbes de luz con el color de Marketing */
+        .glow-orb {
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(217, 70, 239, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+            animation: float 10s infinite alternate ease-in-out;
+        }
+
+        @keyframes float {
+            from { transform: translate(-15%, -15%) scale(1); }
+            to { transform: translate(15%, 15%) scale(1.15); }
+        }
+
         .container { 
-            max-width: 850px; 
-            width: 100%;
-            margin: auto; 
-            background: rgba(255, 255, 255, 0.9); 
-            padding: 40px; 
-            border-radius: 30px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            z-index: 10;
+            max-width: 820px; 
+            width: 92%;
+            background: rgba(255, 255, 255, 0.02); 
+            padding: 45px; 
+            border-radius: 35px; 
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6);
         }
 
         .header-flex { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            border-bottom: 2px solid rgba(155, 89, 182, 0.1); 
-            padding-bottom: 15px; 
-            margin-bottom: 25px; 
+            margin-bottom: 35px; 
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
-
-        .header-flex h2 { margin: 0; font-size: 1.8rem; color: var(--dark); }
 
         #reloj-lista { 
             font-weight: 800; 
-            color: var(--secondary); 
-            font-size: 1.4rem; 
-            background: #ffffff; 
-            padding: 8px 22px; 
-            border-radius: 20px; 
-            box-shadow: 0 8px 20px rgba(142, 68, 173, 0.15);
-            border: 1px solid #f3e5f5;
+            color: var(--primary); 
+            font-size: 1.6rem; 
+            background: rgba(217, 70, 239, 0.08); 
+            padding: 12px 24px; 
+            border-radius: 18px; 
+            border: 1px solid rgba(217, 70, 239, 0.15);
+            text-shadow: 0 0 15px var(--primary-glow);
+            letter-spacing: 1px;
         }
 
-        #lista-asistencia { display: grid; gap: 15px; }
+        #lista-asistencia { display: grid; gap: 14px; }
 
         .item-practicante { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 20px; 
-            background: #fff;
-            border-radius: 20px;
-            border: 1px solid #f1f1f1;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            padding: 20px 28px; 
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         }
 
         .item-practicante:hover { 
-            transform: scale(1.03);
-            box-shadow: 0 15px 30px rgba(155, 89, 182, 0.1);
-            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateX(8px) scale(1.01);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(217, 70, 239, 0.1);
         }
 
-        .info-user strong { font-size: 1.15rem; color: var(--dark); display: block; }
-        .info-user small { color: #95a5a6; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .info-user strong { font-size: 1.15rem; color: #ffffff; display: block; margin-bottom: 4px; }
+        .info-user small { color: #94a3b8; font-weight: 600; font-size: 0.85rem; }
 
         .btn-group { display: flex; gap: 12px; }
 
         .btn-asistencia { 
-            padding: 12px 24px; 
+            padding: 13px 22px; 
             border-radius: 15px; 
             border: none; 
             cursor: pointer; 
-            font-weight: 700; 
+            font-weight: 800; 
             color: white; 
-            transition: all 0.3s; 
+            transition: 0.3s; 
             display: flex; 
             align-items: center; 
             gap: 10px; 
-            font-family: 'Poppins'; 
-            font-size: 0.85rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .btn-entrada { 
-            background: #27ae60; 
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
-        }
-        
-        .btn-salida { 
-            background: var(--primary); 
-            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
-        } 
+        .btn-entrada { background: #7c3aed; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
+        .btn-salida { background: #475569; box-shadow: 0 4px 15px rgba(71, 85, 105, 0.3); } 
 
         .btn-asistencia:hover { 
-            transform: translateY(-3px) rotate(-1deg); 
-            filter: brightness(1.1); 
+            transform: translateY(-3px); 
+            filter: brightness(1.25); 
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); 
         }
 
         .btn-back { 
             text-decoration: none; 
-            color: var(--secondary); 
-            font-weight: 600; 
+            color: #94a3b8; 
+            font-weight: 700; 
             display: inline-flex; 
             align-items: center; 
-            gap: 8px;
-            margin-bottom: 20px; 
-            background: rgba(255, 255, 255, 0.6);
-            padding: 8px 18px;
-            border-radius: 12px;
+            gap: 10px;
+            margin-bottom: 25px; 
             transition: 0.3s;
+            font-size: 0.9rem;
         }
-        
-        .btn-back:hover { background: #fff; color: var(--accent); }
+        .btn-back:hover { color: var(--primary); transform: translateX(-6px); }
 
-        #mensaje-alert {
-            position: fixed; top: 20px; right: 20px; padding: 18px 30px;
-            border-radius: 18px; color: white; display: none; z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2); font-weight: 700;
-            animation: bounceIn 0.6s ease;
-        }
-
-        @keyframes bounceIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            70% { transform: scale(1.1); }
-            100% { transform: scale(1); opacity: 1; }
+        #toast-alert {
+            position: fixed; top: 25px; right: 25px; 
+            padding: 18px 30px; border-radius: 16px; 
+            color: white; display: none; z-index: 1000;
+            font-weight: 800; animation: slideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
-        .loader-marketing { color: var(--accent); font-size: 2.5rem; }
+        @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
     </style>
 </head>
 <body>
 
-    <div id="mensaje-alert"></div>
+    <div class="glow-orb" style="top: -150px; right: -100px;"></div>
+    <div class="glow-orb" style="bottom: -150px; left: -100px; animation-delay: -5s; opacity: 0.6;"></div>
+
+    <div id="toast-alert"></div>
 
     <div class="container">
-        <a href="lista.html" class="btn-back"><i class="fas fa-palette"></i> Ver Áreas</a>
+        <a href="lista.html" class="btn-back"><i class="fas fa-chevron-left"></i> Panel de Áreas</a>
         
         <div class="header-flex">
             <div>
-                <p style="margin:0; color: #7f8c8d; font-weight: 600; font-size: 0.85rem;">Creatividad y Estrategia</p>
-                <h2>Área: <span style="color: var(--primary);">Marketing</span></h2>
+                <p style="margin:0; color: var(--primary); font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px;">Creatividad y Estrategia</p>
+                <h2 style="font-size: 2.2rem; font-weight: 800;">Área <span style="color: var(--primary);">Marketing</span></h2>
             </div>
             <div id="reloj-lista">00:00:00</div>
         </div>
 
         <div id="lista-asistencia">
-            <div style="text-align:center; padding: 50px;">
-                <i class="fas fa-wand-magic-sparkles fa-spin loader-marketing"></i>
-                <p style="margin-top:15px; color:#7f8c8d; font-weight: 600;">Iniciando campaña de asistencia...</p>
+            <div style="text-align:center; padding: 40px; opacity: 0.6;">
+                <i class="fas fa-wand-magic-sparkles fa-spin" style="font-size: 2.5rem; color: var(--primary);"></i>
+                <p style="margin-top: 15px;">Sincronizando talento creativo...</p>
             </div>
         </div>
     </div>
@@ -188,12 +199,13 @@
             document.getElementById('reloj-lista').innerText = new Date().toLocaleTimeString('es-PE', { hour12: true });
         }, 1000);
 
-        function showAlert(msg, isError = false) {
-            const el = document.getElementById('mensaje-alert');
+        function showToast(msg, isError = false) {
+            const el = document.getElementById('toast-alert');
             el.innerHTML = `<i class="fas ${isError ? 'fa-bolt' : 'fa-star'}"></i> ${msg}`;
-            el.style.backgroundColor = isError ? "#e74c3c" : "#8e44ad";
+            el.style.backgroundColor = isError ? "#be123c" : "#701a75";
             el.style.display = "block";
-            setTimeout(() => { el.style.display = "none"; }, 4000);
+            el.style.borderLeft = `6px solid ${isError ? '#fb7185' : '#d946ef'}`;
+            setTimeout(() => { el.style.display = "none"; }, 3500);
         }
 
         async function cargarLista() {
@@ -203,11 +215,7 @@
                 const listaDiv = document.getElementById('lista-asistencia');
                 
                 if(data.length === 0) {
-                    listaDiv.innerHTML = `
-                        <div style="text-align:center; padding:50px; opacity:0.6;">
-                            <i class="fas fa-lightbulb" style="font-size:4rem; color:var(--accent);"></i>
-                            <p style="font-weight:600;">No se encontró talento registrado en Marketing.</p>
-                        </div>`;
+                    listaDiv.innerHTML = `<p style="text-align:center; padding: 40px; opacity:0.4;">No se registra personal en Marketing.</p>`;
                     return;
                 }
 
@@ -217,7 +225,7 @@
                     <div class="item-practicante">
                         <div class="info-user">
                             <strong>${p.apellidos}, ${p.nombres}</strong>
-                            <small><i class="fas fa-star"></i> Brand ID: ${p.id_practicantes}</small>
+                            <small><i class="fas fa-palette"></i> ID: ${p.id_practicantes}</small>
                         </div>
                         <div class="btn-group">
                             <button class="btn-asistencia btn-entrada" onclick="marcar(${p.id_practicantes}, 'entrada')">
@@ -229,31 +237,19 @@
                         </div>
                     </div>
                 `).join('');
-            } catch (e) {
-                document.getElementById('lista-asistencia').innerHTML = "Error al conectar con la agencia creativa.";
-            }
+            } catch (e) { console.error(e); }
         }
 
         async function marcar(id, tipo) {
             try {
-                const horaLocal = new Date().toLocaleTimeString('es-PE', { hour12: true });
                 const res = await fetch(`${ASISTENCIA_URL}/${id}`, { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ tipo_registro: tipo })
                 });
-                
-                const result = await res.json();
-                
-                if (res.ok) {
-                    const icon = tipo === 'entrada' ? '🚀' : '✨';
-                    showAlert(`${icon} Registro de ${tipo} impactante a las ${horaLocal}`);
-                } else {
-                    showAlert(result.message || "Fallo en la conversión", true);
-                }
-            } catch (e) {
-                showAlert("Error de conexión con el servidor creativo.", true);
-            }
+                if (res.ok) showToast(`Impacto de ${tipo} registrado.`);
+                else showToast("Error en el flujo creativo", true);
+            } catch (e) { showToast("Sin conexión con el núcleo", true); }
         }
 
         window.onload = cargarLista;

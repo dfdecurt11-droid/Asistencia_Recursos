@@ -5,76 +5,123 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte Asistencia - RRHH</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #9b59b6; --secondary: #2c3e50; --success: #27ae60; --danger: #e74c3c; --info: #3498db; 
-            --ventas: #e67e22; --finanzas: #2ecc71; --marketing: #9b59b6; --logística: #34495e; --mejora: #f1c40f;
+            /* Colores actualizados según las capturas del panel de áreas */
+            --ventas: #ff3366;           /* Fucsia/Rojo vibrante */
+            --finanzas: #00ff99;         /* Verde Neón */
+            --marketing: #9933ff;        /* Morado vibrante */
+            --logística: #ffcc00;        /* Amarillo/Naranja */
+            --mejora: #00ccff;           /* Cian/Azul brillante */
+            --recursos: #ff00ff;         /* Magenta/Fucsia central */
+            
+            --primary: #4776E6; 
+            --secondary: #2c3e50; 
+            --danger: #e74c3c; 
+            --info: #3498db; 
         }
 
-        body { font-family: 'Poppins', sans-serif; margin: 0; padding: 10px; background-color: #1a1a2e; color: var(--secondary); }
-        .container { width: 100%; max-width: 1200px; margin: auto; background: white; border-radius: 15px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; padding: 15px; background-color: #f4f7f6; color: var(--secondary); }
         
-        .header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
-        .header h2 { margin: 0; font-size: 1.4rem; }
-
-        .controls-wrapper { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; background: #f8f9fa; padding: 15px; border-radius: 12px; border: 1px solid #eee; }
-
-        .search-container { position: relative; width: 100%; }
-        .search-container input { width: 100%; padding: 12px 15px 12px 40px; border-radius: 10px; border: 2px solid #dfe6e9; outline: none; font-size: 1rem; box-sizing: border-box; }
-        .search-container i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--info); }
-
-        .filter-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
-        .btn-filter { padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.75rem; color: white; opacity: 0.7; transition: 0.3s; }
-        .btn-filter.active { opacity: 1; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-
-        .table-wrapper { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        th { text-align: left; padding: 12px; background: #f8f9fa; color: #7f8c8d; font-size: 0.7rem; text-transform: uppercase; }
-        td { padding: 12px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
-
-        .timer-box { font-family: 'JetBrains Mono', monospace; background: #f0f0f0; padding: 4px 8px; border-radius: 5px; font-weight: 600; font-size: 0.85rem; display: inline-block; }
-        .total-highlight { background: var(--secondary); color: white; }
-        .area-badge { padding: 4px 10px; border-radius: 15px; color: white; font-size: 0.7rem; font-weight: 700; display: inline-block; }
-
-        .btn-action { border: none; background: none; cursor: pointer; font-size: 1.1rem; margin: 0 5px; transition: 0.2s; }
-        .btn-edit { color: var(--info); }
-        .btn-delete { color: var(--danger); }
-        .btn-action:hover { transform: scale(1.2); }
-
-        /* --- MODALES --- */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(8px); }
-        .modal-content { background: white; padding: 25px; border-radius: 20px; text-align: center; max-width: 450px; width: 90%; transform: scale(0.8); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .modal-content.show { transform: scale(1); }
+        .container { 
+            width: 100%; 
+            max-width: 1280px; 
+            margin: auto; 
+            background: white; 
+            border-radius: 20px; 
+            padding: 30px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05); 
+            box-sizing: border-box; 
+        }
         
-        /* CUADRO DE EDICIÓN BONITO */
-        .edit-card { 
-            background: #fdfdfd; 
+        .header { 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: space-between; 
+            align-items: center; 
+            gap: 15px; 
+            border-bottom: 2px solid #f1f1f1; 
+            padding-bottom: 20px; 
+            margin-bottom: 25px; 
+        }
+        .header h2 { margin: 0; font-size: 1.6rem; font-weight: 800; }
+
+        .controls-wrapper { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 18px; 
+            margin-bottom: 30px; 
+            background: #fff; 
             padding: 20px; 
             border-radius: 15px; 
-            margin: 20px 0; 
+            border: 1px solid #eaeaea; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+        }
+
+        .search-container { position: relative; width: 100%; }
+        .search-container input { 
+            width: 100%; 
+            padding: 14px 15px 14px 45px; 
+            border-radius: 12px; 
+            border: 2px solid #e2e8f0; 
+            outline: none; 
+            font-size: 1rem; 
+            box-sizing: border-box; 
+            transition: all 0.3s;
+        }
+        .search-container i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #a0aec0; }
+
+        .filter-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn-filter { 
+            padding: 10px 18px; 
+            border: none; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            font-weight: 700; 
+            font-size: 0.8rem; 
+            color: white; 
+            opacity: 0.5; 
+            transition: all 0.3s; 
+            text-transform: uppercase; 
+        }
+        .btn-filter.active { opacity: 1; transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+
+        .table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid #eee; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        th { 
             text-align: left; 
-            border: 1px solid #edf2f7;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-        }
-        .edit-card label { 
+            padding: 18px 15px; 
+            background: #f8fafc; 
+            color: #718096; 
             font-size: 0.75rem; 
-            font-weight: 800; 
-            color: #4a5568; 
-            display: block; 
-            margin-bottom: 8px;
-            text-transform: uppercase;
+            text-transform: uppercase; 
+            font-weight: 700;
         }
-        .edit-card input, .edit-card select { 
-            width: 100%; padding: 12px; border-radius: 10px; border: 2px solid #e2e8f0; 
-            margin-bottom: 15px; font-family: inherit; box-sizing: border-box; font-size: 0.95rem;
-            transition: all 0.3s ease;
+        td { padding: 18px 15px; border-bottom: 1px solid #edf2f7; font-size: 0.95rem; color: #1a202c; }
+
+        .timer-box { 
+            font-family: 'JetBrains Mono', monospace; 
+            background: #edf2f7; 
+            padding: 6px 12px; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            display: inline-block; 
         }
-        .edit-card input:focus, .edit-card select:focus {
-            border-color: var(--info); outline: none; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-        }
+        .total-highlight { background: #2d3748; color: white; }
         
-        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 25px; border-radius: 50px; display: none; z-index: 5000; font-size: 0.85rem; }
+        /* Badges con los nuevos colores del panel */
+        .area-badge { padding: 6px 14px; border-radius: 20px; color: white; font-size: 0.75rem; font-weight: 700; display: inline-block; text-transform: uppercase; }
+
+        .btn-action { border: none; background: none; cursor: pointer; font-size: 1.2rem; margin: 0 8px; transition: all 0.2s; }
+        .btn-edit { color: var(--info); }
+        .btn-delete { color: var(--danger); }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(5px); }
+        .modal-content { background: white; padding: 35px; border-radius: 25px; text-align: center; max-width: 480px; width: 90%; transform: scale(0.9); transition: 0.3s; }
+        .modal-content.show { transform: scale(1); }
+        
+        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a202c; color: white; padding: 15px 30px; border-radius: 50px; display: none; z-index: 5000; font-size: 0.9rem; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -83,64 +130,57 @@
 
 <div class="modal-overlay" id="modalOverlay">
     <div class="modal-content" id="modalContent">
-        <i id="mainIcon" class="fas fa-exclamation-triangle" style="color:var(--danger); font-size: 3rem; margin-bottom: 15px;"></i>
-        <h3 id="modalTitle">¿Estás seguro?</h3>
-        <p id="modalText">Esta acción no se puede deshacer.</p>
-        <div style="display: flex; gap: 10px; margin-top: 20px;">
-            <button onclick="cerrarModal()" style="flex:1; padding:12px; border-radius:10px; border:none; cursor:pointer; font-weight:bold; background:#eee;">Cancelar</button>
-            <button id="btnConfirmarAction" style="flex:1; padding:12px; border-radius:10px; border:none; cursor:pointer; background:var(--danger); color:white; font-weight:bold;">Confirmar</button>
+        <i id="mainIcon" class="fas fa-exclamation-circle" style="color:var(--danger); font-size: 4rem; margin-bottom: 20px;"></i>
+        <h3 id="modalTitle" style="font-weight: 800;">¿Confirmar acción?</h3>
+        <p id="modalText" style="color:#718096; margin-bottom: 25px;">Esta operación no se puede deshacer.</p>
+        <div style="display: flex; gap: 15px;">
+            <button onclick="cerrarModal()" style="flex:1; padding:15px; border-radius:12px; border:none; cursor:pointer; font-weight:700; background:#edf2f7;">Cancelar</button>
+            <button id="btnConfirmarAction" style="flex:1; padding:15px; border-radius:12px; border:none; cursor:pointer; background:var(--danger); color:white; font-weight:700;">Confirmar</button>
         </div>
     </div>
 </div>
 
 <div class="modal-overlay" id="modalEditOverlay">
     <div class="modal-content" id="modalEditContent">
-        <div style="background: rgba(52, 152, 219, 0.1); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
-            <i class="fas fa-user-edit" style="color:var(--info); font-size: 1.8rem;"></i>
-        </div>
-        <h3 style="margin:0;">Editar Practicante</h3>
-        <p style="font-size: 0.85rem; color: #7f8c8d;">Actualiza la información del perfil</p>
-        
-        <div class="edit-card">
+        <h3 style="font-weight: 800;">Actualizar Información</h3>
+        <div style="text-align: left; margin: 20px 0;">
             <input type="hidden" id="editId">
-            <label><i class="fas fa-id-card"></i> Nombres</label>
-            <input type="text" id="editNombres" placeholder="Nombres">
-            
-            <label><i class="fas fa-id-card"></i> Apellidos</label>
-            <input type="text" id="editApellidos" placeholder="Apellidos">
-            
-            <label><i class="fas fa-layer-group"></i> Área de Trabajo</label>
-            <select id="editArea">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #4a5568;">NOMBRES</label>
+            <input type="text" id="editNombres" style="width:100%; padding:12px; margin:10px 0 20px; border-radius:10px; border:1px solid #ddd;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #4a5568;">APELLIDOS</label>
+            <input type="text" id="editApellidos" style="width:100%; padding:12px; margin:10px 0 20px; border-radius:10px; border:1px solid #ddd;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #4a5568;">ÁREA</label>
+            <select id="editArea" style="width:100%; padding:12px; margin:10px 0; border-radius:10px; border:1px solid #ddd;">
                 <option value="Ventas">Ventas</option>
                 <option value="Finanzas">Finanzas</option>
                 <option value="Marketing">Marketing</option>
                 <option value="Logística">Logística</option>
                 <option value="Mejora Continua">Mejora Continua</option>
+                <option value="Recursos Humanos">Recursos Humanos</option>
             </select>
         </div>
-
-        <div style="display: flex; gap: 10px;">
-            <button onclick="cerrarModalEdit()" style="flex:1; padding:12px; border-radius:10px; border:none; cursor:pointer; font-weight:bold; background:#eee;">Cerrar</button>
-            <button onclick="guardarEdicion()" style="flex:1; padding:12px; border-radius:10px; border:none; cursor:pointer; background:var(--info); color:white; font-weight:bold;">Guardar</button>
+        <div style="display: flex; gap: 15px;">
+            <button onclick="cerrarModalEdit()" style="flex:1; padding:15px; border-radius:12px; border:none; background:#edf2f7; font-weight:700;">Cerrar</button>
+            <button onclick="guardarEdicion()" style="flex:1; padding:15px; border-radius:12px; border:none; background:var(--info); color:white; font-weight:700;">Guardar</button>
         </div>
     </div>
 </div>
 
 <div class="container"> 
     <div class="header">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <a href="index.html" style="text-decoration:none; color:var(--info); font-weight:700;"><i class="fas fa-arrow-left"></i> Volver</a>
-            <h2>Reporte <span style="color:var(--info)">RRHH</span></h2>
+        <div style="display:flex; align-items:center; gap:15px;">
+            <a href="index.html" style="text-decoration:none; color:var(--info); font-weight:700;"><i class="fas fa-chevron-left"></i> Volver</a>
+            <h2>Panel de Reportes <span style="color:var(--info)">RRHH</span></h2>
         </div>
-        <button onclick="abrirModalReset()" style="background:var(--danger); color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer; font-weight:700;">
-            <i class="fas fa-history"></i> REINICIAR 
+        <button onclick="abrirModalReset()" style="background:var(--danger); color:white; border:none; padding:12px 20px; border-radius:12px; cursor:pointer; font-weight:700; font-size: 0.9rem;">
+            <i class="fas fa-sync-alt"></i> REINICIAR QUINCENA
         </button>
     </div>
 
     <div class="controls-wrapper">
         <div class="search-container">
             <i class="fas fa-search"></i>
-            <input type="text" id="inputNombre" placeholder="Buscar por nombre o apellido..." onkeyup="ejecutarFiltros()">
+            <input type="text" id="inputNombre" placeholder="Buscar por nombres o apellidos..." onkeyup="ejecutarFiltros()">
         </div>
         <div class="filter-buttons">
             <button class="btn-filter active" style="background:var(--secondary)" onclick="filtrar('Todos', this)">Todos</button>
@@ -149,7 +189,7 @@
             <button class="btn-filter" style="background:var(--marketing)" onclick="filtrar('Marketing', this)">Marketing</button>
             <button class="btn-filter" style="background:var(--logística)" onclick="filtrar('Logística', this)">Logística</button>
             <button class="btn-filter" style="background:var(--mejora)" onclick="filtrar('Mejora Continua', this)">Mejora Continua</button>
-            <button class="btn-filter" style="background:var(--recursos)" onclick="filtrar('MRecursos Humanos', this)">Recursos Humanos</button>
+            <button class="btn-filter" style="background:var(--recursos)" onclick="filtrar('Recursos Humanos', this)">Recursos Humanos</button>
         </div>
     </div>
 
@@ -157,17 +197,17 @@
         <table>
             <thead>
                 <tr>
-                    <th>N°</th>
+                    <th style="width: 50px">N°</th>
                     <th>Practicante</th>
                     <th>Área</th>
                     <th>Entrada</th>
                     <th>Salida</th>
-                    <th>Total</th>
-                    <th style="text-align:center">Acciones</th>
+                    <th>Total (HH:MM)</th>
+                    <th style="text-align:center; width: 120px">Acciones</th>
                 </tr>
             </thead>
             <tbody id="tabla-body">
-                <tr><td colspan="7" style="text-align:center; padding:50px;">Cargando datos...</td></tr>
+                <tr><td colspan="7" style="text-align:center; padding:60px; color:#a0aec0; font-weight:600;">Cargando registros...</td></tr>
             </tbody>
         </table>
     </div>
@@ -204,20 +244,43 @@
 
     function renderizar(lista) {
         const tbody = document.getElementById('tabla-body');
-        tbody.innerHTML = lista.map((p, i) => `
-            <tr>
-                <td><b>${i + 1}</b></td>
-                <td><strong>${p.apellidos}, ${p.nombres}</strong></td>
-                <td><span class="area-badge" style="background:var(--${p.area.toLowerCase().split(' ')[0]})">${p.area}</span></td>
-                <td><span class="timer-box">${mostrarHora(p.hora_entrada)}</span></td>
-                <td><span class="timer-box">${mostrarHora(p.hora_salida)}</span></td>
-                <td><span class="timer-box total-highlight">${p.horas_acumuladas || '00:00:00'}</span></td>
-                <td style="text-align:center">
-                    <button class="btn-action btn-edit" onclick='abrirModalEdit(${JSON.stringify(p)})'><i class="fas fa-edit"></i></button>
-                    <button class="btn-action btn-delete" onclick="abrirModalEliminar(${p.id_practicantes})"><i class="fas fa-trash-alt"></i></button>
-                </td>
-            </tr>
-        `).join('');
+        if(lista.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:40px;">Sin resultados.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = lista.map((p, i) => {
+            let colorVar = "secondary";
+            const areaKey = p.area.toLowerCase();
+            if(areaKey.includes("ventas")) colorVar = "ventas";
+            else if(areaKey.includes("finanzas")) colorVar = "finanzas";
+            else if(areaKey.includes("marketing")) colorVar = "marketing";
+            else if(areaKey.includes("logística") || areaKey.includes("logistica")) colorVar = "logística";
+            else if(areaKey.includes("mejora")) colorVar = "mejora";
+            else if(areaKey.includes("recursos")) colorVar = "recursos";
+
+            // Mostrar solo HH:MM del total
+            let totalCorto = '00:00';
+            if (p.horas_acumuladas && p.horas_acumuladas !== "00:00:00") {
+                const partes = p.horas_acumuladas.split(':');
+                totalCorto = `${partes[0]}:${partes[1]}`;
+            }
+
+            return `
+                <tr>
+                    <td><b>${i + 1}</b></td>
+                    <td><strong>${p.apellidos.toUpperCase()}, ${p.nombres}</strong></td>
+                    <td><span class="area-badge" style="background:var(--${colorVar})">${p.area}</span></td>
+                    <td><span class="timer-box">${mostrarHora(p.hora_entrada)}</span></td>
+                    <td><span class="timer-box">${mostrarHora(p.hora_salida)}</span></td>
+                    <td><span class="timer-box total-highlight">${totalCorto}</span></td>
+                    <td style="text-align:center">
+                        <button class="btn-action btn-edit" onclick='abrirModalEdit(${JSON.stringify(p)})'><i class="fas fa-edit"></i></button>
+                        <button class="btn-action btn-delete" onclick="abrirModalEliminar(${p.id_practicantes})"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
     }
 
     function filtrar(area, btn) {
@@ -227,14 +290,12 @@
         ejecutarFiltros();
     }
 
-    // --- LÓGICA EDITAR ---
     function abrirModalEdit(p) {
         document.getElementById('editId').value = p.id_practicantes;
         document.getElementById('editNombres').value = p.nombres;
         document.getElementById('editApellidos').value = p.apellidos;
         document.getElementById('editArea').value = p.area;
-        const modal = document.getElementById('modalEditOverlay');
-        modal.style.display = 'flex';
+        document.getElementById('modalEditOverlay').style.display = 'flex';
         setTimeout(() => document.getElementById('modalEditContent').classList.add('show'), 10);
     }
 
@@ -260,34 +321,25 @@
         setTimeout(() => document.getElementById('modalEditOverlay').style.display = 'none', 300);
     }
 
-    // --- LÓGICA ELIMINAR / RESET ---
     function abrirModalEliminar(id) {
         const modal = document.getElementById('modalOverlay');
         document.getElementById('modalTitle').innerText = "¿Eliminar Practicante?";
-        document.getElementById('modalText').innerText = "Se borrarán todos sus datos y asistencias.";
         modal.style.display = 'flex';
         setTimeout(() => document.getElementById('modalContent').classList.add('show'), 10);
-
         document.getElementById('btnConfirmarAction').onclick = async () => {
-            try {
-                await fetch(`${BASE_URL}/practicantes/${id}`, { method: 'DELETE' });
-                cerrarModal(); cargarDatos(); mostrarToast("🗑️ Eliminado");
-            } catch (e) { mostrarToast("❌ Error"); }
+            await fetch(`${BASE_URL}/practicantes/${id}`, { method: 'DELETE' });
+            cerrarModal(); cargarDatos(); mostrarToast("🗑️ Eliminado");
         };
     }
 
     function abrirModalReset() {
         const modal = document.getElementById('modalOverlay');
         document.getElementById('modalTitle').innerText = "¿Reiniciar Quincena?";
-        document.getElementById('modalText').innerText = "Todas las horas acumuladas volverán a cero.";
         modal.style.display = 'flex';
         setTimeout(() => document.getElementById('modalContent').classList.add('show'), 10);
-
         document.getElementById('btnConfirmarAction').onclick = async () => {
-            try {
-                await fetch(`${BASE_URL}/reset`, { method: 'DELETE' });
-                cerrarModal(); cargarDatos(); mostrarToast("🔄 Sistema Reiniciado");
-            } catch (e) { mostrarToast("❌ Error"); }
+            await fetch(`${BASE_URL}/reset`, { method: 'DELETE' });
+            cerrarModal(); cargarDatos(); mostrarToast("🔄 Ciclo reiniciado");
         };
     }
 
@@ -299,7 +351,7 @@
     function mostrarToast(m) {
         const t = document.getElementById('toast');
         t.innerText = m; t.style.display = 'block';
-        setTimeout(() => t.style.display = 'none', 3000);
+        setTimeout(() => t.style.display = 'none', 3500);
     }
 
     window.onload = cargarDatos;

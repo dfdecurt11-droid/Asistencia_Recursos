@@ -14,7 +14,7 @@
             --error: #ff7675;
             --dark: #1e272e;
             --text-muted: #636e72;
-            --glass: rgba(255, 255, 255, 0.92);
+            --glass: rgba(255, 255, 255, 0.95);
         }
         
         body { 
@@ -36,102 +36,90 @@
         .card { 
             background: var(--glass); 
             backdrop-filter: blur(25px);
-            padding: 40px; 
+            padding: 35px 40px; 
             border-radius: 40px; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.25); 
-            width: 100%; max-width: 460px; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2); 
+            width: 100%; max-width: 440px; 
             border: 1px solid rgba(255, 255, 255, 0.7);
             position: relative;
         }
 
-        .top-badge {
-            position: absolute;
-            top: 0; left: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--dark);
-            color: white;
-            padding: 8px 25px;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            white-space: nowrap;
-        }
+        /* Se eliminó .top-badge (Sistema D&B) */
 
-        .header-section { text-align: center; margin-bottom: 25px; margin-top: 10px; }
+        .header-section { text-align: center; margin-bottom: 20px; }
         
         .header-section i.main-icon {
-            font-size: 3.5rem;
+            font-size: 3.2rem;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 5px 10px rgba(71, 118, 230, 0.2));
+            filter: drop-shadow(0 5px 10px rgba(71, 118, 230, 0.15));
         }
 
         h2 { 
             color: var(--dark); 
             font-weight: 800; 
-            margin: 15px 0 5px 0; 
-            font-size: 1.7rem; 
+            margin: 10px 0 2px 0; 
+            font-size: 1.6rem; 
             letter-spacing: -0.5px;
             text-transform: uppercase;
         }
         
-        .subtitle { color: var(--text-muted); font-size: 0.95rem; font-weight: 500; }
+        .subtitle { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; }
         
         #reloj { 
-            text-align: center; font-size: 1.3rem; color: var(--dark); 
-            margin: 20px 0; font-weight: 700; 
-            background: linear-gradient(135deg, rgba(71, 118, 230, 0.1), rgba(142, 84, 233, 0.1));
-            padding: 12px; border-radius: 20px; 
-            border: 1px solid rgba(71, 118, 230, 0.2);
+            text-align: center; font-size: 1.2rem; color: var(--dark); 
+            margin: 15px 0; font-weight: 700; 
+            background: rgba(71, 118, 230, 0.08);
+            padding: 10px; border-radius: 18px; 
+            border: 1px solid rgba(71, 118, 230, 0.15);
         }
 
-        .form-group { position: relative; margin-bottom: 22px; }
-        label { display: block; font-weight: 700; color: var(--dark); margin-bottom: 8px; font-size: 0.8rem; padding-left: 10px; text-transform: uppercase; }
+        .form-group { position: relative; margin-bottom: 18px; }
+        label { display: block; font-weight: 700; color: var(--dark); margin-bottom: 6px; font-size: 0.75rem; padding-left: 8px; text-transform: uppercase; }
 
-        .input-wrapper { position: relative; }
-        .input-wrapper i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 1.1rem; }
+        .input-wrapper { position: relative; width: 100%; }
+        .input-wrapper i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 1rem; }
         
         input, select { 
-            width: 100%; padding: 16px 16px 16px 55px; 
-            border: 2px solid #f1f2f6; border-radius: 20px; outline: none; 
-            transition: 0.3s; font-size: 0.95rem; font-family: 'Poppins'; background: #fdfdfd; 
+            width: 100%; padding: 14px 15px 14px 50px; 
+            border: 2px solid #f1f2f6; border-radius: 18px; outline: none; 
+            transition: 0.3s; font-size: 0.9rem; font-family: 'Poppins'; background: #fdfdfd;
+            box-sizing: border-box; /* Asegura que el padding no desborde el input */
         }
 
-        input:focus, select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 10px 25px rgba(71, 118, 230, 0.12); }
+        input:focus, select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 8px 20px rgba(71, 118, 230, 0.1); }
 
         .btn-add { 
-            width: 100%; padding: 18px; border: none; border-radius: 22px; color: white; 
-            font-weight: 700; cursor: pointer; transition: 0.4s; font-size: 1.1rem; 
-            display: flex; align-items: center; justify-content: center; gap: 12px;
+            width: 100%; padding: 16px; border: none; border-radius: 20px; color: white; 
+            font-weight: 700; cursor: pointer; transition: 0.4s; font-size: 1rem; 
+            display: flex; align-items: center; justify-content: center; gap: 10px;
             background: linear-gradient(135deg, var(--primary), var(--secondary)); 
-            box-shadow: 0 12px 30px rgba(71, 118, 230, 0.35);
+            box-shadow: 0 10px 25px rgba(71, 118, 230, 0.3);
+            margin-top: 5px;
         }
 
-        .btn-add:hover { transform: translateY(-4px); filter: brightness(1.1); }
+        .btn-add:hover { transform: translateY(-3px); filter: brightness(1.05); }
 
         .secondary-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
 
         .btn-nav { 
-            background: white; color: var(--dark); border: 2px solid #f1f2f6; padding: 14px; 
-            border-radius: 18px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+            background: white; color: var(--dark); border: 2px solid #f1f2f6; padding: 12px; 
+            border-radius: 15px; font-size: 0.8rem; font-weight: 600; cursor: pointer;
             display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s;
         }
         
-        .btn-nav:hover { background: var(--dark); color: white; }
+        .btn-nav:hover { background: #f8f9fa; border-color: var(--primary); color: var(--primary); }
 
-        #toast-container { position: fixed; top: 30px; right: 30px; z-index: 9999; }
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
         .toast { 
-            background: white; padding: 20px 30px; border-radius: 25px; margin-bottom: 15px; 
-            display: flex; align-items: center; gap: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.12); 
-            animation: slideIn 0.5s ease; border-left: 10px solid var(--success);
+            background: white; padding: 15px 25px; border-radius: 20px; margin-bottom: 10px; 
+            display: flex; align-items: center; gap: 12px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); 
+            animation: slideIn 0.5s ease; border-left: 8px solid var(--success);
         }
-        @keyframes slideIn { from { transform: translateX(150%); } to { transform: translateX(0); } }
-        .spinner { animation: rotate 2s linear infinite; display: none; width: 22px; height: 22px; }
+        @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
+        .spinner { animation: rotate 2s linear infinite; display: none; width: 20px; height: 20px; }
         @keyframes rotate { 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -140,8 +128,6 @@
 <div id="toast-container"></div>
 
 <div class="card">
-    <div class="top-badge">Sistema D&B</div>
-    
     <div class="header-section">
         <i class="fas fa-id-badge main-icon"></i>
         <h2>Registro de Practicantes</h2>
@@ -213,10 +199,10 @@
         toast.className = `toast ${tipo}`;
         const icon = tipo === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
         toast.innerHTML = `
-            <i class="fas ${icon}" style="color: ${tipo === 'success' ? 'var(--success)' : 'var(--error)'}; font-size: 1.8rem;"></i> 
+            <i class="fas ${icon}" style="color: ${tipo === 'success' ? 'var(--success)' : 'var(--error)'}; font-size: 1.5rem;"></i> 
             <div>
-                <strong style="display:block; color:var(--dark); font-size:0.9rem">${tipo === 'success' ? 'Éxito' : 'Atención'}</strong>
-                <span style="color:var(--text-muted); font-size:0.85rem">${mensaje}</span>
+                <strong style="display:block; color:var(--dark); font-size:0.85rem">${tipo === 'success' ? 'Éxito' : 'Atención'}</strong>
+                <span style="color:var(--text-muted); font-size:0.8rem">${mensaje}</span>
             </div>`;
         container.appendChild(toast);
         setTimeout(() => {

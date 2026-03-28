@@ -3,102 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RRHH - Control de Asistencia (Recursos Humanos)</title>
+    <title>Recursos Humanos - Control de Asistencia</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --primary: #0984e3; 
-            --secondary: #00cec9; 
-            --success: #27ae60;
-            --danger: #d63031;
-            --dark: #2d3436; 
-            /* Gradiente Profesional para RRHH */
-            --bg-gradient: linear-gradient(-45deg, #0984e3, #6c5ce7, #00cec9, #81ecec);
+            /* Color exacto de Recursos Humanos extraído de la imagen */
+            --primary: #ff00ff; 
+            --primary-glow: rgba(255, 0, 255, 0.4);
+            /* Fondo dinámico basado en el color del reloj/tarjeta */
+            --bg-gradient: linear-gradient(-45deg, #030a11, #2d004d, #1a0033, #030a11);
         }
         
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body { 
-            font-family: 'Poppins', sans-serif; 
-            margin: 0; 
-            padding: 20px; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             background: var(--bg-gradient);
             background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            animation: gradientMove 12s ease infinite;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        @keyframes gradientBG {
+        @keyframes gradientMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
+        /* Orbes de luz decorativos fucsias */
+        .glow-orb {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 0, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+            animation: float 10s infinite alternate ease-in-out;
+        }
+
+        @keyframes float {
+            from { transform: translate(-10%, -10%) scale(1); }
+            to { transform: translate(10%, 10%) scale(1.1); }
+        }
+
+        /* Contenedor Glassmorphism */
         .container { 
-            max-width: 850px; 
-            width: 100%;
-            background: rgba(255, 255, 255, 0.92); 
-            padding: 40px; 
-            border-radius: 30px; 
-            box-shadow: 0 25px 60px rgba(0,0,0,0.2); 
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+            z-index: 10;
+            max-width: 820px; 
+            width: 92%;
+            background: rgba(10, 2, 15, 0.4); 
+            padding: 45px; 
+            border-radius: 35px; 
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 0, 255, 0.2);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8);
         }
 
-        .header-flex { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 2px solid rgba(9, 132, 227, 0.1); 
-            padding-bottom: 15px; 
-            margin-bottom: 25px; 
+        .area-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 0, 255, 0.1);
         }
 
-        .header-flex h2 { margin: 0; font-size: 1.8rem; color: var(--dark); }
-
-        #reloj-lista { 
-            font-weight: 800; 
-            color: var(--primary); 
-            font-size: 1.4rem; 
-            background: #fff; 
-            padding: 8px 22px; 
-            border-radius: 15px; 
-            box-shadow: 0 5px 15px rgba(9, 132, 227, 0.1);
-            border: 1px solid #e1f5fe;
+        .area-title p {
+            color: #d1d5db;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
         }
 
-        #lista-asistencia { display: grid; gap: 15px; }
+        .area-title h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: white;
+            /* Aplicamos el color fucsia al nombre del área */
+            text-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .area-name-highlight {
+            color: var(--primary);
+        }
+
+        #reloj {
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 1.6rem;
+            background: rgba(255, 0, 255, 0.08);
+            padding: 12px 24px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 0, 255, 0.3);
+            text-shadow: 0 0 15px var(--primary-glow);
+            letter-spacing: 1px;
+            box-shadow: inset 0 0 15px rgba(255, 0, 255, 0.1);
+        }
+
+        .btn-back {
+            text-decoration: none;
+            color: #94a3b8;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+        .btn-back:hover { color: var(--primary); transform: translateX(-5px); }
+
+        #lista-asistencia { display: grid; gap: 14px; }
 
         .item-practicante { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 20px; 
-            background: #fff;
+            padding: 20px 25px; 
+            background: rgba(255, 255, 255, 0.03);
             border-radius: 20px;
-            border: 1px solid #f1f1f1;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease; 
         }
 
         .item-practicante:hover { 
-            transform: translateY(-5px);
-            box-shadow: 0 12px 20px rgba(9, 132, 227, 0.08);
-            border-color: var(--secondary);
+            background: rgba(255, 0, 255, 0.05);
+            border-color: var(--primary);
+            transform: translateX(5px);
+            box-shadow: 0 0 25px rgba(255, 0, 255, 0.15);
         }
 
-        .info-personal strong { font-size: 1.15rem; color: var(--dark); display: block; }
-        .status-badge { 
-            font-size: 0.75rem; 
-            padding: 4px 12px; 
-            border-radius: 20px; 
-            background: #e1f5fe; 
-            color: var(--primary); 
-            font-weight: 700;
-            margin-top: 5px; 
-            display: inline-block;
-        }
+        .info-user strong { font-size: 1.1rem; color: #ffffff; display: block; margin-bottom: 4px; }
+        .info-user small { color: #94a3b8; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.5px; }
 
         .btn-group { display: flex; gap: 12px; }
 
@@ -107,81 +154,66 @@
             border-radius: 14px; 
             border: none; 
             cursor: pointer; 
-            font-weight: 700; 
+            font-weight: 800; 
             color: white; 
             transition: 0.3s; 
             display: flex; 
             align-items: center; 
-            gap: 10px; 
-            font-family: 'Poppins'; 
-            font-size: 0.85rem;
+            gap: 8px; 
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .btn-entrada { 
-            background: var(--success); 
-            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.2);
+            background: var(--primary); 
+            box-shadow: 0 4px 15px var(--primary-glow); 
         }
         
         .btn-salida { 
-            background: var(--primary); 
-            box-shadow: 0 4px 12px rgba(9, 132, 227, 0.2);
-        }
+            background: #1e293b; 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        } 
 
-        .btn-asistencia:hover { 
-            transform: scale(1.05); 
+        .btn-asistencia:hover:not(:disabled) { 
+            transform: translateY(-2px); 
             filter: brightness(1.1); 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
 
-        .btn-back { 
-            text-decoration: none; 
-            color: var(--primary); 
-            font-weight: 600; 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 8px;
-            margin-bottom: 20px; 
-            background: rgba(255, 255, 255, 0.7);
-            padding: 8px 18px;
-            border-radius: 12px;
-            transition: 0.3s;
-        }
-        
-        .btn-back:hover { background: #fff; transform: translateX(-5px); }
-
-        #mensaje-alert {
-            position: fixed; top: 20px; right: 20px; padding: 18px 30px;
-            border-radius: 15px; color: white; display: none; z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2); font-weight: 700;
-            animation: fadeInRight 0.5s ease;
+        #toast-alert {
+            position: fixed; top: 25px; right: 25px; padding: 18px 30px;
+            border-radius: 16px; color: white; display: none; z-index: 1000;
+            font-weight: 800; animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            border-left: 5px solid white;
         }
 
-        @keyframes fadeInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .loader-rrhh { color: var(--primary); font-size: 2.5rem; }
+        @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
     </style>
 </head>
 <body>
 
-    <div id="mensaje-alert"></div>
+    <div class="glow-orb" style="top: -100px; right: -100px;"></div>
+    <div class="glow-orb" style="bottom: -100px; left: -100px; animation-delay: -5s;"></div>
+
+    <div id="toast-alert"></div>
 
     <div class="container">
-        <a href="lista.html" class="btn-back"><i class="fas fa-users-gear"></i> Gestión de Áreas</a>
+        <a href="lista.html" class="btn-back"><i class="fas fa-chevron-left"></i> Panel de Áreas</a>
         
-        <div class="header-flex">
-            <div>
-                <p style="margin:0; color: #636e72; font-weight: 600; font-size: 0.85rem;">Gestión de Talento Humano</p>
-                <h2>Área: <span style="color: var(--primary);">Recursos Humanos</span></h2>
+        <div class="area-header">
+            <div class="area-title">
+                <p>Gestión de Personal</p>
+                <h2>Área <span class="area-name-highlight">Recursos Humanos</span></h2>
             </div>
-            <div id="reloj-lista">00:00:00</div>
+            <div id="reloj">00:00:00 p. m.</div>
         </div>
 
         <div id="lista-asistencia">
-            <div style="text-align:center; padding: 40px;">
-                <i class="fas fa-id-card-clip fa-spin loader-rrhh"></i>
-                <p style="margin-top:15px; color:#636e72; font-weight: 600;">Conectando con la base de datos de RRHH...</p>
+            <div style="text-align:center; padding: 40px; opacity: 0.6;">
+                <i class="fas fa-users-gear fa-spin" style="font-size: 2.5rem; color: var(--primary);"></i>
+                <p style="margin-top: 15px; font-weight: 600;">Sincronizando equipo...</p>
             </div>
         </div>
     </div>
@@ -192,15 +224,20 @@
         const AREA_PAGINA = "Recursos Humanos"; 
 
         setInterval(() => {
-            document.getElementById('reloj-lista').innerText = new Date().toLocaleTimeString('es-PE', { hour12: true });
+            document.getElementById('reloj').innerText = new Date().toLocaleTimeString('es-PE', { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit', 
+                hour12: true 
+            });
         }, 1000);
 
-        function showAlert(msg, isError = false) {
-            const el = document.getElementById('mensaje-alert');
-            el.innerHTML = `<i class="fas ${isError ? 'fa-user-slash' : 'fa-user-check'}"></i> ${msg}`;
-            el.style.backgroundColor = isError ? "var(--danger)" : "var(--success)";
+        function showToast(msg, isError = false) {
+            const el = document.getElementById('toast-alert');
+            el.innerText = msg;
+            el.style.backgroundColor = isError ? "#e11d48" : "#86198f";
             el.style.display = "block";
-            setTimeout(() => { el.style.display = "none"; }, 4000);
+            setTimeout(() => { el.style.display = "none"; }, 3500);
         }
 
         async function cargarLista() {
@@ -209,57 +246,44 @@
                 let data = await res.json();
                 const listaDiv = document.getElementById('lista-asistencia');
                 
-                if (!data || data.length === 0) {
-                    listaDiv.innerHTML = `
-                        <div style="text-align:center; padding:50px; opacity:0.6;">
-                            <i class="fas fa-user-group" style="font-size:3.5rem; color:#b2bec3;"></i>
-                            <p>No se encontraron colaboradores en el área de RRHH.</p>
-                        </div>`;
+                if(data.length === 0) {
+                    listaDiv.innerHTML = `<p style="text-align:center; padding: 30px; opacity:0.5;">No hay colaboradores registrados en Recursos Humanos.</p>`;
                     return;
                 }
 
-                data.sort((a, b) => a.apellidos.localeCompare(b.apellidos, 'es', { sensitivity: 'base' }));
+                data.sort((a, b) => (a.apellidos || "").localeCompare(b.apellidos || ""));
 
                 listaDiv.innerHTML = data.map(p => `
                     <div class="item-practicante">
-                        <div class="info-personal">
+                        <div class="info-user">
                             <strong>${p.apellidos.toUpperCase()}, ${p.nombres}</strong>
-                            <span class="status-badge"><i class="fas fa-id-badge"></i> RRHH-ID: ${p.id_practicantes}</span>
+                            <small>ID: ${p.id_practicantes} • GESTIÓN DE TALENTO</small>
                         </div>
                         <div class="btn-group">
                             <button class="btn-asistencia btn-entrada" onclick="marcar(${p.id_practicantes}, 'entrada')">
-                                <i class="fas fa-user-plus"></i> Entrada
+                                <i class="fas fa-sign-in-alt"></i> Entrada
                             </button>
                             <button class="btn-asistencia btn-salida" onclick="marcar(${p.id_practicantes}, 'salida')">
-                                <i class="fas fa-user-minus"></i> Salida
+                                <i class="fas fa-sign-out-alt"></i> Salida
                             </button>
                         </div>
                     </div>
                 `).join('');
-            } catch (error) {
-                document.getElementById('lista-asistencia').innerHTML = `<p style="text-align:center; color: var(--danger);">Error de conexión con el servidor central.</p>`;
-            }
+            } catch (e) { console.error(e); }
         }
 
         async function marcar(id, tipo) {
             try {
-                const horaLocal = new Date().toLocaleTimeString('es-PE', { hour12: true });
                 const res = await fetch(`${ASISTENCIA_URL}/${id}`, { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ tipo_registro: tipo })
                 });
-                const result = await res.json();
-                if (res.ok) {
-                    const emoji = tipo === 'entrada' ? '🤝' : '👋';
-                    showAlert(`${emoji} Marcación de ${tipo} validada para RRHH (${horaLocal})`);
-                } else {
-                    showAlert(result.message || "Error al validar registro", true);
-                }
-            } catch (e) {
-                showAlert("Fallo en la comunicación con el servidor", true);
-            }
+                if (res.ok) showToast(`Registro de ${tipo} exitoso para el colaborador.`);
+                else showToast("Error en la validación de ID", true);
+            } catch (e) { showToast("Error de comunicación con el servidor", true); }
         }
+
         window.onload = cargarLista;
     </script>
 </body>
