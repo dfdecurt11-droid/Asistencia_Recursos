@@ -11,7 +11,6 @@ const pool = new Pool({
     ssl: { rejectUnauthorized: false }
 });
 
-// --- 1. OBTENER PRACTICANTES ---
 app.get('/api/practicantes', async (req, res) => {
     const { area } = req.query;
     try {
@@ -29,7 +28,6 @@ app.get('/api/practicantes', async (req, res) => {
     }
 });
 
-// --- 2. REGISTRAR NUEVO PRACTICANTE ---
 app.post('/api/practicantes', async (req, res) => {
     const { nombres, apellidos, area } = req.body;
     try {
@@ -43,7 +41,6 @@ app.post('/api/practicantes', async (req, res) => {
     }
 });
 
-// --- 3. REGISTRAR ASISTENCIA ---
 app.post('/api/asistencia/:id', async (req, res) => {
     const { id } = req.params;
     const tipo = req.body.tipo_registro || req.body.tipo;
@@ -69,14 +66,8 @@ app.post('/api/asistencia/:id', async (req, res) => {
     }
 });
 
-// --- 4. REPORTE GENERAL (CORREGIDO PARA REDONDEO DE MINUTOS HACIA ARRIBA) ---
 app.get('/api/reporte', async (req, res) => {
     try {
-        // Explicación de la lógica SQL:
-        // 1. Calculamos la diferencia en segundos (EPOCH).
-        // 2. Dividimos por 60 para tener minutos decimales.
-        // 3. CEIL eleva al entero superior (ej: 1.1 min -> 2 min).
-        // 4. Multiplicamos por 60 para volver a segundos y convertimos a intervalo para formatear.
         const result = await pool.query(`
             SELECT 
                 p.id_practicantes, 
@@ -105,7 +96,6 @@ app.get('/api/reporte', async (req, res) => {
     }
 });
 
-// --- 5. EDITAR ---
 app.put('/api/practicantes/:id', async (req, res) => {
     const { id } = req.params;
     const { nombres, apellidos, area } = req.body;
@@ -117,7 +107,6 @@ app.put('/api/practicantes/:id', async (req, res) => {
     }
 });
 
-// --- 6. ELIMINAR ---
 app.delete('/api/practicantes/:id', async (req, res) => {
     const { id } = req.params;
     try {
@@ -129,7 +118,6 @@ app.delete('/api/practicantes/:id', async (req, res) => {
     }
 });
 
-// --- 7. RESET ---
 app.delete('/api/reset', async (req, res) => {
     try {
         await pool.query('TRUNCATE TABLE asistencia RESTART IDENTITY CASCADE');
