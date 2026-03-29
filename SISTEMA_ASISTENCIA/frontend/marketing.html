@@ -2,254 +2,283 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RRHH - Marketing</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RR HH| Marketing</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    
     <style>
         :root { 
-            --primary: #d946ef; 
-            --primary-glow: rgba(217, 70, 239, 0.4);
-            --success: #10b981; 
-            --dark-bg: #020617;
-            --bg-gradient: linear-gradient(-45deg, #020617, #2e1065, #4c1d95, #020617);
+            --primary: #a855f7; /* Morado Marketing */
+            --primary-glow: rgba(168, 85, 247, 0.3);
+            --bg: #0b0f1a;
+            --card: rgba(30, 41, 59, 0.5);
+            --text: #f1f5f9;
+            --text-dim: #94a3b8;
+            --border: rgba(255, 255, 255, 0.06);
         }
         
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(168, 85, 247, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.08) 0%, transparent 40%);
+            color: var(--text);
             min-height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            background: var(--bg-gradient);
-            background-size: 400% 400%;
-            animation: gradientMove 12s ease infinite;
-            color: white;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .glow-orb {
-            position: absolute;
-            width: 450px;
-            height: 450px;
-            background: radial-gradient(circle, rgba(217, 70, 239, 0.08) 0%, transparent 70%);
-            border-radius: 50%;
-            z-index: 0;
-            animation: float 10s infinite alternate ease-in-out;
-        }
-
-        @keyframes float {
-            from { transform: translate(-15%, -15%) scale(1); }
-            to { transform: translate(15%, 15%) scale(1.15); }
+            padding: clamp(1.5rem, 5vw, 3rem) 1rem;
         }
 
         .container { 
-            position: relative;
-            z-index: 10;
-            max-width: 820px; 
-            width: 92%;
-            background: rgba(255, 255, 255, 0.02); 
-            padding: 45px; 
-            border-radius: 35px; 
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            max-width: 950px;
+            animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        .header-flex { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 35px; 
-            padding-bottom: 25px;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Navegación Superior */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 45px;
         }
 
-        #reloj-lista { 
-            font-weight: 800; 
-            color: var(--primary); 
-            font-size: 1.6rem; 
-            background: rgba(217, 70, 239, 0.08); 
-            padding: 12px 24px; 
-            border-radius: 18px; 
-            border: 1px solid rgba(217, 70, 239, 0.15);
-            text-shadow: 0 0 15px var(--primary-glow);
-            letter-spacing: 1px;
-        }
-
-        #lista-asistencia { display: grid; gap: 14px; }
-
-        .item-practicante { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 20px 28px; 
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 22px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        }
-
-        .item-practicante:hover { 
-            background: rgba(255, 255, 255, 0.06);
-            transform: translateX(8px) scale(1.01);
-            border-color: var(--primary);
-            box-shadow: 0 10px 30px rgba(217, 70, 239, 0.1);
-        }
-
-        .info-user strong { font-size: 1.15rem; color: #ffffff; display: block; margin-bottom: 4px; }
-        .info-user small { color: #94a3b8; font-weight: 600; font-size: 0.85rem; }
-
-        .btn-group { display: flex; gap: 12px; }
-
-        .btn-asistencia { 
-            padding: 13px 22px; 
-            border-radius: 15px; 
-            border: none; 
-            cursor: pointer; 
-            font-weight: 800; 
-            color: white; 
-            transition: 0.3s; 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-entrada { background: #7c3aed; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
-        .btn-salida { background: #475569; box-shadow: 0 4px 15px rgba(71, 85, 105, 0.3); } 
-
-        .btn-asistencia:hover { 
-            transform: translateY(-3px); 
-            filter: brightness(1.25); 
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); 
-        }
-
-        .btn-back { 
-            text-decoration: none; 
-            color: #94a3b8; 
-            font-weight: 700; 
-            display: inline-flex; 
-            align-items: center; 
+        .btn-back {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
             gap: 10px;
-            margin-bottom: 25px; 
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            text-transform: uppercase;
+            letter-spacing: 1px;
             transition: 0.3s;
-            font-size: 0.9rem;
         }
-        .btn-back:hover { color: var(--primary); transform: translateX(-6px); }
+        .btn-back:hover { color: white; background: rgba(168, 85, 247, 0.1); border-color: var(--primary); transform: translateX(-5px); }
 
-        #toast-alert {
-            position: fixed; top: 25px; right: 25px; 
-            padding: 18px 30px; border-radius: 16px; 
-            color: white; display: none; z-index: 1000;
-            font-weight: 800; animation: slideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        #reloj {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 22px;
+            border-radius: 15px;
+            border: 1px solid var(--primary-glow);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        /* Encabezado Principal */
+        .main-header { margin-bottom: 40px; position: relative; }
+        .main-header p { font-size: 0.7rem; color: var(--primary); text-transform: uppercase; letter-spacing: 4px; font-weight: 800; margin-bottom: 8px; }
+        .main-header h1 { font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 800; letter-spacing: -1.5px; line-height: 1; }
+        .main-header h1 span { font-weight: 400; color: #fff; opacity: 0.8; }
+
+        /* Grid de Personal */
+        .list-wrapper {
+            display: grid;
+            gap: 16px;
+            max-height: 55vh;
+            overflow-y: auto;
+            padding-right: 12px;
+        }
+
+        .list-wrapper::-webkit-scrollbar { width: 4px; }
+        .list-wrapper::-webkit-scrollbar-thumb { background: var(--primary-glow); border-radius: 10px; }
+
+        .user-card {
+            background: var(--card);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 22px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .user-card:hover { 
+            border-color: var(--primary); 
+            background: rgba(168, 85, 247, 0.05);
+            transform: scale(1.02);
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
-        @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
+        .user-info strong { font-size: 1.2rem; display: block; margin-bottom: 5px; color: #fff; letter-spacing: -0.5px; }
+        .user-info span { font-size: 0.75rem; color: var(--text-dim); display: flex; align-items: center; gap: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .user-info i { color: var(--primary); }
+
+        /* Botones de Acción */
+        .btn-actions { display: flex; gap: 12px; }
+
+        .btn {
+            border: none;
+            cursor: pointer;
+            padding: 14px 24px;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: 1px;
+        }
+
+        .btn-in { background: linear-gradient(135deg, #7c3aed, #a855f7); box-shadow: 0 10px 20px rgba(124, 58, 237, 0.3); }
+        .btn-out { background-color: #1e293b; border: 1px solid rgba(255,255,255,0.1); }
+
+        .btn:hover:not(:disabled) { transform: translateY(-3px); filter: brightness(1.2); }
+        .btn:active { transform: translateY(0); }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* Notificación Toast */
+        #toast {
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+            padding: 16px 35px; border-radius: 20px;
+            background: #1e1b4b; color: white;
+            border: 1px solid var(--primary);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            display: none; z-index: 1000;
+            font-size: 0.9rem; font-weight: 700;
+            animation: toastUp 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes toastUp { from { transform: translate(-50%, 40px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+
+        @media (max-width: 650px) {
+            .user-card { flex-direction: column; text-align: center; gap: 20px; padding: 30px; }
+            .btn-actions { width: 100%; }
+            .btn { flex: 1; justify-content: center; }
+            .main-header h1 { font-size: 2rem; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="glow-orb" style="top: -150px; right: -100px;"></div>
-    <div class="glow-orb" style="bottom: -150px; left: -100px; animation-delay: -5s; opacity: 0.6;"></div>
-
-    <div id="toast-alert"></div>
+    <div id="toast"></div>
 
     <div class="container">
-        <a href="lista.html" class="btn-back"><i class="fas fa-chevron-left"></i> Panel de Áreas</a>
-        
-        <div class="header-flex">
-            <div>
-                <p style="margin:0; color: var(--primary); font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px;">Creatividad y Estrategia</p>
-                <h2 style="font-size: 2.2rem; font-weight: 800;">Área <span style="color: var(--primary);">Marketing</span></h2>
-            </div>
-            <div id="reloj-lista">00:00:00</div>
-        </div>
+        <nav class="top-nav">
+            <a href="lista.html" class="btn-back"><i class="fas fa-chevron-left"></i>Voler</a>
+            <div id="reloj">00:00:00 --</div>
+        </nav>
 
-        <div id="lista-asistencia">
-            <div style="text-align:center; padding: 40px; opacity: 0.6;">
-                <i class="fas fa-wand-magic-sparkles fa-spin" style="font-size: 2.5rem; color: var(--primary);"></i>
-                <p style="margin-top: 15px;">Sincronizando talento creativo...</p>
+        <header class="main-header">
+            <p>Creative Strategy Team</p>
+            <h1>Gestión <span>Marketing</span></h1>
+        </header>
+
+        <div id="lista-asistencia" class="list-wrapper">
+            <div style="text-align:center; padding: 80px; opacity:0.6;">
+                <i class="fas fa-wand-magic-sparkles fa-beat" style="font-size: 2.5rem; color: var(--primary);"></i>
+                <p style="margin-top: 20px; font-weight: 800; font-size: 0.75rem; letter-spacing: 2px;">SINCRONIZANDO TALENTO...</p>
             </div>
         </div>
     </div>
 
     <script>
-        const API_URL = "https://asistencia-recursos.onrender.com/api/practicantes";
-        const ASISTENCIA_URL = "https://asistencia-recursos.onrender.com/api/asistencia";
-        const AREA_PAGINA = "Marketing"; 
+        const API_URL = "https://asistencia-recursos.onrender.com/api";
+        const AREA = "Marketing";
 
-        setInterval(() => {
-            document.getElementById('reloj-lista').innerText = new Date().toLocaleTimeString('es-PE', { hour12: true });
-        }, 1000);
-
-        function showToast(msg, isError = false) {
-            const el = document.getElementById('toast-alert');
-            el.innerHTML = `<i class="fas ${isError ? 'fa-bolt' : 'fa-star'}"></i> ${msg}`;
-            el.style.backgroundColor = isError ? "#be123c" : "#701a75";
-            el.style.display = "block";
-            el.style.borderLeft = `6px solid ${isError ? '#fb7185' : '#d946ef'}`;
-            setTimeout(() => { el.style.display = "none"; }, 3500);
+        function updateClock() {
+            const el = document.getElementById('reloj');
+            setInterval(() => {
+                el.textContent = new Date().toLocaleTimeString('es-PE', { 
+                    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
+                }).toUpperCase();
+            }, 1000);
         }
 
-        async function cargarLista() {
+        function notify(msg, err = false) {
+            const t = document.getElementById('toast');
+            t.style.display = 'block';
+            t.style.borderColor = err ? '#ef4444' : 'var(--primary)';
+            t.innerHTML = `<i class="fas ${err ? 'fa-triangle-exclamation' : 'fa-circle-check'}" style="margin-right:10px; color:${err ? '#ef4444' : 'var(--primary)'}"></i> ${msg}`;
+            setTimeout(() => t.style.display = 'none', 3500);
+        }
+
+        async function cargarDatos() {
+            const container = document.getElementById('lista-asistencia');
             try {
-                const res = await fetch(`${API_URL}?area=${encodeURIComponent(AREA_PAGINA)}`);
-                let data = await res.json();
-                const listaDiv = document.getElementById('lista-asistencia');
-                
-                if(data.length === 0) {
-                    listaDiv.innerHTML = `<p style="text-align:center; padding: 40px; opacity:0.4;">No se registra personal en Marketing.</p>`;
+                const res = await fetch(`${API_URL}/practicantes?area=${encodeURIComponent(AREA)}`);
+                const data = await res.json();
+
+                if (!data.length) {
+                    container.innerHTML = `<div style="text-align:center; padding: 50px; opacity:0.4;">
+                        <i class="fas fa-ghost" style="font-size: 2rem; margin-bottom:15px;"></i>
+                        <p style="font-weight:700;">No hay creativos asignados a esta división.</p>
+                    </div>`;
                     return;
                 }
 
-                data.sort((a, b) => (a.apellidos || "").localeCompare(b.apellidos || ""));
+                data.sort((a,b) => a.apellidos.localeCompare(b.apellidos));
 
-                listaDiv.innerHTML = data.map(p => `
-                    <div class="item-practicante">
-                        <div class="info-user">
-                            <strong>${p.apellidos}, ${p.nombres}</strong>
-                            <small><i class="fas fa-palette"></i> ID: ${p.id_practicantes}</small>
+                container.innerHTML = data.map(p => `
+                    <div class="user-card">
+                        <div class="user-info">
+                            <strong>${p.apellidos.toUpperCase()}, ${p.nombres}</strong>
+                            <span><i class="fas fa-fingerprint"></i> ID: ${String(p.id_practicantes).padStart(4, '0')}</span>
                         </div>
-                        <div class="btn-group">
-                            <button class="btn-asistencia btn-entrada" onclick="marcar(${p.id_practicantes}, 'entrada')">
-                                <i class="fas fa-rocket"></i> Entrada
+                        <div class="btn-actions">
+                            <button class="btn btn-in" onclick="marcar(${p.id_practicantes}, 'entrada', this)">
+                                <i class="fas fa-bolt"></i> Entrada
                             </button>
-                            <button class="btn-asistencia btn-salida" onclick="marcar(${p.id_practicantes}, 'salida')">
-                                <i class="fas fa-magic"></i> Salida
+                            <button class="btn btn-out" onclick="marcar(${p.id_practicantes}, 'salida', this)">
+                                <i class="fas fa-moon"></i> Salida
                             </button>
                         </div>
                     </div>
                 `).join('');
-            } catch (e) { console.error(e); }
+            } catch (e) {
+                notify("Falla crítica al conectar con la base de datos", true);
+                container.innerHTML = `<p style="text-align:center; color:#ef4444; font-weight:800; padding: 40px; letter-spacing:1px;">ERROR DE ENLACE</p>`;
+            }
         }
 
-        async function marcar(id, tipo) {
+        async function marcar(id, tipo, btn) {
+            const btns = btn.closest('.btn-actions').querySelectorAll('button');
+            const originalHTML = btn.innerHTML;
+            
+            btns.forEach(b => b.disabled = true);
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
+
             try {
-                const res = await fetch(`${ASISTENCIA_URL}/${id}`, { 
+                const res = await fetch(`${API_URL}/asistencia/${id}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ tipo_registro: tipo })
                 });
-                if (res.ok) showToast(`Impacto de ${tipo} registrado.`);
-                else showToast("Error en el flujo creativo", true);
-            } catch (e) { showToast("Sin conexión con el núcleo", true); }
+                
+                if (res.ok) notify(`MARCACIÓN DE ${tipo.toUpperCase()} EXITOSA`);
+                else notify("Error en validación de credenciales", true);
+            } catch (e) {
+                notify("Error de red: Terminal fuera de línea", true);
+            } finally {
+                btns.forEach(b => b.disabled = false);
+                btn.innerHTML = originalHTML;
+            }
         }
 
-        window.onload = cargarLista;
+        window.onload = () => {
+            updateClock();
+            cargarDatos();
+        };
     </script>
 </body>
 </html>

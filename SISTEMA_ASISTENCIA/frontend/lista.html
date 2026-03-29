@@ -2,247 +2,209 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asistencia RRHH de Practicantes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RRHH | Gestión de Áreas</title>
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-dark: #020617;
-            --card-glass: rgba(255, 255, 255, 0.03);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --c-ventas: #ff0055;
-            --c-finanzas: #00ffa3;
-            --c-marketing: #7d2ae8;
-            --c-logistica: #ffb800;
-            --c-mejora: #00e5ff;
-            --c-rrhh: #ff00ff;
+            --bg-body: #020617;
+            --bg-card: rgba(15, 23, 42, 0.6);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --c-ventas: #fb7185; --c-finanzas: #34d399; --c-marketing: #a78bfa;
+            --c-logistica: #fbbf24; --c-mejora: #22d3ee; --c-rrhh: #f472b6;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            height: 100vh;
-            width: 100vw;
+            height: 100vh; /* Altura fija de pantalla */
+            overflow: hidden; /* Prohíbe el scroll */
+            background-color: var(--bg-body);
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 35%),
+                radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.08) 0%, transparent 35%);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container { 
+            width: 100%; 
+            max-width: 1100px; 
+            height: 95vh; /* Ocupa casi todo el alto */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Separa header, grid y footer */
+            padding: 1rem;
+        }
+
+        .header { text-align: center; }
+        .header h1 { 
+            font-size: clamp(1.5rem, 4vh, 2.5rem); 
+            font-weight: 800; 
+            letter-spacing: -1.5px;
+            margin-bottom: 0.5vh;
+        }
+        .header p { color: var(--text-muted); font-size: clamp(0.8rem, 2vh, 1rem); }
+
+        .area-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 columnas fijas en PC */
+            grid-template-rows: repeat(2, 1fr); /* 2 filas fijas en PC */
+            gap: 1.5vh;
+            flex-grow: 1; /* Toma el espacio central disponible */
+            margin: 2vh 0;
+        }
+
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 1.5vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-color: var(--bg-dark);
-            color: white;
-            overflow: hidden;
+            transition: all 0.3s ease;
             position: relative;
         }
 
-        .animated-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
-        }
-
-        .orb {
-            position: absolute;
-            width: 50vw; height: 50vw;
-            border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.12;
-            z-index: -1;
-            animation: floatOrb 15s infinite alternate ease-in-out;
-        }
-        .orb-1 { background: var(--c-marketing); top: -10%; left: -10%; }
-        .orb-2 { background: var(--c-mejora); bottom: -10%; right: -10%; animation-delay: -3s; }
-
-        @keyframes floatOrb {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(50px, 30px) scale(1.1); }
-        }
-
-        .header { text-align: center; margin-bottom: 25px; }
-        .header h1 { 
-            font-size: 2.8rem; 
-            font-weight: 800; 
-            letter-spacing: -1.5px;
-            background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            line-height: 1.1;
-        }
-        .header p { 
-            color: var(--c-mejora); 
-            font-weight: 600; 
-            letter-spacing: 3px; 
-            font-size: 0.75rem;
-            margin-top: 8px;
-            text-transform: uppercase;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            width: 95%;
-            max-width: 1100px;
-        }
-
-        .card {
-            background: var(--card-glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--card-border);
-            border-radius: 28px;
-            padding: 30px 15px;
-            text-align: center;
-            text-decoration: none;
-            color: white;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: var(--theme-color);
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 15px 35px -10px rgba(0,0,0,0.4);
-        }
+        .card:hover { transform: translateY(-5px); border-color: var(--accent-color); }
 
         .icon-wrapper {
-            width: 65px; height: 65px;
-            background: rgba(255,255,255,0.02);
+            width: clamp(40px, 8vh, 60px);
+            height: clamp(40px, 8vh, 60px);
+            background: rgba(255, 255, 255, 0.03);
             border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
-            color: var(--theme-color);
-            margin-bottom: 18px;
-            transition: 0.3s;
-            border: 1px solid rgba(255,255,255,0.05);
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1vh;
+            border: 1px solid var(--border);
         }
 
-        .card:hover .icon-wrapper {
-            background: var(--theme-color);
-            color: #ffffff;
-            box-shadow: 0 0 20px var(--theme-color);
+        .card h3 { 
+            font-size: clamp(1rem, 2.5vh, 1.3rem); 
+            margin-bottom: 1.5vh;
         }
 
-        .card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 4px; }
-        .card p { font-size: 0.8rem; color: #94a3b8; margin-bottom: 22px; }
-
-        .btn-asistencia {
-            width: 100%;
-            padding: 10px;
+        .btn-attendance {
+            width: 90%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
             border-radius: 14px;
-            border: 1.5px solid var(--theme-color);
-            color: var(--theme-color);
-            font-weight: 800;
+            color: var(--text-main);
+            text-decoration: none;
             font-size: 0.7rem;
+            font-weight: 800;
             text-transform: uppercase;
+            letter-spacing: 1px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            transition: 0.3s;
-        }
-
-        .card:hover .btn-asistencia {
-            background: var(--theme-color);
-            color: white;
-        }
-
-        .ventas { --theme-color: var(--c-ventas); }
-        .finanzas { --theme-color: var(--c-finanzas); }
-        .marketing { --theme-color: var(--c-marketing); }
-        .logistica { --theme-color: var(--c-logistica); }
-        .mejora { --theme-color: var(--c-mejora); }
-        .rrhh { --theme-color: var(--c-rrhh); }
-
-        .footer-nav {
-            margin-top: 30px;
-            color: #475569;
-            text-decoration: none;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
             gap: 8px;
             transition: 0.3s;
         }
-        .footer-nav:hover { color: white; }
 
-        @media (max-height: 750px) {
-            .header h1 { font-size: 2rem; }
-            .grid-container { gap: 15px; }
-            .card { padding: 20px 10px; }
+        .card:hover .btn-attendance {
+            background-color: var(--accent-color);
+            color: #020617;
+        }
+
+        /* Colores de Área */
+        .ventas { --accent-color: var(--c-ventas); }
+        .finanzas { --accent-color: var(--c-finanzas); }
+        .marketing { --accent-color: var(--c-marketing); }
+        .logistica { --accent-color: var(--c-logistica); }
+        .mejora { --accent-color: var(--c-mejora); }
+        .rrhh { --accent-color: var(--c-rrhh); }
+
+        .footer { text-align: center; }
+        .btn-home {
+            padding: 10px 20px;
+            border-radius: 100px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--border);
+        }
+
+        /* Ajuste para móviles: Todo en una sola vista también */
+        @media (max-width: 768px) {
+            .area-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 columnas en móviles */
+                grid-template-rows: repeat(3, 1fr); /* 3 filas */
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="animated-bg"></div>
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
+    <div class="container">
+        <header class="header">
+            <h1>Control de Asistencia</h1>
+            <p>Seleccione un area para tomar asistencia</p>
+        </header>
 
-    <header class="header">
-        <h1>Asistencia RRHH de Practicantes</h1>
-        <p>Seleccione un área para tomar asistencia</p>
-    </header>
+        <main class="area-grid">
+            <div class="card ventas">
+                <div class="icon-wrapper"><i class="fas fa-chart-line"></i></div>
+                <h3>Ventas</h3>
+                <a href="ventas.html" class="btn-attendance">TOMAR ASISTENCIA <i class="fas fa-arrow-right"></i></a>
+            </div>
 
-    <main class="grid-container">
-        <a href="ventas.html" class="card ventas">
-            <div class="icon-wrapper"><i class="fas fa-chart-line"></i></div>
-            <h3>Ventas</h3>
-            <p>Comercial y Ventas</p>
-            <div class="btn-asistencia">Tomar Asistencia <i class="fas fa-arrow-right"></i></div>
-        </a>
+            <div class="card finanzas">
+                <div class="icon-wrapper"><i class="fas fa-landmark"></i></div>
+                <h3>Finanzas</h3>
+                <a href="finanzas.html" class="btn-attendance">TOMAR ASISTENCIA <i class="fas fa-arrow-right"></i></a>
+            </div>
 
-        <a href="finanzas.html" class="card finanzas">
-            <div class="icon-wrapper"><i class="fas fa-file-invoice-dollar"></i></div>
-            <h3>Finanzas</h3>
-            <p>Contabilidad y Pagos</p>
-            <div class="btn-asistencia">Tomar Asistencia <i class="fas fa-arrow-right"></i></div>
-        </a>
+            <div class="card marketing">
+                <div class="icon-wrapper"><i class="fas fa-rocket"></i></div>
+                <h3>Marketing</h3>
+                <a href="marketing.html" class="btn-attendance">TOMAR ASISTENCIA <i class="fas fa-arrow-right"></i></a>
+            </div>
 
-        <a href="marketing.html" class="card marketing">
-            <div class="icon-wrapper"><i class="fas fa-bullhorn"></i></div>
-            <h3>Marketing</h3>
-            <p>Publicidad Digital</p>
-            <div class="btn-asistencia">Tomar Asistencia <i class="fas fa-arrow-right"></i></div>
-        </a>
+            <div class="card logistica">
+                <div class="icon-wrapper"><i class="fas fa-box-open"></i></div>
+                <h3>Logística</h3>
+                <a href="logistica.html" class="btn-attendance">TOMAR ASISTENCIA <i class="fas fa-arrow-right"></i></a>
+            </div>
 
-        <a href="logistica.html" class="card logistica">
-            <div class="icon-wrapper"><i class="fas fa-truck-ramp-box"></i></div>
-            <h3>Logística</h3>
-            <p>Distribución y Stock</p>
-            <div class="btn-asistencia">Tomar Asistencia <i class="fas fa-arrow-right"></i></div>
-        </a>
+            <div class="card mejora">
+                <div class="icon-wrapper"><i class="fas fa-microchip"></i></div>
+                <h3>Mejora</h3>
+                <a href="gestion_continua.html" class="btn-attendance">TOMAR ASISTENCIA <i class="fas fa-arrow-right"></i></a>
+            </div>
 
-        <a href="gestion_continua.html" class="card mejora">
-            <div class="icon-wrapper"><i class="fas fa-arrows-spin"></i></div>
-            <h3>Mejora Continua</h3>
-            <p>Calidad de Procesos</p>
-            <div class="btn-asistencia">Tomar Asistencia <i class="fas fa-arrow-right"></i></div>
-        </a>
+            <div class="card rrhh">
+                <div class="icon-wrapper"><i class="fas fa-id-card-clip"></i></div>
+                <h3>Talento</h3>
+                <a href="recursos_humanos.html" class="btn-attendance">TOMAR ASISTENCIA <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </main>
 
-        <a href="recursos_humanos.html" class="card rrhh">
-            <div class="icon-wrapper"><i class="fas fa-users-gear"></i></div>
-            <h3>Recursos Humanos</h3>
-            <p>Control Central</p>
-            <div class="btn-asistencia">Tomar Asistencia <i class="fas fa-arrow-right"></i></div>
-        </a>
-    </main>
-
-    <footer style="z-index: 10;">
-        <a href="index.html" class="footer-nav">
-            <i class="fas fa-house"></i> Volver al Inicio Principal
-        </a>
-    </footer>
+        <footer class="footer">
+            <a href="index.html" class="btn-home">
+                <i class="fas fa-chevron-left"></i> Volver al Inicio
+            </a>
+        </footer>
+    </div>
 
 </body>
 </html>

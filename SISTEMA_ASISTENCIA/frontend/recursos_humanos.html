@@ -2,284 +2,268 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recursos Humanos - Control de Asistencia</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RRHH | Recursos Humanos</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    
     <style>
         :root { 
-            --primary: #ff00ff; 
-            --primary-glow: rgba(255, 0, 255, 0.4);
-            --bg-gradient: linear-gradient(-45deg, #030a11, #2d004d, #1a0033, #030a11);
+            --primary: #f472b6; 
+            --primary-soft: rgba(244, 114, 182, 0.1);
+            --bg: #0f172a;
+            --card: rgba(30, 41, 59, 0.7);
+            --text: #f1f5f9;
+            --text-dim: #94a3b8;
+            --success: #10b981;
+            --border: rgba(255, 255, 255, 0.08);
         }
         
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
 
         body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: radial-gradient(circle at bottom left, #2d1b2e, #0f172a 70%);
+            background-attachment: fixed;
+            color: var(--text);
             min-height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            background: var(--bg-gradient);
-            background-size: 400% 400%;
-            animation: gradientMove 12s ease infinite;
-            color: white;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .glow-orb {
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(255, 0, 255, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            z-index: 0;
-            animation: float 10s infinite alternate ease-in-out;
-        }
-
-        @keyframes float {
-            from { transform: translate(-10%, -10%) scale(1); }
-            to { transform: translate(10%, 10%) scale(1.1); }
+            padding: clamp(1rem, 5vw, 2.5rem);
         }
 
         .container { 
-            position: relative;
-            z-index: 10;
-            max-width: 820px; 
-            width: 92%;
-            background: rgba(10, 2, 15, 0.4); 
-            padding: 45px; 
-            border-radius: 35px; 
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 0, 255, 0.2);
-            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8);
+            width: 100%;
+            max-width: 850px;
+            animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .area-header {
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 35px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 0, 255, 0.1);
-        }
-
-        .area-title p {
-            color: #d1d5db;
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-        }
-
-        .area-title h2 {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: white;
-            text-shadow: 0 0 20px var(--primary-glow);
-        }
-
-        .area-name-highlight {
-            color: var(--primary);
-        }
-
-        #reloj {
-            font-weight: 800;
-            color: var(--primary);
-            font-size: 1.6rem;
-            background: rgba(255, 0, 255, 0.08);
-            padding: 12px 24px;
-            border-radius: 18px;
-            border: 1px solid rgba(255, 0, 255, 0.3);
-            text-shadow: 0 0 15px var(--primary-glow);
-            letter-spacing: 1px;
-            box-shadow: inset 0 0 15px rgba(255, 0, 255, 0.1);
+            margin-bottom: 40px;
         }
 
         .btn-back {
+            color: var(--text-dim);
             text-decoration: none;
-            color: #94a3b8;
+            font-size: 0.85rem;
             font-weight: 700;
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 15px;
+            gap: 10px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 14px;
             transition: 0.3s;
-            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .btn-back:hover { color: var(--primary); transform: translateX(-5px); }
+        .btn-back:hover { color: white; background: rgba(255,255,255,0.08); border-color: var(--primary); }
 
-        #lista-asistencia { display: grid; gap: 14px; }
-
-        .item-practicante { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 20px 25px; 
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease; 
-        }
-
-        .item-practicante:hover { 
-            background: rgba(255, 0, 255, 0.05);
-            border-color: var(--primary);
-            transform: translateX(5px);
-            box-shadow: 0 0 25px rgba(255, 0, 255, 0.15);
+        #reloj {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.15rem;
+            background: var(--primary-soft);
+            padding: 8px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(244, 114, 182, 0.2);
+            box-shadow: 0 0 20px rgba(244, 114, 182, 0.1);
         }
 
-        .info-user strong { font-size: 1.1rem; color: #ffffff; display: block; margin-bottom: 4px; }
-        .info-user small { color: #94a3b8; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.5px; }
+        .main-header { margin-bottom: 35px; }
+        .main-header p { font-size: 0.7rem; color: var(--primary); text-transform: uppercase; letter-spacing: 3px; font-weight: 800; margin-bottom: 8px; }
+        .main-header h1 { font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 800; letter-spacing: -1px; }
 
-        .btn-group { display: flex; gap: 12px; }
+        .list-wrapper {
+            display: grid;
+            gap: 14px;
+            max-height: 55vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
 
-        .btn-asistencia { 
-            padding: 12px 22px; 
-            border-radius: 14px; 
-            border: none; 
-            cursor: pointer; 
-            font-weight: 800; 
-            color: white; 
-            transition: 0.3s; 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
+        .list-wrapper::-webkit-scrollbar { width: 4px; }
+        .list-wrapper::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+        .user-card {
+            background: var(--card);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 22px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .user-card:hover { border-color: var(--primary); background: rgba(244, 114, 182, 0.03); transform: scale(1.01); }
+
+        .user-info strong { font-size: 1.1rem; display: block; margin-bottom: 5px; color: #fff; }
+        .user-info span { font-size: 0.8rem; color: var(--text-dim); display: flex; align-items: center; gap: 8px; font-weight: 600; }
+        .user-info i { color: var(--primary); font-size: 0.9rem; }
+
+        .btn-actions { display: flex; gap: 12px; }
+
+        .btn {
+            border: none;
+            cursor: pointer;
+            padding: 12px 22px;
+            border-radius: 14px;
+            font-weight: 800;
             font-size: 0.75rem;
             text-transform: uppercase;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
             letter-spacing: 0.5px;
         }
 
-        .btn-entrada { 
-            background: var(--primary); 
-            box-shadow: 0 4px 15px var(--primary-glow); 
-        }
-        
-        .btn-salida { 
-            background: #1e293b; 
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        } 
+        .btn-in { background-color: var(--success); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); }
+        .btn-out { background-color: #334155; box-shadow: 0 4px 15px rgba(51, 65, 85, 0.2); }
+        .btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn:active { transform: scale(0.95); }
+        .btn:disabled { opacity: 0.2; cursor: not-allowed; filter: grayscale(1); }
 
-        .btn-asistencia:hover:not(:disabled) { 
-            transform: translateY(-2px); 
-            filter: brightness(1.1); 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-        }
-
-        #toast-alert {
-            position: fixed; top: 25px; right: 25px; padding: 18px 30px;
-            border-radius: 16px; color: white; display: none; z-index: 1000;
-            font-weight: 800; animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            border-left: 5px solid white;
+        #toast {
+            position: fixed; bottom: 30px; right: 30px;
+            padding: 18px 30px; border-radius: 20px;
+            background: #1e293b; color: white;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            display: none; z-index: 1000;
+            font-size: 0.9rem; font-weight: 700;
+            animation: toastIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
+        @keyframes toastIn { from { transform: translateY(100px) scale(0.8); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+
+        @media (max-width: 650px) {
+            .user-card { flex-direction: column; text-align: center; gap: 20px; padding: 25px; }
+            .btn-actions { width: 100%; }
+            .btn { flex: 1; justify-content: center; }
+            .top-bar { flex-direction: column-reverse; gap: 15px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="glow-orb" style="top: -100px; right: -100px;"></div>
-    <div class="glow-orb" style="bottom: -100px; left: -100px; animation-delay: -5s;"></div>
-
-    <div id="toast-alert"></div>
+    <div id="toast"></div>
 
     <div class="container">
-        <a href="lista.html" class="btn-back"><i class="fas fa-chevron-left"></i> Panel de Áreas</a>
-        
-        <div class="area-header">
-            <div class="area-title">
-                <p>Gestión de Personal</p>
-                <h2>Área <span class="area-name-highlight">Recursos Humanos</span></h2>
-            </div>
-            <div id="reloj">00:00:00 p. m.</div>
-        </div>
+        <header class="top-bar">
+            <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i>Volver</a>
+            <div id="reloj">--:--:-- --</div>
+        </header>
 
-        <div id="lista-asistencia">
-            <div style="text-align:center; padding: 40px; opacity: 0.6;">
-                <i class="fas fa-users-gear fa-spin" style="font-size: 2.5rem; color: var(--primary);"></i>
-                <p style="margin-top: 15px; font-weight: 600;">Sincronizando equipo...</p>
+        <section class="main-header">
+            <p>People & Culture</p>
+            <h1>Gestión de <span style="color: var(--primary);">RRHH</span></h1>
+        </section>
+
+        <div id="lista-asistencia" class="list-wrapper">
+            <div style="text-align:center; padding: 60px; color: var(--text-dim);">
+                <i class="fas fa-heart fa-beat" style="font-size: 2rem; color: var(--primary); margin-bottom: 15px;"></i>
+                <p style="letter-spacing: 1px; font-weight: 600;">SINCRONIZANDO TALENTO...</p>
             </div>
         </div>
     </div>
 
     <script>
-        const API_URL = "https://asistencia-recursos.onrender.com/api/practicantes";
-        const ASISTENCIA_URL = "https://asistencia-recursos.onrender.com/api/asistencia";
-        const AREA_PAGINA = "Recursos Humanos"; 
+        const API_URL = "https://asistencia-recursos.onrender.com/api";
+        const AREA = "Recursos Humanos";
 
-        setInterval(() => {
-            document.getElementById('reloj').innerText = new Date().toLocaleTimeString('es-PE', { 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit', 
-                hour12: true 
-            });
-        }, 1000);
-
-        function showToast(msg, isError = false) {
-            const el = document.getElementById('toast-alert');
-            el.innerText = msg;
-            el.style.backgroundColor = isError ? "#e11d48" : "#86198f";
-            el.style.display = "block";
-            setTimeout(() => { el.style.display = "none"; }, 3500);
+        function updateClock() {
+            const el = document.getElementById('reloj');
+            setInterval(() => {
+                el.textContent = new Date().toLocaleTimeString('es-PE', { 
+                    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
+                }).toUpperCase();
+            }, 1000);
         }
 
-        async function cargarLista() {
+        function notify(msg, err = false) {
+            const t = document.getElementById('toast');
+            t.style.display = 'block';
+            t.style.borderLeft = `6px solid ${err ? '#ef4444' : '#f472b6'}`;
+            t.innerHTML = `<i class="fas ${err ? 'fa-times-circle' : 'fa-check-circle'}" style="margin-right:10px; color:${err ? '#ef4444' : '#f472b6'}"></i> ${msg}`;
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+
+        async function cargarDatos() {
+            const container = document.getElementById('lista-asistencia');
             try {
-                const res = await fetch(`${API_URL}?area=${encodeURIComponent(AREA_PAGINA)}`);
-                let data = await res.json();
-                const listaDiv = document.getElementById('lista-asistencia');
-                
-                if(data.length === 0) {
-                    listaDiv.innerHTML = `<p style="text-align:center; padding: 30px; opacity:0.5;">No hay colaboradores registrados en Recursos Humanos.</p>`;
+                const res = await fetch(`${API_URL}/practicantes?area=${encodeURIComponent(AREA)}`);
+                const data = await res.json();
+
+                if (!data.length) {
+                    container.innerHTML = `<div style="text-align:center; padding: 40px; opacity:0.5;">
+                        <i class="fas fa-users-slash fa-2x"></i>
+                        <p style="margin-top:10px;">No hay personal asignado a RRHH.</p>
+                    </div>`;
                     return;
                 }
 
-                data.sort((a, b) => (a.apellidos || "").localeCompare(b.apellidos || ""));
+                data.sort((a,b) => a.apellidos.localeCompare(b.apellidos));
 
-                listaDiv.innerHTML = data.map(p => `
-                    <div class="item-practicante">
-                        <div class="info-user">
+                container.innerHTML = data.map(p => `
+                    <div class="user-card">
+                        <div class="user-info">
                             <strong>${p.apellidos.toUpperCase()}, ${p.nombres}</strong>
-                            <small>ID: ${p.id_practicantes} • GESTIÓN DE TALENTO</small>
+                            <span><i class="fas fa-fingerprint"></i> STAFF ID: ${p.id_practicantes}</span>
                         </div>
-                        <div class="btn-group">
-                            <button class="btn-asistencia btn-entrada" onclick="marcar(${p.id_practicantes}, 'entrada')">
-                                <i class="fas fa-sign-in-alt"></i> Entrada
+                        <div class="btn-actions">
+                            <button class="btn btn-in" onclick="marcar(${p.id_practicantes}, 'entrada', this)">
+                                <i class="fas fa-clock"></i> Entrada
                             </button>
-                            <button class="btn-asistencia btn-salida" onclick="marcar(${p.id_practicantes}, 'salida')">
-                                <i class="fas fa-sign-out-alt"></i> Salida
+                            <button class="btn btn-out" onclick="marcar(${p.id_practicantes}, 'salida', this)">
+                                <i class="fas fa-door-open"></i> Salida
                             </button>
                         </div>
                     </div>
                 `).join('');
-            } catch (e) { console.error(e); }
+            } catch (e) {
+                notify("Fallo al conectar con el servidor", true);
+                container.innerHTML = `<p style="text-align:center; color:#ef4444; font-weight:700;">ERROR DE CONEXIÓN</p>`;
+            }
         }
 
-        async function marcar(id, tipo) {
+        async function marcar(id, tipo, btn) {
+            const btns = btn.closest('.btn-actions').querySelectorAll('button');
+            const originalHTML = btn.innerHTML;
+            
+            btns.forEach(b => b.disabled = true);
+            btn.innerHTML = `<i class="fas fa-sync fa-spin"></i>`;
+
             try {
-                const res = await fetch(`${ASISTENCIA_URL}/${id}`, { 
+                const res = await fetch(`${API_URL}/asistencia/${id}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ tipo_registro: tipo })
                 });
-                if (res.ok) showToast(`Registro de ${tipo} exitoso para el colaborador.`);
-                else showToast("Error en la validación de ID", true);
-            } catch (e) { showToast("Error de comunicación con el servidor", true); }
+                
+                if (res.ok) notify(`¡Marcación de ${tipo} registrada!`);
+                else notify("El servidor rechazó el registro", true);
+            } catch (e) {
+                notify("Error de red crítico", true);
+            } finally {
+                setTimeout(() => {
+                    btns.forEach(b => b.disabled = false);
+                    btn.innerHTML = originalHTML;
+                }, 500);
+            }
         }
 
-        window.onload = cargarLista;
+        window.onload = () => { updateClock(); cargarDatos(); };
     </script>
 </body>
 </html>
