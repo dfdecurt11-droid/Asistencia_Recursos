@@ -39,18 +39,15 @@
             box-shadow: 0 40px 100px -20px rgba(0,0,0,0.4); 
         }
 
-        /* HEADER (Ahora arriba) */
         .header { margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; }
         .header h2 { font-size: 2rem; font-weight: 800; letter-spacing: -1px; margin-top: 0.5rem; }
         .nav-back { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
         .nav-back:hover { color: var(--accent); }
 
-        /* STATS (Debajo del Header) */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
         .stat-card { background: #f8fafc; padding: 1.5rem; border-radius: 20px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 1rem; transition: 0.3s; }
         .stat-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: white; color: var(--accent); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
 
-        /* El resto de estilos se mantienen igual... */
         .controls-card { background: #f8fafc; padding: 1.5rem; border-radius: 24px; margin-bottom: 2rem; border: 1px solid var(--border-color); }
         .search-wrapper { position: relative; }
         .search-wrapper i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
@@ -115,6 +112,15 @@
                 <h4 id="statTotal" class="mono">--</h4>
             </div>
         </div>
+
+        <div class="stat-card" style="cursor: pointer; border: 1px solid var(--accent);" id="generar-reporte">
+            <div class="stat-icon" style="color: white; background: var(--accent);"><i class="fas fa-file-pdf"></i></div>
+            <div>
+                <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">EXPORTAR DATOS</p>
+                <h4 style="font-size: 0.8rem; font-weight: 800;">DESCARGAR PDF</h4>
+            </div>
+        </div>
+
         <div class="stat-card" style="cursor: pointer;" onclick="showResetModal()">
             <div class="stat-icon" style="color: #f43f5e; background: #fff1f2;"><i class="fas fa-sync-alt"></i></div>
             <div>
@@ -141,7 +147,7 @@
     </section>
 
     <div class="table-container">
-        <table>
+        <table id="tabla-practicantes">
             <thead>
                 <tr>
                     <th style="width: 50px;">#</th>
@@ -210,6 +216,9 @@
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
 <script>
     const API = "https://asistencia-recursos.onrender.com/api";
     let allData = [];
@@ -267,6 +276,52 @@
             `;
         }).join('');
     }
+
+    // LÓGICA PARA GENERAR EL PDF
+    document.getElementById('generar-reporte').addEventListener('click', () => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        const ahora = new Date();
+        const fecha = ahora.toLocaleDateString();
+        const hora = ahora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        doc.setFontSize(18);
+        doc.setTextColor(15, 23, 42); 
+        doc.text('REPORTE DE PRACTICANTES', 105, 20, { align: 'center' });
+        
+        doc.setFontSize(10);
+        doc.setTextColor(100, 116, 139);
+        doc.text(`Generado el: ${fecha} a las ${hora}`, 14, 28);
+        doc.text(`Filtro: ${currentArea}`, 14, 33);
+
+        doc.autoTable({
+            html: '#tabla-practicantes', 
+            startY: 40,
+            theme: 'striped',
+            headStyles: { fillColor: [99, 102, 241], fontSize: 10 },
+            styles: { fontSize: 9 },
+            columns: [
+                { header: '#', dataKey: 0 },
+                { header: 'Practicante', dataKey: 1 },
+                { header: 'Área', dataKey: 2 },
+                { header: 'Entrada', dataKey: 3 },
+                { header: 'Salida', dataKey: 4 },
+                { header: 'Acumulado', dataKey: 5 }
+            ],
+            didParseCell: function(data) {
+                if (data.column.index === 1 && data.section === 'body') {
+                    // Limpia las iniciales del avatar para que no salgan en el PDF
+                    const lines = data.cell.text;
+                    if(lines.length > 1) {
+                        data.cell.text = [lines[1], lines[2]].join(' ').trim();
+                    }
+                }
+            }
+        });
+
+        doc.save(`Reporte_Practicantes_${currentArea}_${fecha.replace(/\//g, '-')}.pdf`);
+    });
 
     function openEdit(p) {
         document.getElementById('editId').value = p.id_practicantes;
