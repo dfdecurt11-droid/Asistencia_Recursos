@@ -25,10 +25,10 @@ document.getElementById('generar-reporte').addEventListener('click', () => {
         theme: 'striped',
         headStyles: { fillColor: [41, 128, 185] }, // Azul profesional
         styles: { fontSize: 9, cellPadding: 3 },
-        // Columnas seleccionadas: Practicante(1), Departamento(2), Horas Totales(5)
+        // Columnas seleccionadas: Practicante(1), Area(2), Horas Totales(5)
         columns: [
             { header: 'Practicante', dataKey: 1 },
-            { header: 'Departamento', dataKey: 2 },
+            { header: 'Area', dataKey: 2 },
             { header: 'Horas Totales', dataKey: 5 }
         ],
         // Limpiar espacios en blanco de las celdas

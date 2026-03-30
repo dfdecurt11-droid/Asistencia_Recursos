@@ -152,7 +152,7 @@
                 <tr>
                     <th style="width: 50px;">#</th>
                     <th>Practicante</th>
-                    <th>Departamento</th>
+                    <th>Area</th>
                     <th>Entrada</th>
                     <th>Salida</th>
                     <th>Acumulado</th>
@@ -235,11 +235,17 @@
 
     function filterData() {
         const query = document.getElementById('inputSearch').value.toLowerCase();
-        const filtered = allData.filter(p => {
+        
+        // 1. Filtrar
+        let filtered = allData.filter(p => {
             const matchName = `${p.nombres} ${p.apellidos}`.toLowerCase().includes(query);
             const matchArea = currentArea === "Todos" || p.area.trim() === currentArea;
             return matchName && matchArea;
         });
+
+        // 2. ORDENAR POR DEPARTAMENTO (Agrupar como pediste)
+        filtered.sort((a, b) => a.area.localeCompare(b.area));
+
         render(filtered);
     }
 
@@ -277,50 +283,49 @@
         }).join('');
     }
 
-    // LÓGICA PARA GENERAR EL PDF
+    // LÓGICA DE PDF MEJORADA (Sin Entrada/Salida + Diseño Bonito)
     document.getElementById('generar-reporte').addEventListener('click', () => {
         const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
+        const doc = new jsPDF('p', 'mm', 'a4');
 
         const ahora = new Date();
         const fecha = ahora.toLocaleDateString();
         const hora = ahora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-        doc.setFontSize(18);
-        doc.setTextColor(15, 23, 42); 
-        doc.text('REPORTE DE PRACTICANTES', 105, 20, { align: 'center' });
-        
+        // Encabezado Visual
+        doc.setFillColor(99, 102, 241); 
+        doc.rect(0, 0, 210, 35, 'F');
+        doc.setFontSize(20);
+        doc.setTextColor(255, 255, 255);
+        doc.setFont("helvetica", "bold");
+        doc.text('REPORTE DE ASISTENCIA', 14, 20);
         doc.setFontSize(10);
-        doc.setTextColor(100, 116, 139);
-        doc.text(`Generado el: ${fecha} a las ${hora}`, 14, 28);
-        doc.text(`Filtro: ${currentArea}`, 14, 33);
+        doc.setFont("helvetica", "normal");
+        doc.text(`DEP: ${currentArea.toUpperCase()} | ${fecha} ${hora}`, 14, 28);
 
-        doc.autoTable({
-            html: '#tabla-practicantes', 
-            startY: 40,
-            theme: 'striped',
-            headStyles: { fillColor: [99, 102, 241], fontSize: 10 },
-            styles: { fontSize: 9 },
-            columns: [
-                { header: '#', dataKey: 0 },
-                { header: 'Practicante', dataKey: 1 },
-                { header: 'Área', dataKey: 2 },
-                { header: 'Entrada', dataKey: 3 },
-                { header: 'Salida', dataKey: 4 },
-                { header: 'Acumulado', dataKey: 5 }
-            ],
-            didParseCell: function(data) {
-                if (data.column.index === 1 && data.section === 'body') {
-                    // Limpia las iniciales del avatar para que no salgan en el PDF
-                    const lines = data.cell.text;
-                    if(lines.length > 1) {
-                        data.cell.text = [lines[1], lines[2]].join(' ').trim();
-                    }
-                }
-            }
+        // Extraer datos de la tabla (solo los visibles/filtrados)
+        const rows = [];
+        const tableRows = document.querySelectorAll('#tableBody tr');
+        tableRows.forEach((tr, index) => {
+            const cells = tr.querySelectorAll('td');
+            // Quitamos iniciales del avatar del texto
+            const nombre = cells[1].innerText.replace(/^[A-Z]{2}\n/, '').trim();
+            const area = cells[2].innerText.trim();
+            const total = cells[5].innerText.trim();
+            rows.push([index + 1, nombre, area, total]);
         });
 
-        doc.save(`Reporte_Practicantes_${currentArea}_${fecha.replace(/\//g, '-')}.pdf`);
+        doc.autoTable({
+            head: [['#', 'PRACTICANTE', 'DEPARTAMENTO', 'HORAS TOTALES']],
+            body: rows,
+            startY: 45,
+            theme: 'grid',
+            headStyles: { fillColor: [15, 23, 42], halign: 'center' },
+            styles: { fontSize: 9 },
+            columnStyles: { 0: {halign: 'center'}, 2: {halign: 'center'}, 3: {halign: 'center', fontStyle: 'bold'} }
+        });
+
+        doc.save(`Reporte_${currentArea}_${fecha}.pdf`);
     });
 
     function openEdit(p) {
@@ -365,7 +370,7 @@
     }
 
     function showSuccessMessage(nombre) {
-        document.getElementById('successText').innerHTML = `El practicante <b>${nombre}</b> ha sido eliminado correctamente del sistema.`;
+        document.getElementById('successText').innerHTML = `El practicante <b>${nombre}</b> ha sido eliminado correctamente.`;
         document.getElementById('modalSuccess').classList.add('active');
     }
 
