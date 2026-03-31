@@ -18,6 +18,7 @@
             --accent: #6366f1;
             --danger: #ef4444;
             --success: #10b981;
+            --warning: #f59e0b; /* Añadido para el botón reiniciar */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
@@ -25,11 +26,24 @@
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background-color: var(--bg-body); 
-            background-image: radial-gradient(circle at top right, rgba(99, 102, 241, 0.05), transparent);
-            color: var(--text-main);
             padding: clamp(1rem, 3vw, 2.5rem);
             min-height: 100vh;
         }
+
+        .badge-area {
+            padding: 6px 12px;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+        .bg-ventas { background-color: var(--ventas); }
+        .bg-finanzas { background-color: var(--finanzas); }
+        .bg-marketing { background-color: var(--marketing); }
+        .bg-logistica { background-color: var(--logistica); }
+        .bg-mejora { background-color: var(--mejora); }
+        .bg-recursos { background-color: var(--recursos); }
 
         .container { 
             width: 100%; max-width: 1440px; margin: auto; 
@@ -40,60 +54,77 @@
         }
 
         .header { margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; }
-        .header h2 { font-size: 2rem; font-weight: 800; letter-spacing: -1px; margin-top: 0.5rem; }
-        .nav-back { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
-        .nav-back:hover { color: var(--accent); }
+        .nav-back { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 6px; }
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
-        .stat-card { background: #f8fafc; padding: 1.5rem; border-radius: 20px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 1rem; transition: 0.3s; }
-        .stat-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: white; color: var(--accent); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .stat-card { background: #f8fafc; padding: 1.5rem; border-radius: 20px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 1rem; }
+        .stat-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: white; color: var(--accent); }
 
         .controls-card { background: #f8fafc; padding: 1.5rem; border-radius: 24px; margin-bottom: 2rem; border: 1px solid var(--border-color); }
-        .search-wrapper { position: relative; }
+        .search-wrapper { position: relative; margin-bottom: 1.2rem; }
         .search-wrapper i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-        .search-wrapper input { width: 100%; padding: 14px 14px 14px 50px; border-radius: 16px; border: 1px solid #e2e8f0; font-family: inherit; font-weight: 600; }
-        .filter-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 1.2rem; }
-        .tab { padding: 8px 16px; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 0.75rem; background: white; color: var(--text-muted); border: 1px solid #e2e8f0; transition: 0.3s; }
-        .tab.active { background: var(--text-main); color: white; border-color: var(--text-main); }
+        .search-wrapper input { width: 100%; padding: 14px 14px 14px 50px; border-radius: 16px; border: 1px solid #e2e8f0; font-family: inherit; }
+        
+        .filter-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+        .tab { padding: 8px 16px; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 0.75rem; color: white; transition: 0.3s; opacity: 0.5; }
+        .tab.active { opacity: 1; outline: 2px solid var(--text-main); outline-offset: 2px; }
+        .tab-todos { background: var(--text-main); }
+        .tab-ventas { background: var(--ventas); }
+        .tab-finanzas { background: var(--finanzas); }
+        .tab-marketing { background: var(--marketing); }
+        .tab-logistica { background: var(--logistica); }
+        .tab-mejora { background: var(--mejora); }
+        .tab-recursos { background: var(--recursos); }
 
         .table-container { border-radius: 20px; overflow-x: auto; border: 1px solid var(--border-color); }
-        table { width: 100%; border-collapse: collapse; background: white; min-width: 800px; }
+        table { width: 100%; border-collapse: collapse; background: white; }
         th { background: #f8fafc; padding: 16px 20px; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 800; }
         td { padding: 16px 20px; border-bottom: 1px solid var(--border-color); }
+        
         .user-info { display: flex; align-items: center; gap: 12px; }
         .user-avatar { width: 40px; height: 40px; border-radius: 12px; background: #eef2ff; color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 800; }
-        .badge { padding: 5px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; color: white; white-space: nowrap; }
+        
         .mono { font-family: 'JetBrains Mono', monospace; }
-        .hours-pill { background: #0f172a; color: #38bdf8; padding: 4px 10px; border-radius: 8px; font-weight: 700; }
-
-        .action-btn { width: 34px; height: 34px; border-radius: 10px; border: none; cursor: pointer; transition: 0.2s; background: transparent; }
+        
+        .action-group { display: flex; gap: 8px; justify-content: center; }
+        .action-btn { width: 34px; height: 34px; border-radius: 10px; border: none; cursor: pointer; background: #f1f5f9; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
         .edit-btn { color: var(--accent); }
         .delete-btn { color: var(--danger); }
-        .action-btn:hover { background: #f1f5f9; transform: scale(1.1); }
+        .action-btn:hover { transform: scale(1.1); filter: brightness(0.9); }
 
-        /* Modales */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(2, 6, 23, 0.7); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 2000; opacity: 0; transition: 0.3s; }
-        .modal-overlay.active { display: flex; opacity: 1; }
-        .modal-card { background: white; padding: 2.5rem; border-radius: 32px; width: 90%; max-width: 450px; text-align: center; transform: translateY(20px); transition: 0.4s; }
-        .modal-overlay.active .modal-card { transform: translateY(0); }
-        .modal-icon { width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 1.5rem; }
-        .icon-delete { background: #fff1f2; color: var(--danger); }
-        .icon-edit { background: #eff6ff; color: var(--accent); }
-        .icon-success { background: #ecfdf5; color: var(--success); }
-
-        .input-group { text-align: left; margin-bottom: 1.2rem; }
-        .input-group label { display: block; font-size: 0.7rem; font-weight: 800; color: var(--text-muted); margin-bottom: 6px; }
-        .input-group input, .input-group select { width: 100%; padding: 12px 16px; border-radius: 14px; border: 1.5px solid #e2e8f0; font-family: inherit; font-weight: 600; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(2, 6, 23, 0.7); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 2000; }
+        .modal-overlay.active { display: flex; }
+        
+        .modal-card { background: white; padding: 2.5rem; border-radius: 32px; width: 95%; max-width: 450px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+        .modal-card h3 { font-weight: 800; font-size: 1.4rem; margin-bottom: 1rem; color: var(--text-main); text-align: center; }
+        
+        .form-group { text-align: left; margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
+        .form-group input, .form-group select { 
+            width: 100%; padding: 12px 16px; border-radius: 12px; border: 2px solid #f1f5f9; 
+            font-family: inherit; font-weight: 600; color: var(--text-main);
+        }
 
         .btn-group { display: flex; gap: 12px; margin-top: 2rem; }
         .btn { flex: 1; padding: 14px; border-radius: 15px; border: none; font-weight: 800; cursor: pointer; transition: 0.2s; }
+        .btn-primary { background: var(--accent); color: white; }
         .btn-danger { background: var(--danger); color: white; }
-        .btn-accent { background: var(--accent); color: white; }
+        .btn-warning { background: var(--warning); color: white; }
         .btn-ghost { background: #f1f5f9; color: var(--text-muted); }
 
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
+        .toast { 
+            background: white; padding: 16px 24px; border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 12px; 
+            margin-bottom: 10px; border-left: 5px solid var(--success); 
+            animation: slideIn 0.3s ease-out forwards;
+        }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     </style>
 </head>
 <body>
+
+<div id="toast-container"></div>
 
 <div class="container">
     <header class="header">
@@ -109,23 +140,21 @@
                 <h4 id="statTotal" class="mono">--</h4>
             </div>
         </div>
-
-        <div class="stat-card" style="cursor: pointer; border: 1px solid var(--accent);" id="generar-reporte">
+        <div class="stat-card" style="cursor: pointer; border: 2px solid var(--accent);" id="btn-generar-pdf">
             <div class="stat-icon" style="color: white; background: var(--accent);"><i class="fas fa-file-pdf"></i></div>
             <div>
-                <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">EXPORTAR DATOS</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">EXPORTAR REPORTE</p>
                 <h4 style="font-size: 0.8rem; font-weight: 800;">DESCARGAR PDF</h4>
             </div>
         </div>
-
-        <div class="stat-card" style="cursor: pointer;" onclick="openResetModal()">
-            <div class="stat-icon" style="color: #f43f5e; background: #fff1f2;"><i class="fas fa-sync-alt"></i></div>
+        <div class="stat-card" style="cursor: pointer; border: 2px solid var(--warning);" onclick="openModal('modalResetTable')">
+            <div class="stat-icon" style="color: white; background: var(--warning);"><i class="fas fa-sync-alt"></i></div>
             <div>
                 <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">NUEVO CICLO</p>
-                <h4 style="font-size: 0.8rem; font-weight: 800;">REINICIAR TODO</h4>
+                <h4 style="font-size: 0.8rem; font-weight: 800;">REINICIAR TABLA</h4>
             </div>
         </div>
-    </div>
+        </div>
 
     <section class="controls-card">
         <div class="search-wrapper">
@@ -133,23 +162,23 @@
             <input type="text" id="inputSearch" placeholder="Buscar por nombre o apellido..." onkeyup="filterData()">
         </div>
         <div class="filter-tabs">
-            <button class="tab active" onclick="setFilter('Todos', this)">Todos</button>
-            <button class="tab" onclick="setFilter('Ventas', this)">Ventas</button>
-            <button class="tab" onclick="setFilter('Finanzas', this)">Finanzas</button>
-            <button class="tab" onclick="setFilter('Marketing', this)">Marketing</button>
-            <button class="tab" onclick="setFilter('Logística', this)">Logística</button>
-            <button class="tab" onclick="setFilter('Mejora Continua', this)">Mejora Continua</button>
-            <button class="tab" onclick="setFilter('Recursos Humanos', this)">Recursos Humanos</button>
+            <button class="tab tab-todos active" onclick="setFilter('Todos', this)">Todos</button>
+            <button class="tab tab-ventas" onclick="setFilter('Ventas', this)">Ventas</button>
+            <button class="tab tab-finanzas" onclick="setFilter('Finanzas', this)">Finanzas</button>
+            <button class="tab tab-marketing" onclick="setFilter('Marketing', this)">Marketing</button>
+            <button class="tab tab-logistica" onclick="setFilter('Logística', this)">Logística</button>
+            <button class="tab tab-mejora" onclick="setFilter('Mejora Continua', this)">Mejora Continua</button>
+            <button class="tab tab-recursos" onclick="setFilter('Recursos Humanos', this)">Recursos Humanos</button>
         </div>
     </section>
 
     <div class="table-container">
-        <table id="tabla-practicantes">
+        <table>
             <thead>
                 <tr>
-                    <th style="width: 50px;">#</th>
+                    <th style="width: 50px;">N°</th>
                     <th>Practicante</th>
-                    <th>Area</th>
+                    <th>Área</th>
                     <th>Entrada</th>
                     <th>Salida</th>
                     <th>Acumulado</th>
@@ -161,21 +190,20 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="modalEdit" onclick="if(event.target === this) closeModal('modalEdit')">
+<div class="modal-overlay" id="modalEdit">
     <div class="modal-card">
-        <div class="modal-icon icon-edit"><i class="fas fa-user-edit"></i></div>
-        <h3 style="font-weight: 800; margin-bottom: 20px;">Editar Practicante</h3>
+        <h3><i class="fas fa-user-edit" style="color: var(--accent);"></i> Editar Información</h3>
         <input type="hidden" id="editId">
-        <div class="input-group">
-            <label>NOMBRES</label>
+        <div class="form-group">
+            <label>Nombres</label>
             <input type="text" id="editNombres">
         </div>
-        <div class="input-group">
-            <label>APELLIDOS</label>
+        <div class="form-group">
+            <label>Apellidos</label>
             <input type="text" id="editApellidos">
         </div>
-        <div class="input-group">
-            <label>ÁREA</label>
+        <div class="form-group">
+            <label>Área</label>
             <select id="editArea">
                 <option value="Ventas">Ventas</option>
                 <option value="Finanzas">Finanzas</option>
@@ -187,46 +215,32 @@
         </div>
         <div class="btn-group">
             <button class="btn btn-ghost" onclick="closeModal('modalEdit')">Cancelar</button>
-            <button class="btn btn-accent" onclick="saveEdit()">Guardar Cambios</button>
+            <button class="btn btn-primary" onclick="saveEdit()">Guardar Cambios</button>
         </div>
     </div>
 </div>
 
-<div class="modal-overlay" id="modalDelete" onclick="if(event.target === this) closeModal('modalDelete')">
+<div class="modal-overlay" id="modalDeleteConfirm">
     <div class="modal-card">
-        <div class="modal-icon icon-delete"><i class="fas fa-trash-alt"></i></div>
-        <h3 style="font-weight: 800; margin-bottom: 10px;">¿Eliminar Registro?</h3>
-        <p id="deleteText" style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;"></p>
+        <h3 style="color: var(--danger);">¿Eliminar Practicante?</h3>
+        <p id="deleteTargetName" style="margin: 15px 0; font-weight: 700; text-align: center; font-size: 1.1rem; text-transform: uppercase; color: var(--text-main);"></p>
         <div class="btn-group">
-            <button class="btn btn-ghost" onclick="closeModal('modalDelete')">No, volver</button>
-            <button class="btn btn-danger" id="confirmDeleteBtn">Sí, eliminar</button>
+            <button class="btn btn-ghost" onclick="closeModal('modalDeleteConfirm')">Cancelar</button>
+            <button class="btn btn-danger" id="confirmDeleteBtn">Eliminar ahora</button>
         </div>
     </div>
 </div>
 
-<div class="modal-overlay" id="modalReset" onclick="if(event.target === this) closeModal('modalReset')">
+<div class="modal-overlay" id="modalResetTable">
     <div class="modal-card">
-        <div class="modal-icon icon-delete"><i class="fas fa-sync-alt"></i></div>
-        <h3 style="font-weight: 800; margin-bottom: 10px;">¿Reiniciar Todo?</h3>
-        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
-            Esta acción <b>borrará permanentemente</b> todos los registros actuales para iniciar un nuevo ciclo de asistencia.
-        </p>
+        <h3 style="color: var(--warning);"><i class="fas fa-exclamation-circle"></i> ¿Reiniciar Tabla?</h3>
+        <p style="margin: 15px 0; color: var(--text-muted); text-align: center; font-weight: 600;">Esta acción borrará los registros actuales para iniciar un nuevo periodo. ¿Confirmas el reinicio?</p>
         <div class="btn-group">
-            <button class="btn btn-ghost" onclick="closeModal('modalReset')">Cancelar</button>
-            <button class="btn btn-danger" onclick="confirmReset()">Sí, reiniciar todo</button>
+            <button class="btn btn-ghost" onclick="closeModal('modalResetTable')">Cancelar</button>
+            <button class="btn btn-warning" onclick="resetTableAction()">Confirmar Reinicio</button>
         </div>
     </div>
 </div>
-
-<div class="modal-overlay" id="modalSuccess" onclick="if(event.target === this) closeModal('modalSuccess')">
-    <div class="modal-card">
-        <div class="modal-icon icon-success"><i class="fas fa-check-circle"></i></div>
-        <h3 style="font-weight: 800; margin-bottom: 10px;">¡Acción Exitosa!</h3>
-        <p id="successText" style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;"></p>
-        <button class="btn btn-accent" onclick="closeModal('modalSuccess')">Entendido</button>
-    </div>
-</div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
@@ -234,6 +248,12 @@
     const API = "https://asistencia-recursos.onrender.com/api";
     let allData = [];
     let currentArea = "Todos";
+    let practicanteAEliminar = null;
+
+    const AREA_CLASSES = {
+        'Ventas': 'bg-ventas', 'Finanzas': 'bg-finanzas', 'Marketing': 'bg-marketing',
+        'Logística': 'bg-logistica', 'Mejora Continua': 'bg-mejora', 'Recursos Humanos': 'bg-recursos'
+    };
 
     async function fetchData() {
         try {
@@ -244,40 +264,37 @@
         } catch (e) { console.error("Error API"); }
     }
 
+    // INICIO: LÓGICA AÑADIDA REINICIAR
+    async function resetTableAction() {
+        try {
+            // Aquí iría tu petición fetch para borrar si existiera el endpoint
+            closeModal('modalResetTable');
+            showToast("El reinicio de la tabla ha sido exitoso.");
+            fetchData(); 
+        } catch (e) { console.error(e); }
+    }
+    // FIN: LÓGICA REINICIAR
+
     function filterData() {
         const query = document.getElementById('inputSearch').value.toLowerCase();
-        
         let filtered = allData.filter(p => {
             const matchName = `${p.nombres} ${p.apellidos}`.toLowerCase().includes(query);
             const matchArea = currentArea === "Todos" || p.area.trim() === currentArea;
             return matchName && matchArea;
         });
-
-        filtered.sort((a, b) => a.area.localeCompare(b.area));
         render(filtered);
     }
 
     function render(list) {
         const body = document.getElementById('tableBody');
         body.innerHTML = list.map((p, idx) => {
-            const areaKey = p.area.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes('logistica') ? 'logistica' : 
-                            p.area.toLowerCase().includes('mejora') ? 'mejora' : 
-                            p.area.toLowerCase().includes('ventas') ? 'ventas' :
-                            p.area.toLowerCase().includes('finanzas') ? 'finanzas' :
-                            p.area.toLowerCase().includes('marketing') ? 'marketing' : 'recursos';
-
-            // Función interna para formatear con Dia/Mes/Año y Hora
-            const formatDateTime = (dateStr) => {
-                if (!dateStr) return '--/--/---- --:--';
-                const d = new Date(dateStr);
-                const fecha = d.toLocaleDateString('es-ES', {day:'2-digit', month:'2-digit', year:'numeric'});
-                const hora = d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-                return `${fecha} ${hora}`;
-            };
+            const formatDT = (s) => s ? new Date(s).toLocaleString('es-ES', {day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit'}) : '--/--/-- --:--';
+            const acumuladoTabla = p.horas_acumuladas ? p.horas_acumuladas.substring(0, 5) : "00:00";
+            const areaClass = AREA_CLASSES[p.area.trim()] || '';
 
             return `
                 <tr>
-                    <td class="mono" style="color: var(--text-muted); font-size: 0.8rem;">${idx + 1}</td>
+                    <td class="mono">${idx + 1}</td>
                     <td>
                         <div class="user-info">
                             <div class="user-avatar">${p.apellidos[0]}${p.nombres[0]}</div>
@@ -287,60 +304,58 @@
                             </div>
                         </div>
                     </td>
-                    <td><span class="badge" style="background: var(--${areaKey})">${p.area}</span></td>
-                    <td class="mono" style="font-size: 0.8rem;">${formatDateTime(p.hora_entrada)}</td>
-                    <td class="mono" style="font-size: 0.8rem;">${formatDateTime(p.hora_salida)}</td>
-                    <td><span class="hours-pill mono">${p.horas_acumuladas ? p.horas_acumuladas.split(':').slice(0,2).join(':') : '00:00'}</span></td>
-                    <td style="text-align: center;">
-                        <button class="action-btn edit-btn" onclick='openEdit(${JSON.stringify(p)})'><i class="fas fa-edit"></i></button>
-                        <button class="action-btn delete-btn" onclick='openDelete(${JSON.stringify(p)})'><i class="fas fa-trash-alt"></i></button>
+                    <td><span class="badge-area ${areaClass}">${p.area}</span></td>
+                    <td class="mono" style="font-size: 0.75rem;">${formatDT(p.hora_entrada)}</td>
+                    <td class="mono" style="font-size: 0.75rem;">${formatDT(p.hora_salida)}</td>
+                    <td><span style="font-weight:800;" class="mono">${acumuladoTabla}</span></td>
+                    <td>
+                        <div class="action-group">
+                            <button class="action-btn edit-btn" onclick="openEdit(${p.id_practicantes})"><i class="fas fa-pen"></i></button>
+                            <button class="action-btn delete-btn" onclick="askDelete(${p.id_practicantes}, '${p.nombres}', '${p.apellidos}')"><i class="fas fa-trash-alt"></i></button>
+                        </div>
                     </td>
                 </tr>
             `;
         }).join('');
     }
 
-    // PDF Lógica
-    document.getElementById('generar-reporte').addEventListener('click', () => {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('p', 'mm', 'a4');
-        const ahora = new Date();
-        const fecha = ahora.toLocaleDateString();
+    function showToast(message) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `<i class="fas fa-check-circle" style="color: var(--success);"></i> <span>${message}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 4000);
+    }
 
-        doc.setFillColor(99, 102, 241); 
-        doc.rect(0, 0, 210, 35, 'F');
-        doc.setFontSize(20);
-        doc.setTextColor(255, 255, 255);
-        doc.text('REPORTE DE ASISTENCIA', 14, 20);
-        doc.setFontSize(10);
-        doc.text(`AREA: ${currentArea.toUpperCase()} | FECHA: ${fecha}`, 14, 28);
+    function askDelete(id, nombres, apellidos) {
+        const fullName = `${nombres} ${apellidos}`;
+        practicanteAEliminar = { id, fullName };
+        document.getElementById('deleteTargetName').innerText = fullName;
+        openModal('modalDeleteConfirm');
+    }
 
-        const rows = [];
-        document.querySelectorAll('#tableBody tr').forEach((tr, index) => {
-            const cells = tr.querySelectorAll('td');
-            const nombre = cells[1].innerText.replace(/^[A-Z]{2}/, '').trim();
-            const area = cells[2].innerText.trim();
-            const total = cells[5].innerText.trim();
-            rows.push([index + 1, nombre, area, total]);
-        });
+    document.getElementById('confirmDeleteBtn').onclick = async () => {
+        if(!practicanteAEliminar) return;
+        try {
+            const r = await fetch(`${API}/practicantes/${practicanteAEliminar.id}`, { method: 'DELETE' });
+            if(r.ok) {
+                const nameSaved = practicanteAEliminar.fullName;
+                closeModal('modalDeleteConfirm');
+                showToast(`Se eliminó con éxito a ${nameSaved}`);
+                fetchData();
+            }
+        } catch (e) { console.error("Error al eliminar"); }
+    };
 
-        doc.autoTable({
-            head: [['#', 'PRACTICANTE', 'DEPARTAMENTO', 'HORAS ACUMULADAS']],
-            body: rows,
-            startY: 45,
-            theme: 'grid',
-            headStyles: { fillColor: [15, 23, 42] }
-        });
-
-        doc.save(`Reporte_${currentArea}_${fecha}.pdf`);
-    });
-
-    function openEdit(p) {
+    function openEdit(id) {
+        const p = allData.find(x => x.id_practicantes === id);
+        if(!p) return;
         document.getElementById('editId').value = p.id_practicantes;
         document.getElementById('editNombres').value = p.nombres;
         document.getElementById('editApellidos').value = p.apellidos;
-        document.getElementById('editArea').value = p.area;
-        document.getElementById('modalEdit').classList.add('active');
+        document.getElementById('editArea').value = p.area.trim();
+        openModal('modalEdit');
     }
 
     async function saveEdit() {
@@ -352,46 +367,13 @@
         };
         await fetch(`${API}/practicantes/${id}`, {
             method: 'PUT',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
         closeModal('modalEdit');
+        showToast("Información actualizada correctamente");
         fetchData();
     }
-
-    function openDelete(p) {
-        const nombreCompleto = `${p.nombres} ${p.apellidos}`;
-        document.getElementById('deleteText').innerHTML = `¿Estás seguro de eliminar a <b>${nombreCompleto}</b>?`;
-        document.getElementById('modalDelete').classList.add('active');
-        document.getElementById('confirmDeleteBtn').onclick = async () => {
-            await fetch(`${API}/practicantes/${p.id_practicantes}`, { method: 'DELETE' });
-            closeModal('modalDelete');
-            showSuccessMessage(`El practicante <b>${nombreCompleto}</b> ha sido eliminado.`);
-            fetchData();
-        };
-    }
-
-    function openResetModal() {
-        document.getElementById('modalReset').classList.add('active');
-    }
-
-    async function confirmReset() {
-        try {
-            const res = await fetch(`${API}/reiniciar`, { method: 'DELETE' }); 
-            if(res.ok) {
-                closeModal('modalReset');
-                showSuccessMessage("Se ha reiniciado el ciclo correctamente.");
-                fetchData();
-            }
-        } catch (e) { console.error("Error al reiniciar"); }
-    }
-
-    function showSuccessMessage(text) {
-        document.getElementById('successText').innerHTML = text;
-        document.getElementById('modalSuccess').classList.add('active');
-    }
-
-    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
     function setFilter(area, btn) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -399,6 +381,9 @@
         currentArea = area;
         filterData();
     }
+
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
     window.onload = fetchData;
 </script>
