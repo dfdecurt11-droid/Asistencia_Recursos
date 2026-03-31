@@ -266,6 +266,15 @@
                             p.area.toLowerCase().includes('finanzas') ? 'finanzas' :
                             p.area.toLowerCase().includes('marketing') ? 'marketing' : 'recursos';
 
+            // Función interna para formatear con Dia/Mes/Año y Hora
+            const formatDateTime = (dateStr) => {
+                if (!dateStr) return '--/--/---- --:--';
+                const d = new Date(dateStr);
+                const fecha = d.toLocaleDateString('es-ES', {day:'2-digit', month:'2-digit', year:'numeric'});
+                const hora = d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+                return `${fecha} ${hora}`;
+            };
+
             return `
                 <tr>
                     <td class="mono" style="color: var(--text-muted); font-size: 0.8rem;">${idx + 1}</td>
@@ -279,8 +288,8 @@
                         </div>
                     </td>
                     <td><span class="badge" style="background: var(--${areaKey})">${p.area}</span></td>
-                    <td class="mono" style="font-size: 0.8rem;">${p.hora_entrada ? new Date(p.hora_entrada).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : '--:--'}</td>
-                    <td class="mono" style="font-size: 0.8rem;">${p.hora_salida ? new Date(p.hora_salida).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : '--:--'}</td>
+                    <td class="mono" style="font-size: 0.8rem;">${formatDateTime(p.hora_entrada)}</td>
+                    <td class="mono" style="font-size: 0.8rem;">${formatDateTime(p.hora_salida)}</td>
                     <td><span class="hours-pill mono">${p.horas_acumuladas ? p.horas_acumuladas.split(':').slice(0,2).join(':') : '00:00'}</span></td>
                     <td style="text-align: center;">
                         <button class="action-btn edit-btn" onclick='openEdit(${JSON.stringify(p)})'><i class="fas fa-edit"></i></button>
@@ -368,8 +377,6 @@
 
     async function confirmReset() {
         try {
-            // Asumiendo que tienes una ruta de "delete all" o similar
-            // Si no la tienes, esto recorrerá los datos y los borrará uno por uno (o limpia la tabla vía API)
             const res = await fetch(`${API}/reiniciar`, { method: 'DELETE' }); 
             if(res.ok) {
                 closeModal('modalReset');
