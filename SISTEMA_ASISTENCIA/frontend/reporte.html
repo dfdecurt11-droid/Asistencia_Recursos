@@ -18,7 +18,7 @@
             --accent: #6366f1;
             --danger: #ef4444;
             --success: #10b981;
-            --warning: #f59e0b; /* Añadido para el botón reiniciar */
+            --warning: #f59e0b;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
@@ -98,13 +98,6 @@
         .modal-card { background: white; padding: 2.5rem; border-radius: 32px; width: 95%; max-width: 450px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
         .modal-card h3 { font-weight: 800; font-size: 1.4rem; margin-bottom: 1rem; color: var(--text-main); text-align: center; }
         
-        .form-group { text-align: left; margin-bottom: 1rem; }
-        .form-group label { display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
-        .form-group input, .form-group select { 
-            width: 100%; padding: 12px 16px; border-radius: 12px; border: 2px solid #f1f5f9; 
-            font-family: inherit; font-weight: 600; color: var(--text-main);
-        }
-
         .btn-group { display: flex; gap: 12px; margin-top: 2rem; }
         .btn { flex: 1; padding: 14px; border-radius: 15px; border: none; font-weight: 800; cursor: pointer; transition: 0.2s; }
         .btn-primary { background: var(--accent); color: white; }
@@ -140,7 +133,7 @@
                 <h4 id="statTotal" class="mono">--</h4>
             </div>
         </div>
-        <div class="stat-card" style="cursor: pointer; border: 2px solid var(--accent);" id="btn-generar-pdf">
+        <div class="stat-card" style="cursor: pointer; border: 2px solid var(--accent);" onclick="generatePDF()">
             <div class="stat-icon" style="color: white; background: var(--accent);"><i class="fas fa-file-pdf"></i></div>
             <div>
                 <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">EXPORTAR REPORTE</p>
@@ -154,7 +147,7 @@
                 <h4 style="font-size: 0.8rem; font-weight: 800;">REINICIAR TABLA</h4>
             </div>
         </div>
-        </div>
+    </div>
 
     <section class="controls-card">
         <div class="search-wrapper">
@@ -241,6 +234,7 @@
         </div>
     </div>
 </div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
@@ -249,6 +243,27 @@
     let allData = [];
     let currentArea = "Todos";
     let practicanteAEliminar = null;
+
+    // Colores para la cabecera del PDF según el área activa
+    const AREA_COLORS = {
+        'Todos': [15, 23, 42],
+        'Ventas': [251, 113, 133],
+        'Finanzas': [52, 211, 153],
+        'Marketing': [167, 139, 250],
+        'Logística': [251, 191, 36],
+        'Mejora Continua': [34, 211, 238],
+        'Recursos Humanos': [244, 114, 182]
+    };
+
+    // Jerarquía de ordenamiento para el PDF (Ventas primero, etc.)
+    const AREA_ORDER = {
+        'Ventas': 1,
+        'Finanzas': 2,
+        'Marketing': 3,
+        'Logística': 4,
+        'Mejora Continua': 5,
+        'Recursos Humanos': 6
+    };
 
     const AREA_CLASSES = {
         'Ventas': 'bg-ventas', 'Finanzas': 'bg-finanzas', 'Marketing': 'bg-marketing',
@@ -264,16 +279,91 @@
         } catch (e) { console.error("Error API"); }
     }
 
-    // INICIO: LÓGICA AÑADIDA REINICIAR
-    async function resetTableAction() {
-        try {
-            // Aquí iría tu petición fetch para borrar si existiera el endpoint
-            closeModal('modalResetTable');
-            showToast("El reinicio de la tabla ha sido exitoso.");
-            fetchData(); 
-        } catch (e) { console.error(e); }
+    function generatePDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('p', 'mm', 'a4');
+        const now = new Date();
+        
+        const fullDate = now.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
+        const timeShort = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+        const headerColor = AREA_COLORS[currentArea] || [99, 102, 241];
+
+        // Diseño Cabecera PDF
+        doc.setFillColor(headerColor[0], headerColor[1], headerColor[2]);
+        doc.rect(0, 0, 210, 40, 'F');
+        
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(22);
+        doc.setFont("helvetica", "bold");
+        doc.text("REPORTE DE ASISTENCIA", 15, 20);
+        
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "normal");
+        doc.text(`ÁREA: ${currentArea.toUpperCase()}`, 15, 30);
+        doc.text(`GENERADO: ${fullDate} - ${timeShort.toUpperCase()}`, 125, 30);
+
+        // --- LÓGICA DE FILTRADO Y ORDENAMIENTO PARA EL PDF ---
+        const query = document.getElementById('inputSearch').value.toLowerCase();
+        let filtered = allData.filter(p => {
+            const matchName = `${p.nombres} ${p.apellidos}`.toLowerCase().includes(query);
+            const matchArea = currentArea === "Todos" || p.area.trim() === currentArea;
+            return matchName && matchArea;
+        });
+
+        // Ordenar datos: Primero por jerarquía de Área, luego por Apellido
+        filtered.sort((a, b) => {
+            const areaA = a.area.trim();
+            const areaB = b.area.trim();
+            
+            // Si las áreas son distintas, ordenar por jerarquía AREA_ORDER
+            if (AREA_ORDER[areaA] !== AREA_ORDER[areaB]) {
+                return (AREA_ORDER[areaA] || 99) - (AREA_ORDER[areaB] || 99);
+            }
+            
+            // Si son del mismo área, ordenar alfabéticamente por apellido
+            return a.apellidos.localeCompare(b.apellidos);
+        });
+
+        // Preparar filas para la tabla del PDF
+        const rows = filtered.map((p, idx) => {
+            let tiempoFormat = "00 horas y 00 minutos";
+            if(p.horas_acumuladas && p.horas_acumuladas.includes(":")) {
+                const parts = p.horas_acumuladas.split(":");
+                tiempoFormat = `${parts[0]} horas y ${parts[1]} minutos`;
+            }
+            return [
+                idx + 1, // Nuevo número secuencial tras ordenar
+                `${p.apellidos.toUpperCase()}, ${p.nombres}`,
+                p.area,
+                tiempoFormat
+            ];
+        });
+
+        // Generar Tabla en el PDF
+        doc.autoTable({
+            head: [['N°', 'PRACTICANTE', 'ÁREA', 'TIEMPO ACUMULADO']],
+            body: rows,
+            startY: 50,
+            styles: { font: "helvetica", fontSize: 9, cellPadding: 4 },
+            headStyles: { fillColor: headerColor, textColor: 255, fontStyle: 'bold' },
+            alternateRowStyles: { fillColor: [245, 247, 250] },
+            columnStyles: {
+                0: { cellWidth: 15, halign: 'center' },
+                1: { cellWidth: 80 },
+                2: { cellWidth: 45 },
+                3: { cellWidth: 50 }
+            }
+        });
+
+        doc.save(`Reporte_${currentArea}_${now.getTime()}.pdf`);
     }
-    // FIN: LÓGICA REINICIAR
+
+    async function resetTableAction() {
+        closeModal('modalResetTable');
+        showToast("Reinicio exitoso");
+        fetchData();
+    }
 
     function filterData() {
         const query = document.getElementById('inputSearch').value.toLowerCase();
@@ -291,7 +381,6 @@
             const formatDT = (s) => s ? new Date(s).toLocaleString('es-ES', {day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit'}) : '--/--/-- --:--';
             const acumuladoTabla = p.horas_acumuladas ? p.horas_acumuladas.substring(0, 5) : "00:00";
             const areaClass = AREA_CLASSES[p.area.trim()] || '';
-
             return `
                 <tr>
                     <td class="mono">${idx + 1}</td>
@@ -329,9 +418,8 @@
     }
 
     function askDelete(id, nombres, apellidos) {
-        const fullName = `${nombres} ${apellidos}`;
-        practicanteAEliminar = { id, fullName };
-        document.getElementById('deleteTargetName').innerText = fullName;
+        practicanteAEliminar = { id, fullName: `${nombres} ${apellidos}` };
+        document.getElementById('deleteTargetName').innerText = practicanteAEliminar.fullName;
         openModal('modalDeleteConfirm');
     }
 
@@ -340,12 +428,11 @@
         try {
             const r = await fetch(`${API}/practicantes/${practicanteAEliminar.id}`, { method: 'DELETE' });
             if(r.ok) {
-                const nameSaved = practicanteAEliminar.fullName;
                 closeModal('modalDeleteConfirm');
-                showToast(`Se eliminó con éxito a ${nameSaved}`);
+                showToast("Eliminado con éxito");
                 fetchData();
             }
-        } catch (e) { console.error("Error al eliminar"); }
+        } catch (e) { console.error("Error"); }
     };
 
     function openEdit(id) {
@@ -371,7 +458,7 @@
             body: JSON.stringify(payload)
         });
         closeModal('modalEdit');
-        showToast("Información actualizada correctamente");
+        showToast("Actualizado");
         fetchData();
     }
 
