@@ -137,8 +137,8 @@
 </div>
 
 <script>
-    // URL DE TU BACKEND (Asegúrate que coincida con tu server.js)
-    const API_LOGIN_URL = "http://localhost:3000/api/login"; 
+    // URL ACTUALIZADA PARA RENDER
+    const API_LOGIN_URL = "https://asistencia-recursos-1.onrender.com/api/login"; 
 
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -151,7 +151,6 @@
         const email = document.getElementById('txtEmail').value;
         const password = document.getElementById('txtPass').value;
 
-        // Visual Feedback
         btn.disabled = true;
         icon.style.display = 'none';
         spinner.style.display = 'block';
@@ -167,11 +166,10 @@
             const data = await response.json();
 
             if (response.ok && data.token) {
-                // Éxito: Guardamos token y redirigimos
                 localStorage.setItem('token', data.token);
+                // Si renombraste el index a registro.html, cámbialo aquí también:
                 window.location.href = 'index.html'; 
             } else {
-                // Error de credenciales
                 errorDiv.innerText = data.error || "Acceso denegado";
                 errorDiv.style.display = 'block';
             }
@@ -185,7 +183,6 @@
         }
     });
 
-    // Si ya tiene un token válido, enviarlo directo al index
     if(localStorage.getItem('token')) {
         window.location.href = 'index.html';
     }
