@@ -10,7 +10,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Servir archivos estáticos desde la carpeta frontend
+// Servir archivos estáticos (Frontend)
+// Asegúrate de que la carpeta 'frontend' esté un nivel arriba de 'backend'
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // CONFIGURACIÓN JWT
@@ -37,7 +38,7 @@ const verificarToken = (req, res, next) => {
     }
 };
 
-// --- RUTA DE LOGIN (Credenciales: admin@rrhh.com / rrhh123) ---
+// --- RUTA DE LOGIN (admin@rrhh.com / rrhh123) ---
 app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
 
@@ -49,7 +50,7 @@ app.post('/api/login', (req, res) => {
     }
 });
 
-// --- RUTAS DE PRACTICANTES Y ASISTENCIA ---
+// --- RUTAS DE PRACTICANTES ---
 app.get('/api/practicantes', async (req, res) => {
     const { area } = req.query;
     try {
@@ -97,7 +98,7 @@ app.post('/api/asistencia/:id', async (req, res) => {
     }
 });
 
-// --- RUTAS DE REPORTE (PROTEGIDAS) ---
+// --- RUTAS DE REPORTE ---
 app.get('/api/reporte', verificarToken, async (req, res) => {
     try {
         const result = await pool.query(`
@@ -112,8 +113,9 @@ app.get('/api/reporte', verificarToken, async (req, res) => {
     }
 });
 
-// Ruta comodín para que el navegador siempre cargue el index
-app.get('*', (req, res) => {
+// --- CORRECCIÓN DEL ERROR DE RENDER ---
+// Usamos '(.*)' en lugar de '*' para evitar el error de path-to-regexp
+app.get('(.*)', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
