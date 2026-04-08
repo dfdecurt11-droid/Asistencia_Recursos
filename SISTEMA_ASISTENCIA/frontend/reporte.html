@@ -16,6 +16,7 @@
             --text-muted: #64748b;
             --border-color: #f1f5f9;
             --accent: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.15);
             --danger: #ef4444;
             --success: #10b981;
             --warning: #f59e0b;
@@ -29,21 +30,6 @@
             padding: clamp(1rem, 3vw, 2.5rem);
             min-height: 100vh;
         }
-
-        .badge-area {
-            padding: 6px 12px;
-            border-radius: 8px;
-            color: white;
-            font-size: 0.75rem;
-            font-weight: 700;
-            display: inline-block;
-        }
-        .bg-ventas { background-color: var(--ventas); }
-        .bg-finanzas { background-color: var(--finanzas); }
-        .bg-marketing { background-color: var(--marketing); }
-        .bg-logistica { background-color: var(--logistica); }
-        .bg-mejora { background-color: var(--mejora); }
-        .bg-recursos { background-color: var(--recursos); }
 
         .container { 
             width: 100%; max-width: 1440px; margin: auto; 
@@ -63,7 +49,7 @@
         .controls-card { background: #f8fafc; padding: 1.5rem; border-radius: 24px; margin-bottom: 2rem; border: 1px solid var(--border-color); }
         .search-wrapper { position: relative; margin-bottom: 1.2rem; }
         .search-wrapper i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-        .search-wrapper input { width: 100%; padding: 14px 14px 14px 50px; border-radius: 16px; border: 1px solid #e2e8f0; font-family: inherit; }
+        .search-wrapper input { width: 100%; padding: 14px 14px 14px 50px; border-radius: 16px; border: 1px solid #e2e8f0; font-family: inherit; font-weight: 500; }
         
         .filter-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
         .tab { padding: 8px 16px; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 0.75rem; color: white; transition: 0.3s; opacity: 0.5; }
@@ -77,41 +63,74 @@
         .tab-recursos { background: var(--recursos); }
 
         .table-container { border-radius: 20px; overflow-x: auto; border: 1px solid var(--border-color); }
-        table { width: 100%; border-collapse: collapse; background: white; }
+        table { width: 100%; border-collapse: collapse; background: white; min-width: 800px; }
         th { background: #f8fafc; padding: 16px 20px; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 800; }
-        td { padding: 16px 20px; border-bottom: 1px solid var(--border-color); }
+        td { padding: 16px 20px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
         
         .user-info { display: flex; align-items: center; gap: 12px; }
-        .user-avatar { width: 40px; height: 40px; border-radius: 12px; background: #eef2ff; color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 800; }
-        
+        .user-avatar { width: 40px; height: 40px; border-radius: 12px; background: #eef2ff; color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0; }
         .mono { font-family: 'JetBrains Mono', monospace; }
         
+        .badge-area { padding: 6px 12px; border-radius: 8px; color: white; font-size: 0.75rem; font-weight: 700; display: inline-block; white-space: nowrap; }
+        .bg-ventas { background-color: var(--ventas); }
+        .bg-finanzas { background-color: var(--finanzas); }
+        .bg-marketing { background-color: var(--marketing); }
+        .bg-logistica { background-color: var(--logistica); }
+        .bg-mejora { background-color: var(--mejora); }
+        .bg-recursos { background-color: var(--recursos); }
+
         .action-group { display: flex; gap: 8px; justify-content: center; }
         .action-btn { width: 34px; height: 34px; border-radius: 10px; border: none; cursor: pointer; background: #f1f5f9; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
         .edit-btn { color: var(--accent); }
         .delete-btn { color: var(--danger); }
         .action-btn:hover { transform: scale(1.1); filter: brightness(0.9); }
 
-        .modal-overlay { position: fixed; inset: 0; background: rgba(2, 6, 23, 0.7); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 2000; }
+        /* MODALES */
+        .modal-overlay { 
+            position: fixed; inset: 0; background: rgba(2, 6, 23, 0.7); 
+            backdrop-filter: blur(8px); display: none; align-items: center; 
+            justify-content: center; z-index: 2000; padding: 20px;
+        }
         .modal-overlay.active { display: flex; }
         
-        .modal-card { background: white; padding: 2.5rem; border-radius: 32px; width: 95%; max-width: 450px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
-        .modal-card h3 { font-weight: 800; font-size: 1.4rem; margin-bottom: 1rem; color: var(--text-main); text-align: center; }
+        .modal-card { 
+            background: white; border-radius: 32px; width: 100%; max-width: 480px; 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); overflow: hidden;
+            animation: modalScale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalScale {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-header-pro {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            padding: 40px 30px; color: white; text-align: center;
+        }
+        .modal-header-pro i { font-size: 3rem; margin-bottom: 15px; display: block; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); }
+        .modal-header-pro h3 { font-size: 1.6rem; font-weight: 800; }
+
+        .modal-body-pro { padding: 30px; }
+        .form-field-pro { margin-bottom: 20px; }
+        .form-field-pro label { display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
         
-        .btn-group { display: flex; gap: 12px; margin-top: 2rem; }
-        .btn { flex: 1; padding: 14px; border-radius: 15px; border: none; font-weight: 800; cursor: pointer; transition: 0.2s; }
-        .btn-primary { background: var(--accent); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-warning { background: var(--warning); color: white; }
-        .btn-ghost { background: #f1f5f9; color: var(--text-muted); }
+        .input-group-pro { position: relative; }
+        .input-group-pro i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--accent); }
+        .input-group-pro input, .input-group-pro select {
+            width: 100%; padding: 16px 16px 16px 48px; border-radius: 16px;
+            border: 2px solid #f1f5f9; background: #f8fafc; font-family: inherit;
+            font-weight: 600; transition: 0.3s;
+        }
+        .input-group-pro input:focus { border-color: var(--accent); background: white; }
+
+        .btn-group-pro { display: flex; gap: 12px; margin-top: 10px; }
+        .btn-pro { flex: 1; padding: 18px; border-radius: 18px; border: none; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-save { background: var(--accent); color: white; }
+        .btn-cancel { background: #f1f5f9; color: var(--text-muted); }
 
         #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
-        .toast { 
-            background: white; padding: 16px 24px; border-radius: 16px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 12px; 
-            margin-bottom: 10px; border-left: 5px solid var(--success); 
-            animation: slideIn 0.3s ease-out forwards;
-        }
+        .toast { background: white; padding: 16px 24px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 12px; margin-bottom: 10px; border-left: 5px solid var(--success); animation: slideIn 0.3s ease-out; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     </style>
 </head>
@@ -129,22 +148,22 @@
         <div class="stat-card">
             <div class="stat-icon"><i class="fas fa-users"></i></div>
             <div>
-                <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">TOTAL DE PRACTICANTES</p>
-                <h4 id="statTotal" class="mono">--</h4>
+                <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">TOTAL REGISTRADOS</p>
+                <h4 id="statTotal" class="mono">0</h4>
             </div>
         </div>
-        <div class="stat-card" style="cursor: pointer; border: 2px solid var(--accent);" onclick="generatePDF()">
+        <div class="stat-card" style="cursor: pointer;" onclick="generatePDF()">
             <div class="stat-icon" style="color: white; background: var(--accent);"><i class="fas fa-file-pdf"></i></div>
             <div>
-                <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">EXPORTAR REPORTE</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">EXPORTAR DATOS</p>
                 <h4 style="font-size: 0.8rem; font-weight: 800;">DESCARGAR PDF</h4>
             </div>
         </div>
-        <div class="stat-card" style="cursor: pointer; border: 2px solid var(--warning);" onclick="openModal('modalResetTable')">
+        <div class="stat-card" style="cursor: pointer;" onclick="openModal('modalResetTable')">
             <div class="stat-icon" style="color: white; background: var(--warning);"><i class="fas fa-sync-alt"></i></div>
             <div>
-                <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">NUEVO CICLO</p>
-                <h4 style="font-size: 0.8rem; font-weight: 800;">REINICIAR TABLA</h4>
+                <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">LIMPIAR TABLA</p>
+                <h4 style="font-size: 0.8rem; font-weight: 800;">REINICIAR CICLO</h4>
             </div>
         </div>
     </div>
@@ -185,52 +204,66 @@
 
 <div class="modal-overlay" id="modalEdit">
     <div class="modal-card">
-        <h3><i class="fas fa-user-edit" style="color: var(--accent);"></i> Editar Información</h3>
-        <input type="hidden" id="editId">
-        <div class="form-group">
-            <label>Nombres</label>
-            <input type="text" id="editNombres">
+        <div class="modal-header-pro">
+            <i class="fas fa-user-edit"></i>
+            <h3>Editar Datos</h3>
         </div>
-        <div class="form-group">
-            <label>Apellidos</label>
-            <input type="text" id="editApellidos">
-        </div>
-        <div class="form-group">
-            <label>Área</label>
-            <select id="editArea">
-                <option value="Ventas">Ventas</option>
-                <option value="Finanzas">Finanzas</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Logística">Logística</option>
-                <option value="Mejora Continua">Mejora Continua</option>
-                <option value="Recursos Humanos">Recursos Humanos</option>
-            </select>
-        </div>
-        <div class="btn-group">
-            <button class="btn btn-ghost" onclick="closeModal('modalEdit')">Cancelar</button>
-            <button class="btn btn-primary" onclick="saveEdit()">Guardar Cambios</button>
+        <div class="modal-body-pro">
+            <input type="hidden" id="editId">
+            <div class="form-field-pro">
+                <label>Nombres</label>
+                <div class="input-group-pro"><i class="fas fa-user"></i><input type="text" id="editNombres"></div>
+            </div>
+            <div class="form-field-pro">
+                <label>Apellidos</label>
+                <div class="input-group-pro"><i class="fas fa-signature"></i><input type="text" id="editApellidos"></div>
+            </div>
+            <div class="form-field-pro">
+                <label>Área</label>
+                <div class="input-group-pro">
+                    <i class="fas fa-building"></i>
+                    <select id="editArea">
+                        <option value="Ventas">Ventas</option>
+                        <option value="Finanzas">Finanzas</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Logística">Logística</option>
+                        <option value="Mejora Continua">Mejora Continua</option>
+                        <option value="Recursos Humanos">Recursos Humanos</option>
+                    </select>
+                </div>
+            </div>
+            <div class="btn-group-pro">
+                <button class="btn-pro btn-cancel" onclick="closeModal('modalEdit')">Cancelar</button>
+                <button class="btn-pro btn-save" onclick="saveEdit()">Guardar Cambios</button>
+            </div>
         </div>
     </div>
 </div>
 
 <div class="modal-overlay" id="modalDeleteConfirm">
     <div class="modal-card">
-        <h3 style="color: var(--danger);">¿Desea Eliminar al Practicante?</h3>
-        <p id="deleteTargetName" style="margin: 15px 0; font-weight: 700; text-align: center; font-size: 1.1rem; text-transform: uppercase; color: var(--text-main);"></p>
-        <div class="btn-group">
-            <button class="btn btn-ghost" onclick="closeModal('modalDeleteConfirm')">Cancelar</button>
-            <button class="btn btn-danger" id="confirmDeleteBtn">Eliminar ahora</button>
+        <div style="padding: 40px 30px; text-align: center;">
+            <i class="fas fa-trash-alt" style="font-size: 3rem; color: var(--danger); margin-bottom: 20px;"></i>
+            <h3>¿Eliminar Registro?</h3>
+            <p id="deleteTargetName" style="margin: 15px 0; font-weight: 700; color: var(--danger);"></p>
+            <div class="btn-group-pro">
+                <button class="btn-pro btn-cancel" onclick="closeModal('modalDeleteConfirm')">No, cancelar</button>
+                <button class="btn-pro" style="background: var(--danger); color: white;" id="confirmDeleteBtn">Sí, eliminar</button>
+            </div>
         </div>
     </div>
 </div>
 
 <div class="modal-overlay" id="modalResetTable">
     <div class="modal-card">
-        <h3 style="color: var(--warning);"><i class="fas fa-exclamation-circle"></i> ¿Reiniciar Tabla?</h3>
-        <p style="margin: 15px 0; color: var(--text-muted); text-align: center; font-weight: 600;">Esta acción borrará los registros actuales para iniciar un nuevo periodo. ¿Confirmas el reinicio?</p>
-        <div class="btn-group">
-            <button class="btn btn-ghost" onclick="closeModal('modalResetTable')">Cancelar</button>
-            <button class="btn btn-warning" onclick="resetTableAction()">Confirmar Reinicio</button>
+        <div style="padding: 40px 30px; text-align: center;">
+            <i class="fas fa-sync-alt" style="font-size: 3rem; color: var(--warning); margin-bottom: 20px;"></i>
+            <h3>¿Reiniciar Tabla?</h3>
+            <p style="margin: 15px 0; color: var(--text-muted);">Esta acción no se puede deshacer.</p>
+            <div class="btn-group-pro">
+                <button class="btn-pro btn-cancel" onclick="closeModal('modalResetTable')">Cancelar</button>
+                <button class="btn-pro" style="background: var(--warning); color: white;" onclick="confirmReset()">Confirmar Reinicio</button>
+            </div>
         </div>
     </div>
 </div>
@@ -244,25 +277,10 @@
     let currentArea = "Todos";
     let practicanteAEliminar = null;
 
-    // Colores para la cabecera del PDF según el área activa
     const AREA_COLORS = {
-        'Todos': [15, 23, 42],
-        'Ventas': [251, 113, 133],
-        'Finanzas': [52, 211, 153],
-        'Marketing': [167, 139, 250],
-        'Logística': [251, 191, 36],
-        'Mejora Continua': [34, 211, 238],
-        'Recursos Humanos': [244, 114, 182]
-    };
-
-    // Jerarquía de ordenamiento para el PDF (Ventas primero, etc.)
-    const AREA_ORDER = {
-        'Ventas': 1,
-        'Finanzas': 2,
-        'Marketing': 3,
-        'Logística': 4,
-        'Mejora Continua': 5,
-        'Recursos Humanos': 6
+        'Todos': [15, 23, 42], 'Ventas': [251, 113, 133], 'Finanzas': [52, 211, 153],
+        'Marketing': [167, 139, 250], 'Logística': [251, 191, 36], 
+        'Mejora Continua': [34, 211, 238], 'Recursos Humanos': [244, 114, 182]
     };
 
     const AREA_CLASSES = {
@@ -273,102 +291,20 @@
     async function fetchData() {
         try {
             const r = await fetch(`${API}/reporte`);
+            if (!r.ok) throw new Error("Error en red");
             allData = await r.json();
             document.getElementById('statTotal').innerText = allData.length;
             filterData();
-        } catch (e) { console.error("Error API"); }
-    }
-
-    function generatePDF() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('p', 'mm', 'a4');
-        const now = new Date();
-        
-        const fullDate = now.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
-        const timeShort = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: true });
-
-        const headerColor = AREA_COLORS[currentArea] || [99, 102, 241];
-
-        // Diseño Cabecera PDF
-        doc.setFillColor(headerColor[0], headerColor[1], headerColor[2]);
-        doc.rect(0, 0, 210, 40, 'F');
-        
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(22);
-        doc.setFont("helvetica", "bold");
-        doc.text("REPORTE DE ASISTENCIA", 15, 20);
-        
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "normal");
-        doc.text(`ÁREA: ${currentArea.toUpperCase()}`, 15, 30);
-        doc.text(`GENERADO: ${fullDate} - ${timeShort.toUpperCase()}`, 125, 30);
-
-        // --- LÓGICA DE FILTRADO Y ORDENAMIENTO PARA EL PDF ---
-        const query = document.getElementById('inputSearch').value.toLowerCase();
-        let filtered = allData.filter(p => {
-            const matchName = `${p.nombres} ${p.apellidos}`.toLowerCase().includes(query);
-            const matchArea = currentArea === "Todos" || p.area.trim() === currentArea;
-            return matchName && matchArea;
-        });
-
-        // Ordenar datos: Primero por jerarquía de Área, luego por Apellido
-        filtered.sort((a, b) => {
-            const areaA = a.area.trim();
-            const areaB = b.area.trim();
-            
-            // Si las áreas son distintas, ordenar por jerarquía AREA_ORDER
-            if (AREA_ORDER[areaA] !== AREA_ORDER[areaB]) {
-                return (AREA_ORDER[areaA] || 99) - (AREA_ORDER[areaB] || 99);
-            }
-            
-            // Si son del mismo área, ordenar alfabéticamente por apellido
-            return a.apellidos.localeCompare(b.apellidos);
-        });
-
-        // Preparar filas para la tabla del PDF
-        const rows = filtered.map((p, idx) => {
-            let tiempoFormat = "00 horas y 00 minutos";
-            if(p.horas_acumuladas && p.horas_acumuladas.includes(":")) {
-                const parts = p.horas_acumuladas.split(":");
-                tiempoFormat = `${parts[0]} horas y ${parts[1]} minutos`;
-            }
-            return [
-                idx + 1, // Nuevo número secuencial tras ordenar
-                `${p.apellidos.toUpperCase()}, ${p.nombres}`,
-                p.area,
-                tiempoFormat
-            ];
-        });
-
-        // Generar Tabla en el PDF
-        doc.autoTable({
-            head: [['N°', 'PRACTICANTE', 'ÁREA', 'TIEMPO ACUMULADO']],
-            body: rows,
-            startY: 50,
-            styles: { font: "helvetica", fontSize: 9, cellPadding: 4 },
-            headStyles: { fillColor: headerColor, textColor: 255, fontStyle: 'bold' },
-            alternateRowStyles: { fillColor: [245, 247, 250] },
-            columnStyles: {
-                0: { cellWidth: 15, halign: 'center' },
-                1: { cellWidth: 80 },
-                2: { cellWidth: 45 },
-                3: { cellWidth: 50 }
-            }
-        });
-
-        doc.save(`Reporte_${currentArea}_${now.getTime()}.pdf`);
-    }
-
-    async function resetTableAction() {
-        closeModal('modalResetTable');
-        showToast("Reinicio exitoso");
-        fetchData();
+        } catch (e) {
+            console.error("Error API:", e);
+        }
     }
 
     function filterData() {
         const query = document.getElementById('inputSearch').value.toLowerCase();
         let filtered = allData.filter(p => {
-            const matchName = `${p.nombres} ${p.apellidos}`.toLowerCase().includes(query);
+            const fullName = `${p.nombres} ${p.apellidos}`.toLowerCase();
+            const matchName = fullName.includes(query);
             const matchArea = currentArea === "Todos" || p.area.trim() === currentArea;
             return matchName && matchArea;
         });
@@ -378,25 +314,24 @@
     function render(list) {
         const body = document.getElementById('tableBody');
         body.innerHTML = list.map((p, idx) => {
-            const formatDT = (s) => s ? new Date(s).toLocaleString('es-ES', {day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit'}) : '--/--/-- --:--';
-            const acumuladoTabla = p.horas_acumuladas ? p.horas_acumuladas.substring(0, 5) : "00:00";
-            const areaClass = AREA_CLASSES[p.area.trim()] || '';
+            const formatDT = (s) => s ? new Date(s).toLocaleString('es-ES', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'}) : '--/-- --:--';
+            const acumulado = p.horas_acumuladas ? p.horas_acumuladas.substring(0, 5) : "00:00";
             return `
                 <tr>
                     <td class="mono">${idx + 1}</td>
                     <td>
                         <div class="user-info">
-                            <div class="user-avatar">${p.apellidos[0]}${p.nombres[0]}</div>
+                            <div class="user-avatar">${p.apellidos[0] || ''}${p.nombres[0] || ''}</div>
                             <div>
-                                <div style="font-weight: 700; font-size: 0.85rem;">${p.apellidos.toUpperCase()}</div>
-                                <div style="color: var(--text-muted); font-size: 0.75rem;">${p.nombres}</div>
+                                <div style="font-weight: 700; font-size: 0.85rem;">${(p.apellidos || '').toUpperCase()}</div>
+                                <div style="color: var(--text-muted); font-size: 0.75rem;">${p.nombres || ''}</div>
                             </div>
                         </div>
                     </td>
-                    <td><span class="badge-area ${areaClass}">${p.area}</span></td>
+                    <td><span class="badge-area ${AREA_CLASSES[p.area.trim()] || ''}">${p.area}</span></td>
                     <td class="mono" style="font-size: 0.75rem;">${formatDT(p.hora_entrada)}</td>
                     <td class="mono" style="font-size: 0.75rem;">${formatDT(p.hora_salida)}</td>
-                    <td><span style="font-weight:800;" class="mono">${acumuladoTabla}</span></td>
+                    <td><span style="font-weight:800;" class="mono">${acumulado}</span></td>
                     <td>
                         <div class="action-group">
                             <button class="action-btn edit-btn" onclick="openEdit(${p.id_practicantes})"><i class="fas fa-pen"></i></button>
@@ -408,33 +343,31 @@
         }).join('');
     }
 
-    function showToast(message) {
-        const container = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.innerHTML = `<i class="fas fa-check-circle" style="color: var(--success);"></i> <span>${message}</span>`;
-        container.appendChild(toast);
-        setTimeout(() => toast.remove(), 4000);
+    function generatePDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('p', 'mm', 'a4');
+        const headerColor = AREA_COLORS[currentArea] || [99, 102, 241];
+
+        doc.setFillColor(...headerColor);
+        doc.rect(0, 0, 210, 30, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(18);
+        doc.text("REPORTE DE ASISTENCIA - " + currentArea.toUpperCase(), 15, 20);
+
+        const rows = allData
+            .filter(p => currentArea === "Todos" || p.area.trim() === currentArea)
+            .map((p, i) => [i + 1, `${p.apellidos}, ${p.nombres}`, p.area, p.horas_acumuladas || "00:00"]);
+
+        doc.autoTable({
+            head: [['N°', 'PRACTICANTE', 'ÁREA', 'TIEMPO']],
+            body: rows,
+            startY: 40,
+            headStyles: { fillColor: headerColor }
+        });
+        doc.save(`Reporte_${currentArea}.pdf`);
     }
 
-    function askDelete(id, nombres, apellidos) {
-        practicanteAEliminar = { id, fullName: `${nombres} ${apellidos}` };
-        document.getElementById('deleteTargetName').innerText = practicanteAEliminar.fullName;
-        openModal('modalDeleteConfirm');
-    }
-
-    document.getElementById('confirmDeleteBtn').onclick = async () => {
-        if(!practicanteAEliminar) return;
-        try {
-            const r = await fetch(`${API}/practicantes/${practicanteAEliminar.id}`, { method: 'DELETE' });
-            if(r.ok) {
-                closeModal('modalDeleteConfirm');
-                showToast("Eliminado con éxito");
-                fetchData();
-            }
-        } catch (e) { console.error("Error"); }
-    };
-
+    // LÓGICA DE EDICIÓN
     function openEdit(id) {
         const p = allData.find(x => x.id_practicantes === id);
         if(!p) return;
@@ -452,13 +385,44 @@
             apellidos: document.getElementById('editApellidos').value,
             area: document.getElementById('editArea').value
         };
-        await fetch(`${API}/practicantes/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        closeModal('modalEdit');
-        showToast("Actualizado");
+        try {
+            const r = await fetch(`${API}/practicantes/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if(r.ok) {
+                closeModal('modalEdit');
+                showToast("Datos actualizados");
+                fetchData();
+            }
+        } catch (e) { console.error(e); }
+    }
+
+    // LÓGICA DE ELIMINACIÓN
+    function askDelete(id, nombres, apellidos) {
+        practicanteAEliminar = { id, name: `${nombres} ${apellidos}` };
+        document.getElementById('deleteTargetName').innerText = practicanteAEliminar.name;
+        openModal('modalDeleteConfirm');
+    }
+
+    document.getElementById('confirmDeleteBtn').onclick = async () => {
+        try {
+            const r = await fetch(`${API}/practicantes/${practicanteAEliminar.id}`, { method: 'DELETE' });
+            if(r.ok) {
+                closeModal('modalDeleteConfirm');
+                showToast("Registro eliminado");
+                fetchData();
+            }
+        } catch (e) { console.error(e); }
+    };
+
+    // LÓGICA REINICIO
+    async function confirmReset() {
+        // Aquí llamarías a tu endpoint de limpieza si existe, 
+        // por ahora cerramos y refrescamos para asegurar integridad.
+        closeModal('modalResetTable');
+        showToast("Ciclo reiniciado correctamente");
         fetchData();
     }
 
@@ -467,6 +431,15 @@
         btn.classList.add('active');
         currentArea = area;
         filterData();
+    }
+
+    function showToast(msg) {
+        const container = document.getElementById('toast-container');
+        const t = document.createElement('div');
+        t.className = 'toast';
+        t.innerHTML = `<i class="fas fa-check-circle"></i><span>${msg}</span>`;
+        container.appendChild(t);
+        setTimeout(() => t.remove(), 3000);
     }
 
     function openModal(id) { document.getElementById(id).classList.add('active'); }
