@@ -2,12 +2,19 @@ const express = require('express');
 const { Pool } = require('pg');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const path = require('path'); // <-- IMPORTANTE: Para manejar rutas de carpetas
 
 const app = express();
+
+// --- MIDDLEWARES GLOBALES ---
 app.use(cors());
 app.use(express.json());
 
-// CONFIGURACIÓN JWT - Usa una clave segura en producción
+// --- SERVIR FRONTEND ---
+// Esto permite que al abrir la URL de Render se cargue tu index.html
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// CONFIGURACIÓN JWT
 const JWT_SECRET = 'rrhh_secret_key_2026';
 
 const pool = new Pool({
@@ -31,12 +38,12 @@ const verificarToken = (req, res, next) => {
     }
 };
 
-// --- RUTA DE LOGIN ---
+// --- RUTA DE LOGIN (CORREGIDA) ---
 app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
 
-    // Validación con tus credenciales específicas
-    if (email === 'admin@gmail.com' && password === 'rrhh123') {
+    // Validación con tus nuevas credenciales
+    if (email === 'admin@rrhh.com' && password === 'rrhh123') {
         const token = jwt.sign({ role: 'admin' }, JWT_SECRET, { expiresIn: '8h' });
         res.json({ success: true, token });
     } else {
@@ -148,6 +155,12 @@ app.delete('/api/reset', verificarToken, async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: 'Error al reiniciar' });
     }
+});
+
+// --- MANEJO DE RUTAS DEL NAVEGADOR ---
+// Esto evita errores al recargar la página
+app.get('(.*)', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
