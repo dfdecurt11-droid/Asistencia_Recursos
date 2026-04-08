@@ -49,10 +49,12 @@
 </div>
 
 <script>
-    const API_LOGIN_URL = "https://asistencia-recursos.onrender.com/api"; // Usar ruta relativa para que funcione en Render
+    // CORRECCIÓN: Se debe apuntar al endpoint /api/login
+    const API_LOGIN_URL = "/api/login"; 
 
+    // CORRECCIÓN: Redirigir al archivo correcto según tu estructura
     if(localStorage.getItem('token')) {
-        window.location.href = 'registro.html';
+        window.location.href = 'recursos_humanos.html';
     }
 
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -71,7 +73,8 @@
 
             if (response.ok && data.token) {
                 localStorage.setItem('token', data.token);
-                window.location.href = 'registro.html'; 
+                // Redirigir al panel de Recursos Humanos
+                window.location.href = 'recursos_humanos.html'; 
             } else {
                 errorDiv.innerText = data.error || "Acceso denegado";
                 errorDiv.style.display = 'block';
