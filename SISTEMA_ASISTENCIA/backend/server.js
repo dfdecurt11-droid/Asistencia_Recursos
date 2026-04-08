@@ -2,12 +2,19 @@ const express = require('express');
 const { Pool } = require('pg');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const path = require('path'); // <-- Necesario para las rutas de archivos
 
 const app = express();
+
+// --- MIDDLEWARES GLOBALES ---
 app.use(cors());
 app.use(express.json());
 
-// CONFIGURACIÓN JWT - Usa una clave segura en producción
+// Servir archivos estáticos (Frontend)
+// Esto hace que Render pueda encontrar tus .html, .css y .js
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// CONFIGURACIÓN JWT
 const JWT_SECRET = 'rrhh_secret_key_2026';
 
 const pool = new Pool({
@@ -35,7 +42,7 @@ const verificarToken = (req, res, next) => {
 app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
 
-    // Validación con tus credenciales específicas
+    // Validación con tus credenciales
     if (email === 'admin@gmail.com' && password === 'rrhh123') {
         const token = jwt.sign({ role: 'admin' }, JWT_SECRET, { expiresIn: '8h' });
         res.json({ success: true, token });
@@ -148,6 +155,11 @@ app.delete('/api/reset', verificarToken, async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: 'Error al reiniciar' });
     }
+});
+
+// Ruta comodín para manejar el refresco de página en el navegador
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
