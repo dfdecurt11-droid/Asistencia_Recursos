@@ -2,7 +2,7 @@ const express = require('express');
 const { Pool } = require('pg');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const path = require('path');
+const path = require('path'); // <-- Necesario para las rutas de archivos
 
 const app = express();
 
@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // Servir archivos estáticos (Frontend)
-// Asegúrate de que la carpeta 'frontend' esté un nivel arriba de 'backend'
+// Esto hace que Render pueda encontrar tus .html, .css y .js
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // CONFIGURACIÓN JWT
@@ -38,11 +38,12 @@ const verificarToken = (req, res, next) => {
     }
 };
 
-// --- RUTA DE LOGIN (admin@rrhh.com / rrhh123) ---
+// --- RUTA DE LOGIN ---
 app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
 
-    if (email === 'admin@rrhh.com' && password === 'rrhh123') { 
+    // Validación con tus credenciales
+    if (email === 'admin@gmail.com' && password === 'rrhh123') {
         const token = jwt.sign({ role: 'admin' }, JWT_SECRET, { expiresIn: '8h' });
         res.json({ success: true, token });
     } else {
@@ -84,12 +85,20 @@ app.post('/api/practicantes', async (req, res) => {
 app.post('/api/asistencia/:id', async (req, res) => {
     const { id } = req.params;
     const tipo = req.body.tipo_registro || req.body.tipo;
+
     try {
         if (tipo === 'entrada') {
-            await pool.query('INSERT INTO asistencia (id_practicantes, hora_entrada) VALUES ($1, CURRENT_TIMESTAMP)', [id]);
+            await pool.query(
+                'INSERT INTO asistencia (id_practicantes, hora_entrada) VALUES ($1, CURRENT_TIMESTAMP)',
+                [id]
+            );
             res.json({ message: '🕒 Entrada registrada' });
         } else {
-            const check = await pool.query(`UPDATE asistencia SET hora_salida = CURRENT_TIMESTAMP WHERE id_practicantes = $1 AND hora_salida IS NULL RETURNING id`, [id]);
+            const check = await pool.query(
+                `UPDATE asistencia SET hora_salida = CURRENT_TIMESTAMP 
+                 WHERE id_practicantes = $1 AND hora_salida IS NULL RETURNING id`,
+                [id]
+            );
             if (check.rows.length === 0) return res.status(400).json({ message: 'No hay entrada abierta' });
             res.json({ message: '✅ Salida registrada' });
         }
@@ -98,24 +107,58 @@ app.post('/api/asistencia/:id', async (req, res) => {
     }
 });
 
-// --- RUTAS DE REPORTE ---
+// --- RUTAS PROTEGIDAS (Solo Admin) ---
 app.get('/api/reporte', verificarToken, async (req, res) => {
     try {
         const result = await pool.query(`
-            SELECT p.id_practicantes, p.nombres, p.apellidos, p.area,
-            MAX(a.hora_entrada) AS hora_entrada, MAX(a.hora_salida) AS hora_salida,
-            COALESCE(TO_CHAR((SUM(CEIL(EXTRACT(EPOCH FROM (COALESCE(a.hora_salida, a.hora_entrada) - a.hora_entrada)) / 60)) * INTERVAL '1 minute'), 'HH24:MI:SS'), '00:00:00') AS horas_acumuladas
-            FROM practicantes p LEFT JOIN asistencia a ON p.id_practicantes = a.id_practicantes
-            GROUP BY p.id_practicantes, p.nombres, p.apellidos, p.area ORDER BY p.apellidos ASC`);
+            SELECT 
+                p.id_practicantes, p.nombres, p.apellidos, p.area,
+                MAX(a.hora_entrada) AS hora_entrada, 
+                MAX(a.hora_salida) AS hora_salida,
+                COALESCE(TO_CHAR((SUM(CEIL(EXTRACT(EPOCH FROM (COALESCE(a.hora_salida, a.hora_entrada) - a.hora_entrada)) / 60)) * INTERVAL '1 minute'), 'HH24:MI:SS'), '00:00:00') AS horas_acumuladas
+            FROM practicantes p 
+            LEFT JOIN asistencia a ON p.id_practicantes = a.id_practicantes
+            GROUP BY p.id_practicantes, p.nombres, p.apellidos, p.area
+            ORDER BY p.apellidos ASC`);
         res.json(result.rows);
     } catch (error) {
         res.status(500).json({ error: 'Error en reporte' });
     }
 });
 
-// --- CORRECCIÓN DEL ERROR DE RENDER ---
-// Usamos '(.*)' en lugar de '*' para evitar el error de path-to-regexp
-app.get('(.*)', (req, res) => {
+app.put('/api/practicantes/:id', verificarToken, async (req, res) => {
+    const { id } = req.params;
+    const { nombres, apellidos, area } = req.body;
+    try {
+        await pool.query('UPDATE practicantes SET nombres=$1, apellidos=$2, area=$3 WHERE id_practicantes=$4', [nombres, apellidos, area, id]);
+        res.json({ message: 'Actualizado' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al actualizar' });
+    }
+});
+
+app.delete('/api/practicantes/:id', verificarToken, async (req, res) => {
+    const { id } = req.params;
+    try {
+        await pool.query('DELETE FROM asistencia WHERE id_practicantes=$1', [id]);
+        await pool.query('DELETE FROM practicantes WHERE id_practicantes=$1', [id]);
+        res.json({ message: 'Eliminado correctamente' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al eliminar' });
+    }
+});
+
+app.delete('/api/reset', verificarToken, async (req, res) => {
+    try {
+        await pool.query('TRUNCATE TABLE asistencia RESTART IDENTITY CASCADE');
+        res.json({ message: '🔄 Sistema reiniciado' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al reiniciar' });
+    }
+});
+
+// Ruta comodín para manejar el refresco de página en el navegador
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
