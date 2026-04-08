@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Servir archivos estáticos del frontend
+// Servir archivos estáticos de la carpeta frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 const JWT_SECRET = 'rrhh_secret_key_2026';
@@ -31,7 +31,7 @@ app.post('/api/login', (req, res) => {
     }
 });
 
-// --- RUTAS DE PRACTICANTES Y ASISTENCIA (Lógica existente) ---
+// --- RUTAS DE PRACTICANTES ---
 app.get('/api/practicantes', async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM practicantes ORDER BY apellidos ASC');
@@ -57,8 +57,7 @@ app.post('/api/asistencia/:id', async (req, res) => {
     }
 });
 
-// --- CORRECCIÓN DEFINITIVA PARA NODE 22 ---
-// En lugar de '*' o '(.*)', usamos esta expresión regular para capturar todo
+// --- SOLUCIÓN ERROR RENDER (PathError) ---
 app.get(/^\/(?!api).*/, (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
