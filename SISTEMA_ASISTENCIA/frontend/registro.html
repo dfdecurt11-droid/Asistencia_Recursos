@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RRHH | Registro de Practicantes</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --bg-body: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --input-bg: #f8fafc;
+            --border-color: #e2e8f0;
+            --success: #10b981;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg-body);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 20px; color: var(--text-main);
+        }
+
+        .card { 
+            background: var(--card-bg); 
+            padding: 45px 40px; 
+            border-radius: 40px; 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08); 
+            width: 100%; max-width: 480px; 
+            border: 1px solid #ffffff;
+            position: relative;
+        }
+
+        .card::after {
+            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 80px; height: 5px; background: var(--primary);
+            border-radius: 0 0 10px 10px; opacity: 0.3;
+        }
+
+        .header-section { text-align: center; margin-bottom: 30px; }
+        
+        .header-section .icon-box {
+            width: 70px; height: 70px; background: #f1f5ff;
+            border-radius: 22px; display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 15px; color: var(--primary); font-size: 2rem;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        h2 { font-weight: 800; font-size: 1.75rem; letter-spacing: -1px; color: var(--text-main); margin-bottom: 4px; }
+        .subtitle { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; }
+        
+        #reloj { 
+            text-align: center; font-size: 1.1rem; color: var(--primary); 
+            margin: 20px 0 30px; font-weight: 700; 
+            background: #f8fafc; padding: 12px; border-radius: 20px; 
+            border: 1px dashed var(--border-color); letter-spacing: 1px;
+        }
+
+        .form-group { margin-bottom: 22px; }
+        label { display: block; font-weight: 700; color: var(--text-main); margin-bottom: 10px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; padding-left: 5px; }
+
+        .input-wrapper { position: relative; }
+        .input-wrapper i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.1rem; }
+        
+        input, select { 
+            width: 100%; padding: 16px 20px 16px 55px; 
+            border: 1.5px solid var(--border-color); border-radius: 18px; 
+            outline: none; transition: 0.3s; font-size: 0.95rem; 
+            font-family: inherit; background: var(--input-bg);
+            color: var(--text-main);
+        }
+
+        input:focus, select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+
+        .btn-add { 
+            width: 100%; padding: 18px; border: none; border-radius: 20px; 
+            color: white; font-weight: 700; cursor: pointer; transition: 0.3s; 
+            font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 12px;
+            background: var(--primary);
+            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
+            margin-top: 10px; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .btn-add:hover { transform: translateY(-2px); background: #4f46e5; }
+
+        .secondary-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
+        .btn-nav { background: #fff; color: var(--text-main); border: 1.5px solid var(--border-color); padding: 14px; border-radius: 18px; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; }
+
+        /* Toast Profesional Mejorado */
+        #toast-container { position: fixed; top: 30px; right: 30px; z-index: 9999; }
+        .toast { 
+            background: white; padding: 20px 25px; border-radius: 24px; margin-bottom: 15px; 
+            display: flex; align-items: center; gap: 15px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1); 
+            border-left: 6px solid var(--success);
+            min-width: 300px;
+            animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
+
+        .spinner { animation: rotate 1s linear infinite; display: none; width: 22px; height: 22px; }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<div class="card">
+    <div class="header-section">
+        <div class="icon-box"><i class="fas fa-user-plus"></i></div>
+        <h2>Registro</h2>
+        <span class="subtitle">Gestión de Talento Humano</span>
+    </div>
+
+    <div id="reloj">--:--:-- --</div>
+    
+    <div class="form-group">
+        <label>Nombres Completos</label>
+        <div class="input-wrapper">
+            <input type="text" id="txtNombres" placeholder="Ej. Juan Andrés" spellcheck="false">
+            <i class="fas fa-signature"></i>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label>Apellidos Completos</label>
+        <div class="input-wrapper">
+            <input type="text" id="txtApellidos" placeholder="Ej. Pérez García" spellcheck="false">
+            <i class="fas fa-address-book"></i>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Área Designada</label>
+        <div class="input-wrapper">
+            <select id="selArea">
+                <option value="" disabled selected>Seleccione el área destino</option>
+                <option value="Ventas">Ventas</option>
+                <option value="Finanzas">Finanzas</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Logística">Logística</option>
+                <option value="Mejora Continua">Mejora Continua</option>
+                <option value="Recursos Humanos">Recursos Humanos</option>
+            </select>
+            <i class="fas fa-layer-group"></i>
+        </div>
+    </div>
+
+    <button class="btn-add" id="btnGuardar" onclick="registrar()">
+        <i class="fas fa-check-circle" id="btnIcon"></i>
+        <i class="fas fa-circle-notch spinner" id="btnSpinner"></i>
+        <span>Guardar Registro</span>
+    </button>
+    
+    <div class="secondary-btns">
+        <button class="btn-nav" onclick="location.href='lista.html'">
+            <i class="fas fa-th-large"></i> Áreas
+        </button>
+        <button class="btn-nav" onclick="location.href='reporte.html'">
+            <i class="fas fa-file-chart-column"></i> Reportes
+        </button>
+    </div>
+</div>
+
+<script>
+    const API_URL = "https://asistencia-recursos.onrender.com/api/practicantes";
+
+    function updateClock() {
+        document.getElementById('reloj').innerText = new Date().toLocaleTimeString('es-PE', { 
+            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
+        }).toUpperCase();
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function mostrarToast(mensaje, tipo = 'success') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast`;
+        toast.style.borderLeftColor = tipo === 'success' ? 'var(--success)' : '#f43f5e';
+        
+        toast.innerHTML = `
+            <i class="fas ${tipo === 'success' ? 'fa-check-circle' : 'fa-circle-xmark'}" 
+               style="color: ${tipo === 'success' ? 'var(--success)' : '#f43f5e'}; font-size: 1.5rem;"></i> 
+            <div>
+                <strong style="display:block; font-size:0.85rem">${tipo === 'success' ? 'Operación Exitosa' : 'Aviso'}</strong>
+                <span style="color:var(--text-muted); font-size:0.8rem">${mensaje}</span>
+            </div>`;
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(20px)';
+            toast.style.transition = '0.5s';
+            setTimeout(() => toast.remove(), 500);
+        }, 5000);
+    }
+
+    async function registrar() {
+        const btn = document.getElementById('btnGuardar');
+        const icon = document.getElementById('btnIcon');
+        const spinner = document.getElementById('btnSpinner');
+        const txtBtn = btn.querySelector('span');
+
+        const nom = document.getElementById('txtNombres').value.trim();
+        const ape = document.getElementById('txtApellidos').value.trim();
+        const are = document.getElementById('selArea').value;
+
+        if(!nom || !ape || !are) {
+            mostrarToast("Por favor, complete todos los campos requeridos", "error");
+            return;
+        }
+
+        btn.disabled = true;
+        icon.style.display = 'none';
+        spinner.style.display = 'block';
+        txtBtn.innerText = "Procesando...";
+
+        try {
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nombres: nom, apellidos: ape, area: are })
+            });
+            
+            if(res.ok) {
+                // MENSAJE MEJORADO: Nombres + Apellidos + Área
+                mostrarToast(`Se ha registrado a <b>${nom.toUpperCase()} ${ape.toUpperCase()}</b> en el área de <b>${are}</b>.`);
+                
+                document.getElementById('txtNombres').value = "";
+                document.getElementById('txtApellidos').value = "";
+                document.getElementById('selArea').value = "";
+            } else {
+                mostrarToast("No se pudo completar el registro", "error");
+            }
+        } catch (e) { 
+            mostrarToast("Error de conexión con el servidor", "error"); 
+        } finally {
+            btn.disabled = false;
+            icon.style.display = 'block';
+            spinner.style.display = 'none';
+            txtBtn.innerText = "Guardar Registro";
+        }
+    }
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RRHH | Registro de Practicantes</title>
+    <title>RRHH | Inicio de Sesión</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
             --text-muted: #64748b;
             --input-bg: #f8fafc;
             --border-color: #e2e8f0;
-            --success: #10b981;
+            --error: #f43f5e;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -38,7 +38,7 @@
             padding: 45px 40px; 
             border-radius: 40px; 
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08); 
-            width: 100%; max-width: 480px; 
+            width: 100%; max-width: 420px; 
             border: 1px solid #ffffff;
             position: relative;
         }
@@ -60,13 +60,6 @@
 
         h2 { font-weight: 800; font-size: 1.75rem; letter-spacing: -1px; color: var(--text-main); margin-bottom: 4px; }
         .subtitle { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; }
-        
-        #reloj { 
-            text-align: center; font-size: 1.1rem; color: var(--primary); 
-            margin: 20px 0 30px; font-weight: 700; 
-            background: #f8fafc; padding: 12px; border-radius: 20px; 
-            border: 1px dashed var(--border-color); letter-spacing: 1px;
-        }
 
         .form-group { margin-bottom: 22px; }
         label { display: block; font-weight: 700; color: var(--text-main); margin-bottom: 10px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; padding-left: 5px; }
@@ -74,7 +67,7 @@
         .input-wrapper { position: relative; }
         .input-wrapper i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.1rem; }
         
-        input, select { 
+        input { 
             width: 100%; padding: 16px 20px 16px 55px; 
             border: 1.5px solid var(--border-color); border-radius: 18px; 
             outline: none; transition: 0.3s; font-size: 0.95rem; 
@@ -82,9 +75,9 @@
             color: var(--text-main);
         }
 
-        input:focus, select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+        input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
 
-        .btn-add { 
+        .btn-login { 
             width: 100%; padding: 18px; border: none; border-radius: 20px; 
             color: white; font-weight: 700; cursor: pointer; transition: 0.3s; 
             font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 12px;
@@ -93,167 +86,107 @@
             margin-top: 10px; text-transform: uppercase; letter-spacing: 1px;
         }
 
-        .btn-add:hover { transform: translateY(-2px); background: #4f46e5; }
+        .btn-login:hover { transform: translateY(-2px); background: #4f46e5; }
+        .btn-login:disabled { background: var(--text-muted); cursor: not-allowed; opacity: 0.7; }
 
-        .secondary-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
-        .btn-nav { background: #fff; color: var(--text-main); border: 1.5px solid var(--border-color); padding: 14px; border-radius: 18px; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; }
-
-        /* Toast Profesional Mejorado */
-        #toast-container { position: fixed; top: 30px; right: 30px; z-index: 9999; }
-        .toast { 
-            background: white; padding: 20px 25px; border-radius: 24px; margin-bottom: 15px; 
-            display: flex; align-items: center; gap: 15px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1); 
-            border-left: 6px solid var(--success);
-            min-width: 300px;
-            animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        #error-msg {
+            background: #fff1f2; color: var(--error);
+            padding: 12px; border-radius: 15px; font-size: 0.85rem;
+            text-align: center; margin-bottom: 20px; font-weight: 600;
+            display: none; border: 1px solid rgba(244, 63, 94, 0.2);
         }
-        @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
 
-        .spinner { animation: rotate 1s linear infinite; display: none; width: 22px; height: 22px; }
+        .spinner { animation: rotate 1s linear infinite; display: none; width: 20px; height: 20px; }
         @keyframes rotate { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-<div id="toast-container"></div>
-
 <div class="card">
     <div class="header-section">
-        <div class="icon-box"><i class="fas fa-user-plus"></i></div>
-        <h2>Registro</h2>
-        <span class="subtitle">Gestión de Talento Humano</span>
+        <div class="icon-box"><i class="fas fa-lock"></i></div>
+        <h2>Acceso Privado</h2>
+        <span class="subtitle">Panel de Control RRHH</span>
     </div>
 
-    <div id="reloj">--:--:-- --</div>
-    
-    <div class="form-group">
-        <label>Nombres Completos</label>
-        <div class="input-wrapper">
-            <input type="text" id="txtNombres" placeholder="Ej. Juan Andrés" spellcheck="false">
-            <i class="fas fa-signature"></i>
-        </div>
-    </div>
-    
-    <div class="form-group">
-        <label>Apellidos Completos</label>
-        <div class="input-wrapper">
-            <input type="text" id="txtApellidos" placeholder="Ej. Pérez García" spellcheck="false">
-            <i class="fas fa-address-book"></i>
-        </div>
-    </div>
+    <div id="error-msg">Credenciales incorrectas</div>
 
-    <div class="form-group">
-        <label>Área Designada</label>
-        <div class="input-wrapper">
-            <select id="selArea">
-                <option value="" disabled selected>Seleccione el área destino</option>
-                <option value="Ventas">Ventas</option>
-                <option value="Finanzas">Finanzas</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Logística">Logística</option>
-                <option value="Mejora Continua">Mejora Continua</option>
-                <option value="Recursos Humanos">Recursos Humanos</option>
-            </select>
-            <i class="fas fa-layer-group"></i>
+    <form id="loginForm">
+        <div class="form-group">
+            <label>Correo Electrónico</label>
+            <div class="input-wrapper">
+                <input type="email" id="txtEmail" placeholder="admin@gmail.com" required>
+                <i class="fas fa-envelope"></i>
+            </div>
         </div>
-    </div>
+        
+        <div class="form-group">
+            <label>Contraseña</label>
+            <div class="input-wrapper">
+                <input type="password" id="txtPass" placeholder="••••••••" required>
+                <i class="fas fa-key"></i>
+            </div>
+        </div>
 
-    <button class="btn-add" id="btnGuardar" onclick="registrar()">
-        <i class="fas fa-check-circle" id="btnIcon"></i>
-        <i class="fas fa-circle-notch spinner" id="btnSpinner"></i>
-        <span>Guardar Registro</span>
-    </button>
-    
-    <div class="secondary-btns">
-        <button class="btn-nav" onclick="location.href='lista.html'">
-            <i class="fas fa-th-large"></i> Áreas
+        <button type="submit" class="btn-login" id="btnLogin">
+            <i class="fas fa-sign-in-alt" id="btnIcon"></i>
+            <i class="fas fa-circle-notch spinner" id="btnSpinner"></i>
+            <span>Entrar al Sistema</span>
         </button>
-        <button class="btn-nav" onclick="location.href='reporte.html'">
-            <i class="fas fa-file-chart-column"></i> Reportes
-        </button>
-    </div>
+    </form>
 </div>
 
 <script>
-    const API_URL = "https://asistencia-recursos.onrender.com/api/practicantes";
+    // URL ACTUALIZADA PARA RENDER
+    const API_LOGIN_URL = "https://asistencia-recursos-1.onrender.com/api/login"; 
 
-    function updateClock() {
-        document.getElementById('reloj').innerText = new Date().toLocaleTimeString('es-PE', { 
-            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
-        }).toUpperCase();
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    function mostrarToast(mensaje, tipo = 'success') {
-        const container = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        toast.className = `toast`;
-        toast.style.borderLeftColor = tipo === 'success' ? 'var(--success)' : '#f43f5e';
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
         
-        toast.innerHTML = `
-            <i class="fas ${tipo === 'success' ? 'fa-check-circle' : 'fa-circle-xmark'}" 
-               style="color: ${tipo === 'success' ? 'var(--success)' : '#f43f5e'}; font-size: 1.5rem;"></i> 
-            <div>
-                <strong style="display:block; font-size:0.85rem">${tipo === 'success' ? 'Operación Exitosa' : 'Aviso'}</strong>
-                <span style="color:var(--text-muted); font-size:0.8rem">${mensaje}</span>
-            </div>`;
-        container.appendChild(toast);
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            toast.style.transform = 'translateX(20px)';
-            toast.style.transition = '0.5s';
-            setTimeout(() => toast.remove(), 500);
-        }, 5000);
-    }
-
-    async function registrar() {
-        const btn = document.getElementById('btnGuardar');
+        const btn = document.getElementById('btnLogin');
         const icon = document.getElementById('btnIcon');
         const spinner = document.getElementById('btnSpinner');
-        const txtBtn = btn.querySelector('span');
-
-        const nom = document.getElementById('txtNombres').value.trim();
-        const ape = document.getElementById('txtApellidos').value.trim();
-        const are = document.getElementById('selArea').value;
-
-        if(!nom || !ape || !are) {
-            mostrarToast("Por favor, complete todos los campos requeridos", "error");
-            return;
-        }
+        const errorDiv = document.getElementById('error-msg');
+        
+        const email = document.getElementById('txtEmail').value;
+        const password = document.getElementById('txtPass').value;
 
         btn.disabled = true;
         icon.style.display = 'none';
         spinner.style.display = 'block';
-        txtBtn.innerText = "Procesando...";
+        errorDiv.style.display = 'none';
 
         try {
-            const res = await fetch(API_URL, {
+            const response = await fetch(API_LOGIN_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nombres: nom, apellidos: ape, area: are })
+                body: JSON.stringify({ email, password })
             });
-            
-            if(res.ok) {
-                // MENSAJE MEJORADO: Nombres + Apellidos + Área
-                mostrarToast(`Se ha registrado a <b>${nom.toUpperCase()} ${ape.toUpperCase()}</b> en el área de <b>${are}</b>.`);
-                
-                document.getElementById('txtNombres').value = "";
-                document.getElementById('txtApellidos').value = "";
-                document.getElementById('selArea').value = "";
+
+            const data = await response.json();
+
+            if (response.ok && data.token) {
+                localStorage.setItem('token', data.token);
+                // Si renombraste el index a registro.html, cámbialo aquí también:
+                window.location.href = 'index.html'; 
             } else {
-                mostrarToast("No se pudo completar el registro", "error");
+                errorDiv.innerText = data.error || "Acceso denegado";
+                errorDiv.style.display = 'block';
             }
-        } catch (e) { 
-            mostrarToast("Error de conexión con el servidor", "error"); 
+        } catch (err) {
+            errorDiv.innerText = "Error de conexión con el servidor";
+            errorDiv.style.display = 'block';
         } finally {
             btn.disabled = false;
             icon.style.display = 'block';
             spinner.style.display = 'none';
-            txtBtn.innerText = "Guardar Registro";
         }
+    });
+
+    if(localStorage.getItem('token')) {
+        window.location.href = 'index.html';
     }
 </script>
+
 </body>
 </html>
