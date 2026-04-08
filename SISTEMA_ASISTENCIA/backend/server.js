@@ -1,16 +1,50 @@
 const express = require('express');
 const { Pool } = require('pg');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// CONFIGURACIÓN JWT - Usa una clave segura en producción
+const JWT_SECRET = 'rrhh_secret_key_2026';
 
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false }
 });
 
+// --- MIDDLEWARE DE AUTENTICACIÓN ---
+const verificarToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) return res.status(403).json({ error: 'Acceso denegado. Inicie sesión.' });
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch (err) {
+        return res.status(401).json({ error: 'Sesión expirada o inválida' });
+    }
+};
+
+// --- RUTA DE LOGIN ---
+app.post('/api/login', (req, res) => {
+    const { email, password } = req.body;
+
+    // Validación con tus credenciales específicas
+    if (email === 'admin@gmail.com' && password === 'rrhh123') {
+        const token = jwt.sign({ role: 'admin' }, JWT_SECRET, { expiresIn: '8h' });
+        res.json({ success: true, token });
+    } else {
+        res.status(401).json({ error: 'Correo o contraseña incorrectos' });
+    }
+});
+
+// --- RUTAS DE PRACTICANTES ---
 app.get('/api/practicantes', async (req, res) => {
     const { area } = req.query;
     try {
@@ -66,66 +100,55 @@ app.post('/api/asistencia/:id', async (req, res) => {
     }
 });
 
-app.get('/api/reporte', async (req, res) => {
+// --- RUTAS PROTEGIDAS (Solo Admin) ---
+app.get('/api/reporte', verificarToken, async (req, res) => {
     try {
         const result = await pool.query(`
             SELECT 
-                p.id_practicantes, 
-                p.nombres, 
-                p.apellidos, 
-                p.area,
+                p.id_practicantes, p.nombres, p.apellidos, p.area,
                 MAX(a.hora_entrada) AS hora_entrada, 
                 MAX(a.hora_salida) AS hora_salida,
-                COALESCE(
-                    TO_CHAR(
-                        (SUM(
-                            CEIL(EXTRACT(EPOCH FROM (COALESCE(a.hora_salida, a.hora_entrada) - a.hora_entrada)) / 60)
-                        ) * INTERVAL '1 minute'), 
-                        'HH24:MI:SS'
-                    ), 
-                    '00:00:00'
-                ) AS horas_acumuladas
+                COALESCE(TO_CHAR((SUM(CEIL(EXTRACT(EPOCH FROM (COALESCE(a.hora_salida, a.hora_entrada) - a.hora_entrada)) / 60)) * INTERVAL '1 minute'), 'HH24:MI:SS'), '00:00:00') AS horas_acumuladas
             FROM practicantes p 
             LEFT JOIN asistencia a ON p.id_practicantes = a.id_practicantes
             GROUP BY p.id_practicantes, p.nombres, p.apellidos, p.area
             ORDER BY p.apellidos ASC`);
         res.json(result.rows);
     } catch (error) {
-        console.error("Error en reporte SQL:", error);
         res.status(500).json({ error: 'Error en reporte' });
     }
 });
 
-app.put('/api/practicantes/:id', async (req, res) => {
+app.put('/api/practicantes/:id', verificarToken, async (req, res) => {
     const { id } = req.params;
     const { nombres, apellidos, area } = req.body;
     try {
         await pool.query('UPDATE practicantes SET nombres=$1, apellidos=$2, area=$3 WHERE id_practicantes=$4', [nombres, apellidos, area, id]);
         res.json({ message: 'Actualizado' });
     } catch (error) {
-        res.status(500).json({ error: 'Error' });
+        res.status(500).json({ error: 'Error al actualizar' });
     }
 });
 
-app.delete('/api/practicantes/:id', async (req, res) => {
+app.delete('/api/practicantes/:id', verificarToken, async (req, res) => {
     const { id } = req.params;
     try {
         await pool.query('DELETE FROM asistencia WHERE id_practicantes=$1', [id]);
         await pool.query('DELETE FROM practicantes WHERE id_practicantes=$1', [id]);
-        res.json({ message: 'Eliminado' });
+        res.json({ message: 'Eliminado correctamente' });
     } catch (error) {
-        res.status(500).json({ error: 'Error' });
+        res.status(500).json({ error: 'Error al eliminar' });
     }
 });
 
-app.delete('/api/reset', async (req, res) => {
+app.delete('/api/reset', verificarToken, async (req, res) => {
     try {
         await pool.query('TRUNCATE TABLE asistencia RESTART IDENTITY CASCADE');
-        res.json({ message: '🔄 Reiniciado' });
+        res.json({ message: '🔄 Sistema reiniciado' });
     } catch (error) {
         res.status(500).json({ error: 'Error al reiniciar' });
     }
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Puerto ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Servidor en puerto ${PORT}`));
