@@ -20,20 +20,6 @@ const pool = new Pool({
     ssl: { rejectUnauthorized: false }
 });
 
-// --- MIDDLEWARE DE AUTENTICACIÓN ---
-const verificarToken = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    if (!token) return res.status(403).json({ error: 'Acceso denegado. Inicie sesión.' });
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        req.user = decoded;
-        next();
-    } catch (err) {
-        return res.status(401).json({ error: 'Sesión expirada o inválida' });
-    }
-};
-
 // --- RUTA DE LOGIN (admin@rrhh.com / rrhh123) ---
 app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
@@ -45,47 +31,25 @@ app.post('/api/login', (req, res) => {
     }
 });
 
-// --- RUTAS DE PRACTICANTES ---
+// --- RUTAS DE PRACTICANTES Y ASISTENCIA (Lógica existente) ---
 app.get('/api/practicantes', async (req, res) => {
-    const { area } = req.query;
     try {
-        let query = 'SELECT * FROM practicantes';
-        let params = [];
-        if (area) {
-            query += ' WHERE area = $1';
-            params.push(area);
-        }
-        query += ' ORDER BY apellidos ASC';
-        const result = await pool.query(query, params);
+        const result = await pool.query('SELECT * FROM practicantes ORDER BY apellidos ASC');
         res.json(result.rows);
     } catch (error) {
         res.status(500).json({ error: 'Error al obtener datos' });
     }
 });
 
-app.post('/api/practicantes', async (req, res) => {
-    const { nombres, apellidos, area } = req.body;
-    try {
-        const result = await pool.query(
-            'INSERT INTO practicantes (nombres, apellidos, area) VALUES ($1, $2, $3) RETURNING *',
-            [nombres, apellidos, area]
-        );
-        res.status(201).json({ message: '✅ Practicante registrado', practicante: result.rows[0] });
-    } catch (error) {
-        res.status(500).json({ error: 'Error al guardar' });
-    }
-});
-
 app.post('/api/asistencia/:id', async (req, res) => {
     const { id } = req.params;
-    const tipo = req.body.tipo_registro || req.body.tipo;
+    const { tipo } = req.body;
     try {
         if (tipo === 'entrada') {
             await pool.query('INSERT INTO asistencia (id_practicantes, hora_entrada) VALUES ($1, CURRENT_TIMESTAMP)', [id]);
             res.json({ message: '🕒 Entrada registrada' });
         } else {
-            const check = await pool.query(`UPDATE asistencia SET hora_salida = CURRENT_TIMESTAMP WHERE id_practicantes = $1 AND hora_salida IS NULL RETURNING id`, [id]);
-            if (check.rows.length === 0) return res.status(400).json({ message: 'No hay entrada abierta' });
+            await pool.query('UPDATE asistencia SET hora_salida = CURRENT_TIMESTAMP WHERE id_practicantes = $1 AND hora_salida IS NULL', [id]);
             res.json({ message: '✅ Salida registrada' });
         }
     } catch (error) {
@@ -93,26 +57,10 @@ app.post('/api/asistencia/:id', async (req, res) => {
     }
 });
 
-// --- RUTAS DE REPORTE (PROTEGIDAS) ---
-app.get('/api/reporte', verificarToken, async (req, res) => {
-    try {
-        const result = await pool.query(`
-            SELECT p.id_practicantes, p.nombres, p.apellidos, p.area,
-            MAX(a.hora_entrada) AS hora_entrada, MAX(a.hora_salida) AS hora_salida,
-            COALESCE(TO_CHAR((SUM(CEIL(EXTRACT(EPOCH FROM (COALESCE(a.hora_salida, a.hora_entrada) - a.hora_entrada)) / 60)) * INTERVAL '1 minute'), 'HH24:MI:SS'), '00:00:00') AS horas_acumuladas
-            FROM practicantes p LEFT JOIN asistencia a ON p.id_practicantes = a.id_practicantes
-            GROUP BY p.id_practicantes, p.nombres, p.apellidos, p.area ORDER BY p.apellidos ASC`);
-        res.json(result.rows);
-    } catch (error) {
-        res.status(500).json({ error: 'Error en reporte' });
-    }
-});
-
-// --- LA CORRECCIÓN DEFINITIVA PARA RENDER ---
-// Usamos '*' sin paréntesis o '/*path' dependiendo de la versión, 
-// pero en Express 4, esto suele ser lo más seguro:
-app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../frontend/index.html'));
+// --- CORRECCIÓN DEFINITIVA PARA NODE 22 ---
+// En lugar de '*' o '(.*)', usamos esta expresión regular para capturar todo
+app.get(/^\/(?!api).*/, (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
