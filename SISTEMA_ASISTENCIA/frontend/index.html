@@ -137,8 +137,13 @@
 </div>
 
 <script>
-    // URL ACTUALIZADA PARA RENDER
+    // URL DE TU PROYECTO EN RENDER
     const API_LOGIN_URL = "https://asistencia-recursos-1.onrender.com/api/login"; 
+
+    // Si ya tiene sesión, mandarlo al registro
+    if(localStorage.getItem('token')) {
+        window.location.href = 'registro.html';
+    }
 
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -167,8 +172,7 @@
 
             if (response.ok && data.token) {
                 localStorage.setItem('token', data.token);
-                // Si renombraste el index a registro.html, cámbialo aquí también:
-                window.location.href = 'index.html'; 
+                window.location.href = 'registro.html'; 
             } else {
                 errorDiv.innerText = data.error || "Acceso denegado";
                 errorDiv.style.display = 'block';
@@ -182,10 +186,6 @@
             spinner.style.display = 'none';
         }
     });
-
-    if(localStorage.getItem('token')) {
-        window.location.href = 'index.html';
-    }
 </script>
 
 </body>
