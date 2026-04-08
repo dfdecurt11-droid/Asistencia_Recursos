@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>RRHH | Registro de Practicantes</title>
     
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3456/3456426.png">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
@@ -179,7 +181,8 @@
     const API_URL = "https://asistencia-recursos.onrender.com/api/practicantes";
 
     function updateClock() {
-        document.getElementById('reloj').innerText = new Date().toLocaleTimeString('es-PE', { 
+        const now = new Date();
+        document.getElementById('reloj').innerText = now.toLocaleTimeString('es-PE', { 
             hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
         }).toUpperCase();
     }
@@ -236,9 +239,7 @@
             });
             
             if(res.ok) {
-                // MENSAJE MEJORADO: Nombres + Apellidos + Área
                 mostrarToast(`Se ha registrado a <b>${nom.toUpperCase()} ${ape.toUpperCase()}</b> en el área de <b>${are}</b>.`);
-                
                 document.getElementById('txtNombres').value = "";
                 document.getElementById('txtApellidos').value = "";
                 document.getElementById('selArea').value = "";

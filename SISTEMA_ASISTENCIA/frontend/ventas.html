@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RRHH | Ventas</title>
+    <title>RRHH | División Ventas</title>
     
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/9440/9440939.png">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     
@@ -30,9 +32,10 @@
             background-color: var(--dark-bg);
             color: white;
             padding: clamp(15px, 4vw, 40px);
+            overflow-x: hidden;
         }
 
-        /* Orbes decorativos */
+        /* Orbes decorativos animados */
         .orb {
             position: fixed;
             width: 500px; height: 500px;
@@ -92,7 +95,7 @@
             border-radius: 15px; 
             border: 1px solid var(--primary);
             color: var(--primary);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             box-shadow: 0 0 15px var(--primary-glow);
         }
 
@@ -100,11 +103,11 @@
         .title-section p { color: var(--primary); font-weight: 800; font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 5px; }
         .title-section h2 { font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; letter-spacing: -1.5px; }
 
-        /* Lista */
+        /* Lista de practicantes */
         #lista-asistencia { 
             display: grid; 
             gap: 15px; 
-            max-height: 50vh; 
+            max-height: 55vh; 
             overflow-y: auto; 
             padding-right: 10px;
         }
@@ -132,7 +135,6 @@
         .info strong { font-size: 1.1rem; color: #fff; display: block; margin-bottom: 4px; letter-spacing: -0.5px; }
         .info small { color: #64748b; font-weight: 700; font-size: 0.75rem; display: flex; align-items: center; gap: 6px; text-transform: uppercase; }
 
-        /* Acciones */
         .actions { display: flex; gap: 12px; }
 
         .btn-action { 
@@ -156,6 +158,7 @@
         .btn-action:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.2); }
         .btn-action:disabled { opacity: 0.3; cursor: not-allowed; }
 
+        /* Notificaciones flotantes */
         #notification {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             padding: 18px 35px; border-radius: 20px; 
@@ -184,7 +187,7 @@
 
     <div class="container">
         <div class="nav-header">
-            <a href="lista.html" class="btn-back"><i class="fas fa-chevron-left"></i> Volver</a>
+            <a href="index.html" class="btn-back"><i class="fas fa-chevron-left"></i> Volver al Inicio</a>
             <div id="reloj" class="clock-display">00:00:00 --</div>
         </div>
         
@@ -204,10 +207,11 @@
     <script>
         const API_GET = "https://asistencia-recursos.onrender.com/api/practicantes";
         const API_POST = "https://asistencia-recursos.onrender.com/api/asistencia";
-        const AREA = "Ventas";
+        const AREA_FILTRO = "Ventas";
 
         function updateClock() {
-            document.getElementById('reloj').innerText = new Date().toLocaleTimeString('es-PE', { 
+            const now = new Date();
+            document.getElementById('reloj').innerText = now.toLocaleTimeString('es-PE', { 
                 hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
             }).toUpperCase();
         }
@@ -216,8 +220,8 @@
 
         function notify(msg, err = false) {
             const n = document.getElementById('notification');
-            n.style.borderColor = err ? '#ff4444' : '#ff334b';
-            n.innerHTML = `<i class="fas ${err ? 'fa-exclamation-triangle' : 'fa-check-circle'}" style="color: ${err ? '#ff4444' : '#ff334b'}; margin-right:10px;"></i> ${msg}`;
+            n.style.borderColor = err ? '#ef4444' : '#ff334b';
+            n.innerHTML = `<i class="fas ${err ? 'fa-exclamation-triangle' : 'fa-check-circle'}" style="color: ${err ? '#ef4444' : '#ff334b'}; margin-right:10px;"></i> ${msg}`;
             n.style.display = "block";
             setTimeout(() => n.style.display = "none", 3000);
         }
@@ -225,15 +229,20 @@
         async function loadTeam() {
             const container = document.getElementById('lista-asistencia');
             try {
-                const res = await fetch(`${API_GET}?area=${encodeURIComponent(AREA)}`);
+                const res = await fetch(API_GET);
                 const data = await res.json();
                 
-                if(!data.length) {
-                    container.innerHTML = `<p style="text-align:center; padding: 40px; color:#64748b;">No hay asesores asignados a Ventas.</p>`;
+                // Filtrar solo los del área de Ventas
+                const equipoVentas = data.filter(p => p.area.trim() === AREA_FILTRO);
+
+                if(equipoVentas.length === 0) {
+                    container.innerHTML = `<div style="text-align:center; padding: 40px;">
+                        <p style="color:#64748b; font-weight:700;">No hay practicantes registrados en Ventas.</p>
+                    </div>`;
                     return;
                 }
 
-                container.innerHTML = data.sort((a,b) => a.apellidos.localeCompare(b.apellidos)).map(p => `
+                container.innerHTML = equipoVentas.sort((a,b) => a.apellidos.localeCompare(b.apellidos)).map(p => `
                     <div class="card-practicante">
                         <div class="info">
                             <strong>${p.apellidos.toUpperCase()}, ${p.nombres}</strong>
@@ -250,16 +259,19 @@
                     </div>
                 `).join('');
             } catch (e) { 
-                container.innerHTML = `<p style="text-align:center; color:var(--primary);">ERROR AL CARGAR DATOS</p>`;
+                container.innerHTML = `<p style="text-align:center; color:var(--primary); font-weight:800;">ERROR AL CONECTAR CON EL SERVIDOR</p>`;
+                console.error(e);
             }
         }
 
         async function register(id, tipo, btn) {
-            const btns = btn.closest('.actions').querySelectorAll('button');
-            const original = btn.innerHTML;
+            const actionsDiv = btn.closest('.actions');
+            const btns = actionsDiv.querySelectorAll('button');
+            const originalContent = btn.innerHTML;
             
+            // Bloqueo de UI
             btns.forEach(b => b.disabled = true);
-            btn.innerHTML = `<i class="fas fa-sync fa-spin"></i>`;
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
 
             try {
                 const res = await fetch(`${API_POST}/${id}`, { 
@@ -267,13 +279,18 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ tipo_registro: tipo })
                 });
-                if (res.ok) notify(`MARCACIÓN EXITOSA: ${tipo.toUpperCase()}`);
-                else notify("Error en el registro", true);
+
+                if (res.ok) {
+                    notify(`¡REGISTRO DE ${tipo.toUpperCase()} EXITOSO!`);
+                } else {
+                    const errorData = await res.json();
+                    notify(errorData.message || "Error al procesar", true);
+                }
             } catch (e) { 
-                notify("Error de conexión", true); 
+                notify("Fallo de red: Reintente luego", true); 
             } finally {
                 btns.forEach(b => b.disabled = false);
-                btn.innerHTML = original;
+                btn.innerHTML = originalContent;
             }
         }
 

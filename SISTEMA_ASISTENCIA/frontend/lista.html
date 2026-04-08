@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>RRHH | Gestión de Áreas</title>
     
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2329/2329087.png">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
@@ -42,10 +44,10 @@
             display: flex;
             flex-direction: column;
             padding: 1rem;
-            position: relative; /* Para que el botón se posicione respecto a esto */
+            position: relative;
         }
 
-        /* --- BOTÓN VOLVER (ESQUINA SUPERIOR IZQUIERDA) --- */
+        /* --- BOTÓN VOLVER --- */
         .btn-back-header {
             position: absolute;
             top: 10px;
@@ -73,7 +75,7 @@
 
         .header { 
             text-align: center; 
-            margin-top: 40px; /* Espacio para que no choque con el botón de volver */
+            margin-top: 40px;
         }
         .header h1 { 
             font-size: clamp(1.4rem, 4vh, 2.2rem); 
@@ -160,7 +162,6 @@
         .mejora { --accent-color: var(--c-mejora); }
         .rrhh { --accent-color: var(--c-rrhh); }
 
-        /* Ajuste para móviles */
         @media (max-width: 768px) {
             .container { height: 98vh; padding: 0.8rem; }
             .header { margin-top: 50px; }

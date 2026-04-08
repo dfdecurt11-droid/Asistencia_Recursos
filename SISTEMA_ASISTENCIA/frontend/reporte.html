@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RRHH | Reporte de Practicantes</title>
+    
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1055/1055644.png">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
@@ -321,7 +324,7 @@
                     <td class="mono">${idx + 1}</td>
                     <td>
                         <div class="user-info">
-                            <div class="user-avatar">${p.apellidos[0] || ''}${p.nombres[0] || ''}</div>
+                            <div class="user-avatar">${(p.apellidos[0] || '').toUpperCase()}${(p.nombres[0] || '').toUpperCase()}</div>
                             <div>
                                 <div style="font-weight: 700; font-size: 0.85rem;">${(p.apellidos || '').toUpperCase()}</div>
                                 <div style="color: var(--text-muted); font-size: 0.75rem;">${p.nombres || ''}</div>
@@ -371,7 +374,7 @@
     function openEdit(id) {
         const p = allData.find(x => x.id_practicantes === id);
         if(!p) return;
-        document.getElementById('editId').value = p.id_practicantes;
+        document.getElementById('editId').value = p.id_pract_antes;
         document.getElementById('editNombres').value = p.nombres;
         document.getElementById('editApellidos').value = p.apellidos;
         document.getElementById('editArea').value = p.area.trim();
@@ -419,8 +422,6 @@
 
     // LÓGICA REINICIO
     async function confirmReset() {
-        // Aquí llamarías a tu endpoint de limpieza si existe, 
-        // por ahora cerramos y refrescamos para asegurar integridad.
         closeModal('modalResetTable');
         showToast("Ciclo reiniciado correctamente");
         fetchData();
