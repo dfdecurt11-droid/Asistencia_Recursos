@@ -3,269 +3,327 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RRHH | Recursos Humanos</title>
+    <title>ARGRAMETAL | Área Recursos Humanos</title>
     
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/912/912318.png">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
         :root { 
-            --primary: #f472b6; 
-            --primary-soft: rgba(244, 114, 182, 0.1);
-            --bg: #0f172a;
-            --card: rgba(30, 41, 59, 0.7);
-            --text: #f1f5f9;
+            --accent: #f472b6; /* Rose Quartz para RRHH */
+            --bg-dark: #020617;
+            --surface: #0f172a;
+            --surface-alt: #1e293b;
+            --text-main: #f8fafc;
             --text-dim: #94a3b8;
+            --border: rgba(255, 255, 255, 0.06);
             --success: #10b981;
-            --border: rgba(255, 255, 255, 0.08);
+            --error: #ef4444;
         }
         
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body { 
-            background: radial-gradient(circle at bottom left, #2d1b2e, #0f172a 70%);
-            background-attachment: fixed;
-            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 100% 100%, rgba(244, 114, 182, 0.05) 0px, transparent 50%),
+                url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            padding: clamp(1rem, 5vw, 2.5rem);
+            padding: clamp(20px, 5vh, 50px) 20px;
         }
 
-        .container { 
+        .app-container { 
             width: 100%;
-            max-width: 850px;
-            animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            max-width: 1000px;
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        .top-bar {
+        /* --- NAVEGACIÓN --- */
+        .nav-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
         }
 
-        .btn-back {
-            color: var(--text-dim);
+        .btn-return {
             text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 700;
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 10px 20px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            border-radius: 14px;
             transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
-        .btn-back:hover { color: white; background: rgba(255,255,255,0.08); border-color: var(--primary); }
+        .btn-return:hover { color: white; transform: translateX(-5px); }
 
-        #reloj {
+        .clock-display {
             font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
             font-weight: 700;
-            color: var(--primary);
-            font-size: 1.15rem;
-            background: var(--primary-soft);
+            color: var(--accent);
+            background: rgba(244, 114, 182, 0.05);
             padding: 8px 18px;
-            border-radius: 12px;
-            border: 1px solid rgba(244, 114, 182, 0.2);
-            box-shadow: 0 0 20px rgba(244, 114, 182, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(244, 114, 182, 0.15);
         }
 
-        .main-header { margin-bottom: 35px; }
-        .main-header p { font-size: 0.7rem; color: var(--primary); text-transform: uppercase; letter-spacing: 3px; font-weight: 800; margin-bottom: 8px; }
-        .main-header h1 { font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 800; letter-spacing: -1px; }
+        /* --- TÍTULOS --- */
+        .header-main { margin-bottom: 35px; }
+        .header-main span { 
+            font-size: 0.75rem; 
+            color: var(--accent); 
+            text-transform: uppercase; 
+            letter-spacing: 4px; 
+            font-weight: 800; 
+        }
+        .header-main h1 { 
+            font-size: clamp(1.8rem, 5vw, 2.5rem); 
+            font-weight: 800; 
+            letter-spacing: -1.5px; 
+            margin-top: 5px;
+        }
 
-        .list-wrapper {
+        /* --- LISTADO --- */
+        .staff-list {
             display: grid;
-            gap: 14px;
-            max-height: 55vh;
+            gap: 12px;
+            max-height: 58vh;
             overflow-y: auto;
             padding-right: 10px;
         }
 
-        .list-wrapper::-webkit-scrollbar { width: 4px; }
-        .list-wrapper::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+        .staff-list::-webkit-scrollbar { width: 4px; }
+        .staff-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 
-        .user-card {
-            background: var(--card);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+        .staff-card {
+            background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 22px;
-            padding: 22px 28px;
+            border-radius: 16px;
+            padding: 22px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
         }
-        .user-card:hover { border-color: var(--primary); background: rgba(244, 114, 182, 0.03); transform: scale(1.01); }
 
-        .user-info strong { font-size: 1.1rem; display: block; margin-bottom: 5px; color: #fff; }
-        .user-info span { font-size: 0.8rem; color: var(--text-dim); display: flex; align-items: center; gap: 8px; font-weight: 600; }
-        .user-info i { color: var(--primary); font-size: 0.9rem; }
+        .staff-card:hover {
+            border-color: rgba(244, 114, 182, 0.3);
+            background: var(--surface-alt);
+            transform: scale(1.005);
+        }
 
-        .btn-actions { display: flex; gap: 12px; }
+        .staff-info strong { 
+            font-size: 1.15rem; 
+            display: block; 
+            margin-bottom: 4px; 
+            color: #fff; 
+            letter-spacing: -0.3px;
+        }
 
-        .btn {
-            border: none;
-            cursor: pointer;
-            padding: 12px 22px;
-            border-radius: 14px;
-            font-weight: 800;
-            font-size: 0.75rem;
-            text-transform: uppercase;
+        .staff-tag { 
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem; 
+            color: var(--text-dim); 
+            background: rgba(255,255,255,0.03);
+            padding: 3px 8px;
+            border-radius: 5px;
+            border: 1px solid var(--border);
+        }
+
+        /* --- BOTONES --- */
+        .btn-group { display: flex; gap: 10px; }
+
+        .btn-action {
+            height: 44px;
+            min-width: 130px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            background: transparent;
             color: white;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 10px;
-            transition: 0.3s;
-            letter-spacing: 0.5px;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
         }
 
-        .btn-in { background-color: var(--success); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); }
-        .btn-out { background-color: #334155; box-shadow: 0 4px 15px rgba(51, 65, 85, 0.2); }
-        .btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); }
-        .btn:active { transform: scale(0.95); }
-        .btn:disabled { opacity: 0.2; cursor: not-allowed; filter: grayscale(1); }
+        .btn-action:hover:not(:disabled) {
+            background: white;
+            color: var(--bg-dark);
+        }
 
-        #toast {
-            position: fixed; bottom: 30px; right: 30px;
-            padding: 18px 30px; border-radius: 20px;
-            background: #1e293b; color: white;
-            border: 1px solid var(--border);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        .btn-action:disabled {
+            opacity: 0.2;
+            cursor: not-allowed;
+        }
+
+        /* --- TOAST NOTIFICATION --- */
+        #notification-toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            padding: 16px 28px; border-radius: 12px;
+            background: white; color: var(--bg-dark);
             display: none; z-index: 1000;
-            font-size: 0.9rem; font-weight: 700;
-            animation: toastIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 0.8rem; font-weight: 800;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            animation: slideUp 0.3s ease;
         }
 
-        @keyframes toastIn { from { transform: translateY(100px) scale(0.8); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+        @keyframes slideUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
 
-        @media (max-width: 650px) {
-            .user-card { flex-direction: column; text-align: center; gap: 20px; padding: 25px; }
-            .btn-actions { width: 100%; }
-            .btn { flex: 1; justify-content: center; }
-            .top-bar { flex-direction: column-reverse; gap: 15px; }
+        @media (max-width: 750px) {
+            .staff-card { flex-direction: column; text-align: center; gap: 20px; padding: 25px; }
+            .btn-group { width: 100%; }
+            .btn-action { flex: 1; }
+            .nav-header { flex-direction: column-reverse; gap: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <div id="toast"></div>
+    <div id="notification-toast"></div>
 
-    <div class="container">
-        <header class="top-bar">
-            <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i>Volver</a>
-            <div id="reloj">--:--:-- --</div>
+    <div class="app-container">
+        <nav class="nav-header">
+            <a href="lista.html" class="btn-return"><i class="fas fa-arrow-left"></i> Áreas del Sistema</a>
+            <div id="reloj" class="clock-display">00:00:00</div>
+        </nav>
+
+        <header class="header-main">
+            <span>ARGRAMETAL S.A.</span>
+            <h1>AREA <span style="color: var(--accent);">Recursos Humanos</span></h1>
         </header>
 
-        <section class="main-header">
-            <p>People & Culture</p>
-            <h1>Gestión de <span style="color: var(--primary);">RRHH</span></h1>
-        </section>
-
-        <div id="lista-asistencia" class="list-wrapper">
-            <div style="text-align:center; padding: 60px; color: var(--text-dim);">
-                <i class="fas fa-heart fa-beat" style="font-size: 2rem; color: var(--primary); margin-bottom: 15px;"></i>
-                <p style="letter-spacing: 1px; font-weight: 600;">SINCRONIZANDO TALENTO...</p>
+        <main id="lista-asistencia" class="staff-list">
+            <div style="text-align:center; padding: 80px; opacity: 0.4;">
+                <i class="fas fa-circle-notch fa-spin" style="font-size: 1.5rem; color: var(--accent);"></i>
+                <p style="margin-top: 15px; font-weight: 700; font-size: 0.75rem; letter-spacing: 3px;">SINCRONIZANDO DATA...</p>
             </div>
-        </div>
+        </main>
     </div>
 
     <script>
-        const API_URL = "https://asistencia-recursos.onrender.com/api";
-        const AREA = "Recursos Humanos";
+        // CONFIGURACIÓN DE ENDPOINTS
+        const URL_GET = "https://asistencia-recursos.onrender.com/api/practicantes";
+        const URL_POST = "https://asistencia-recursos.onrender.com/api/asistencia";
+        const AREA_OBJETIVO = "Recursos Humanos";
 
-        function updateClock() {
-            const el = document.getElementById('reloj');
+        // Reloj en tiempo real
+        function initClock() {
+            const clockEl = document.getElementById('reloj');
             setInterval(() => {
-                el.textContent = new Date().toLocaleTimeString('es-PE', { 
-                    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
-                }).toUpperCase();
+                clockEl.textContent = new Date().toLocaleTimeString('es-PE', { 
+                    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false 
+                });
             }, 1000);
         }
 
-        function notify(msg, err = false) {
-            const t = document.getElementById('toast');
-            t.style.display = 'block';
-            t.style.borderLeft = `6px solid ${err ? '#ef4444' : '#f472b6'}`;
-            t.innerHTML = `<i class="fas ${err ? 'fa-times-circle' : 'fa-check-circle'}" style="margin-right:10px; color:${err ? '#ef4444' : '#f472b6'}"></i> ${msg}`;
-            setTimeout(() => t.style.display = 'none', 3000);
+        // Sistema de notificaciones centralizado
+        function showNotify(text, isError = false) {
+            const toast = document.getElementById('notification-toast');
+            toast.style.display = 'block';
+            toast.style.background = isError ? '#ef4444' : '#ffffff';
+            toast.style.color = isError ? '#ffffff' : '#020617';
+            toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i> &nbsp; ${text}`;
+            setTimeout(() => toast.style.display = 'none', 3500);
         }
 
-        async function cargarDatos() {
+        // Función Principal: Cargar y Filtrar Personal
+        async function fetchStaff() {
             const container = document.getElementById('lista-asistencia');
             try {
-                const res = await fetch(`${API_URL}/practicantes?area=${encodeURIComponent(AREA)}`);
-                const data = await res.json();
+                const response = await fetch(URL_GET);
+                const allData = await response.json();
+                
+                // Aplicamos la lógica de filtrado por área
+                const filteredStaff = allData.filter(p => p.area.trim() === AREA_OBJETIVO);
 
-                if (!data.length) {
-                    container.innerHTML = `<div style="text-align:center; padding: 40px; opacity:0.5;">
-                        <i class="fas fa-users-slash fa-2x"></i>
-                        <p style="margin-top:10px;">No hay personal asignado a RRHH.</p>
-                    </div>`;
+                if (filteredStaff.length === 0) {
+                    container.innerHTML = `<p style="text-align:center; padding: 40px; color:var(--text-dim);">No hay colaboradores registrados en RRHH.</p>`;
                     return;
                 }
 
-                data.sort((a,b) => a.apellidos.localeCompare(b.apellidos));
-
-                container.innerHTML = data.map(p => `
-                    <div class="user-card">
-                        <div class="user-info">
+                // Renderizado dinámico ordenado por apellidos
+                container.innerHTML = filteredStaff.sort((a,b) => a.apellidos.localeCompare(b.apellidos)).map(p => `
+                    <div class="staff-card">
+                        <div class="staff-info">
                             <strong>${p.apellidos.toUpperCase()}, ${p.nombres}</strong>
-                            <span><i class="fas fa-fingerprint"></i> STAFF ID: ${p.id_practicantes}</span>
+                            <span class="staff-tag">ID: ${String(p.id_practicantes).padStart(4, '0')} • STAFF</span>
                         </div>
-                        <div class="btn-actions">
-                            <button class="btn btn-in" onclick="marcar(${p.id_practicantes}, 'entrada', this)">
-                                <i class="fas fa-clock"></i> Entrada
+                        <div class="btn-group">
+                            <button class="btn-action" onclick="sendRegistry(${p.id_practicantes}, 'entrada', this)">
+                                Entrada
                             </button>
-                            <button class="btn btn-out" onclick="marcar(${p.id_practicantes}, 'salida', this)">
-                                <i class="fas fa-door-open"></i> Salida
+                            <button class="btn-action" onclick="sendRegistry(${p.id_practicantes}, 'salida', this)">
+                                Salida
                             </button>
                         </div>
                     </div>
                 `).join('');
-            } catch (e) {
-                notify("Fallo al conectar con el servidor", true);
-                container.innerHTML = `<p style="text-align:center; color:#ef4444; font-weight:700;">ERROR DE CONEXIÓN</p>`;
+
+            } catch (error) {
+                showNotify("Error crítico de conexión", true);
+                container.innerHTML = `<p style="text-align:center; color:#ef4444; font-weight:800;">ERROR: SERVIDOR NO DISPONIBLE</p>`;
             }
         }
 
-        async function marcar(id, tipo, btn) {
-            const btns = btn.closest('.btn-actions').querySelectorAll('button');
-            const originalHTML = btn.innerHTML;
-            
-            btns.forEach(b => b.disabled = true);
-            btn.innerHTML = `<i class="fas fa-sync fa-spin"></i>`;
+        // Función de Marcación (POST)
+        async function sendRegistry(id, tipo, button) {
+            const parent = button.closest('.btn-group');
+            const allBtns = parent.querySelectorAll('button');
+            const originalText = button.innerText;
+
+            // Bloqueo de UI para evitar doble envío
+            allBtns.forEach(b => b.disabled = true);
+            button.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
 
             try {
-                const res = await fetch(`${API_URL}/asistencia/${id}`, {
+                const res = await fetch(`${URL_POST}/${id}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ tipo_registro: tipo })
                 });
-                
-                if (res.ok) notify(`¡Marcación de ${tipo} registrada!`);
-                else notify("El servidor rechazó el registro", true);
+
+                if (res.ok) {
+                    showNotify(`REGISTRO DE ${tipo.toUpperCase()} EXITOSO`);
+                } else {
+                    const errorMsg = await res.json();
+                    showNotify(errorMsg.message || "Acción rechazada", true);
+                }
             } catch (e) {
-                notify("Error de red crítico", true);
+                showNotify("Fallo de red", true);
             } finally {
+                // Restauración de botones
                 setTimeout(() => {
-                    btns.forEach(b => b.disabled = false);
-                    btn.innerHTML = originalHTML;
+                    allBtns.forEach(b => b.disabled = false);
+                    button.innerText = originalText;
                 }, 500);
             }
         }
 
-        window.onload = () => { updateClock(); cargarDatos(); };
+        // Ejecución al cargar
+        window.onload = () => {
+            initClock();
+            fetchStaff();
+        };
     </script>
 </body>
 </html>

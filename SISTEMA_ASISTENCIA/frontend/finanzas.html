@@ -3,267 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RRHH | Finanzas</title>
+    <title>ARGRAMETAL | Área Finanzas</title>
     
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2422/2422796.png">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
         :root { 
-            --accent: #10b981; /* Verde Finanzas oficial */
-            --accent-glow: rgba(16, 185, 129, 0.2);
-            --primary-bg: #020617;
-            --card-bg: rgba(15, 23, 42, 0.8);
-            --border: rgba(255, 255, 255, 0.08);
+            --accent: #10b981; /* Verde Finanzas */
+            --bg-dark: #020617;
+            --surface: #0f172a;
+            --surface-alt: #1e293b;
             --text-main: #f8fafc;
             --text-dim: #94a3b8;
-            --glass-blur: blur(25px);
+            --border: rgba(255, 255, 255, 0.08);
+            --glow: rgba(16, 185, 129, 0.15);
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            min-height: 100vh;
-            background-color: var(--primary-bg);
+            background-color: var(--bg-dark);
             background-image: 
-                radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(30, 58, 138, 0.25) 0px, transparent 50%);
-            background-attachment: fixed;
+                radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
+                url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
             color: var(--text-main);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
-            padding: clamp(1rem, 3vw, 2rem);
+            padding: clamp(20px, 5vh, 50px) 20px;
         }
 
-        .app-container { 
-            width: 100%; 
-            max-width: 900px; 
-            animation: fadeIn 0.6s ease-out;
+        .container { 
+            width: 100%;
+            max-width: 1000px;
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- NAVEGACIÓN PROFESIONAL --- */
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
 
         .btn-back {
-            display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
-            color: var(--text-dim); font-size: 0.8rem; font-weight: 800;
-            margin-bottom: 2rem; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            text-transform: uppercase; letter-spacing: 1.5px;
-            background: rgba(255,255,255,0.03); padding: 10px 20px; border-radius: 50px;
+            text-decoration: none;
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s ease;
+        }
+        .btn-back:hover { color: var(--accent); transform: translateX(-5px); }
+
+        .clock-display {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent);
+            background: rgba(16, 185, 129, 0.05);
+            padding: 8px 18px;
+            border-radius: 10px;
+            border: 1px solid var(--glow);
+            text-shadow: 0 0 10px var(--glow);
+        }
+
+        /* --- ENCABEZADO DE ÁREA --- */
+        .header-section { margin-bottom: 35px; }
+        .header-section span { 
+            font-size: 0.75rem; 
+            color: var(--accent); 
+            text-transform: uppercase; 
+            letter-spacing: 4px; 
+            font-weight: 800; 
+        }
+        .header-section h1 { 
+            font-size: clamp(1.8rem, 5vw, 2.5rem); 
+            font-weight: 800; 
+            letter-spacing: -1.5px; 
+            margin-top: 5px;
+        }
+
+        /* --- LISTADO DE SISTEMA --- */
+        .staff-grid {
+            display: grid;
+            gap: 12px;
+            max-height: 58vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .staff-grid::-webkit-scrollbar { width: 4px; }
+        .staff-grid::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+        .staff-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 22px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .staff-card:hover {
+            border-color: rgba(16, 185, 129, 0.3);
+            background: var(--surface-alt);
+            transform: translateX(5px);
+        }
+
+        .staff-info strong { 
+            font-size: 1.15rem; 
+            display: block; 
+            margin-bottom: 4px; 
+            color: #fff; 
+        }
+
+        .staff-tag { 
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem; 
+            color: var(--text-dim); 
+            background: rgba(255,255,255,0.03);
+            padding: 3px 8px;
+            border-radius: 5px;
             border: 1px solid var(--border);
         }
-        .btn-back:hover { color: white; background: rgba(255,255,255,0.08); transform: translateX(-5px); border-color: var(--accent); }
 
-        .glass-card { 
-            background: var(--card-bg); 
-            backdrop-filter: var(--glass-blur); 
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--border); 
-            border-radius: 35px; 
-            padding: clamp(1.5rem, 5vw, 3rem); 
-            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.6);
-            position: relative; overflow: hidden;
-        }
+        /* --- ACCIONES DE REGISTRO --- */
+        .btn-group { display: flex; gap: 10px; }
 
-        .header-ui { 
-            display: flex; justify-content: space-between; align-items: center; 
-            margin-bottom: 3rem; flex-wrap: wrap; gap: 1.5rem; 
-        }
-
-        .title-group p { 
-            color: var(--accent); font-size: 0.75rem; text-transform: uppercase; 
-            letter-spacing: 4px; font-weight: 800; margin-bottom: 8px;
-        }
-        .title-group h1 { font-size: clamp(1.8rem, 6vw, 2.5rem); font-weight: 800; letter-spacing: -1.5px; }
-
-        #clock { 
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--accent); font-size: clamp(1rem, 4vw, 1.4rem); 
-            background: rgba(16, 185, 129, 0.08); 
-            padding: 12px 24px; border-radius: 18px; 
-            border: 1px solid var(--accent-glow);
-            box-shadow: 0 0 30px var(--accent-glow);
-            font-weight: 700;
-        }
-
-        .list-wrapper { display: grid; gap: 16px; max-height: 55vh; overflow-y: auto; padding-right: 10px; }
-        .list-wrapper::-webkit-scrollbar { width: 6px; }
-        .list-wrapper::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-
-        .user-item { 
-            background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border);
-            border-radius: 24px; padding: 1.5rem; display: grid;
-            grid-template-columns: 1fr auto; align-items: center; transition: 0.4s ease;
-        }
-
-        .user-item:hover { 
-            background: rgba(255, 255, 255, 0.05); 
-            border-color: var(--accent); 
-            transform: scale(1.01); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .user-info strong { font-size: 1.1rem; display: block; color: #fff; margin-bottom: 6px; letter-spacing: 0.5px; }
-        .user-info span { color: var(--text-dim); font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-        .user-info i { color: var(--accent); font-size: 0.9rem; }
-
-        .button-group { display: flex; gap: 12px; }
         .btn-action {
-            border: none; cursor: pointer; padding: 14px 24px; border-radius: 18px;
-            font-weight: 800; font-size: 0.75rem; text-transform: uppercase; color: white;
-            display: flex; align-items: center; gap: 10px; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 44px;
+            min-width: 130px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            background: transparent;
+            color: white;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.7rem;
+            text-transform: uppercase;
             letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
         }
 
-        .in { background: #059669; box-shadow: 0 4px 15px rgba(5, 150, 105, 0.2); }
-        .out { background: #1e40af; box-shadow: 0 4px 15px rgba(30, 64, 175, 0.2); }
-        
-        .btn-action:hover:not(:disabled) { transform: translateY(-3px); filter: brightness(1.2); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
-        .btn-action:active { transform: translateY(-1px); }
-        .btn-action:disabled { opacity: 0.2; cursor: not-allowed; filter: grayscale(1); }
-
-        #toast {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); 
-            padding: 18px 35px; border-radius: 20px;
-            color: white; font-weight: 800; font-size: 0.9rem; z-index: 10000;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5); display: none;
-            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
-            text-align: center; white-space: nowrap;
+        .btn-action:hover:not(:disabled) {
+            background: white;
+            color: var(--bg-dark);
+            border-color: white;
         }
+
+        .btn-action:disabled { opacity: 0.2; cursor: not-allowed; }
+
+        /* --- NOTIFICACIONES --- */
+        #toast-panel {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            padding: 16px 28px; border-radius: 12px;
+            background: white; color: var(--bg-dark);
+            display: none; z-index: 1000;
+            font-size: 0.8rem; font-weight: 800;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
 
         @media (max-width: 768px) {
-            .user-item { grid-template-columns: 1fr; gap: 1.5rem; text-align: center; }
-            .user-info span { justify-content: center; }
-            .button-group { width: 100%; }
-            .btn-action { flex: 1; justify-content: center; padding: 16px; }
-            .header-ui { flex-direction: column; text-align: center; }
+            .staff-card { flex-direction: column; text-align: center; gap: 20px; padding: 25px; }
+            .btn-group { width: 100%; }
+            .btn-action { flex: 1; }
+            .nav-header { flex-direction: column-reverse; gap: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <div id="toast"></div>
+    <div id="toast-panel"></div>
 
-    <div class="app-container">
-        <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i>Volver</a>
+    <div class="container">
+        <nav class="nav-header">
+            <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i> Áreas del Sistema</a>
+            <div id="live-clock" class="clock-display">00:00:00</div>
+        </nav>
 
-        <main class="glass-card">
-            <header class="header-ui">
-                <div class="title-group">
-                    <p>Módulo de Tesorería</p>
-                    <h1>Finanzas <span style="font-weight:300; color:var(--text-dim)">Pro</span></h1>
-                </div>
-                <div id="clock">--:--:-- --</div>
-            </header>
+        <header class="header-section">
+            <span>ARGRAMETAL S.A.C.</span>
+            <h1>ÁREA <span style="color: var(--accent);">FINANZAS</span></h1>
+        </header>
 
-            <div class="list-wrapper" id="content-list">
-                <div style="text-align:center; padding: 4rem; color: var(--text-dim);">
-                    <div class="fa-3x" style="margin-bottom: 1.5rem;">
-                        <i class="fas fa-circle-notch fa-spin" style="color: var(--accent);"></i>
-                    </div>
-                    <p style="font-size:0.9rem; font-weight:700; letter-spacing:2px; text-transform:uppercase;">Iniciando Protocolos...</p>
-                </div>
+        <main id="staff-container" class="staff-grid">
+            <div style="text-align:center; padding: 80px; opacity: 0.4;">
+                <i class="fas fa-atom fa-spin" style="font-size: 1.5rem; color: var(--accent);"></i>
+                <p style="margin-top: 15px; font-weight: 700; font-size: 0.75rem; letter-spacing: 3px;">OPTIMIZANDO DATAFLOW...</p>
             </div>
         </main>
     </div>
 
     <script>
-        const API_URL = "https://asistencia-recursos.onrender.com/api";
-        const AREA_NAME = "Finanzas"; 
+        const API_EP_GET = "https://asistencia-recursos.onrender.com/api/practicantes";
+        const API_EP_POST = "https://asistencia-recursos.onrender.com/api/asistencia";
+        const CURRENT_AREA = "Finanzas";
 
-        function startClock() {
-            const clockEl = document.getElementById('clock');
-            const update = () => {
-                clockEl.textContent = new Date().toLocaleTimeString('es-PE', {
-                    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
-                }).toUpperCase();
-            };
-            update();
-            setInterval(update, 1000);
+        function startEngine() {
+            setInterval(() => {
+                document.getElementById('live-clock').textContent = new Date().toLocaleTimeString('es-PE', { 
+                    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false 
+                });
+            }, 1000);
         }
 
-        function showMsg(text, isErr = false) {
-            const t = document.getElementById('toast');
-            t.innerHTML = isErr ? `<i class="fas fa-exclamation-triangle"></i> ${text}` : `<i class="fas fa-check-circle"></i> ${text}`;
-            t.style.background = isErr ? "rgba(239, 68, 68, 0.9)" : "rgba(16, 185, 129, 0.9)";
-            t.style.display = "block";
-            setTimeout(() => { t.style.display = "none"; }, 3000);
+        function systemAlert(text, isError = false) {
+            const toast = document.getElementById('toast-panel');
+            toast.style.display = 'block';
+            toast.style.background = isError ? '#ef4444' : '#ffffff';
+            toast.style.color = isError ? '#ffffff' : '#020617';
+            toast.innerHTML = `<i class="fas ${isError ? 'fa-bolt' : 'fa-check-double'}"></i> &nbsp; ${text.toUpperCase()}`;
+            setTimeout(() => toast.style.display = 'none', 3000);
         }
 
-        async function loadData() {
-            const listContainer = document.getElementById('content-list');
+        async function loadAreaTeam() {
+            const container = document.getElementById('staff-container');
             try {
-                const res = await fetch(`${API_URL}/practicantes?area=${encodeURIComponent(AREA_NAME)}`);
-                const users = await res.json();
+                const res = await fetch(API_EP_GET);
+                const data = await res.json();
                 
-                if (!users || users.length === 0) {
-                    listContainer.innerHTML = `<div style="text-align:center; padding:3rem; opacity:0.6;">
-                        <i class="fas fa-folder-open fa-3x" style="margin-bottom:1rem; display:block;"></i>
-                        <p>No se encontraron registros activos en el área.</p>
-                    </div>`;
+                const team = data.filter(p => p.area.trim() === CURRENT_AREA);
+
+                if (team.length === 0) {
+                    container.innerHTML = `<p style="text-align:center; padding: 40px; color:var(--text-dim);">No hay registros en la división de Finanzas.</p>`;
                     return;
                 }
 
-                users.sort((a, b) => a.apellidos.localeCompare(b.apellidos));
-
-                listContainer.innerHTML = users.map(u => `
-                    <div class="user-item">
-                        <div class="user-info">
-                            <strong>${u.apellidos.toUpperCase()}, ${u.nombres}</strong>
-                            <span><i class="fas fa-shield-alt"></i> TOKEN ID: ${u.id_practicantes}</span>
+                container.innerHTML = team.sort((a,b) => a.apellidos.localeCompare(b.apellidos)).map(p => `
+                    <div class="staff-card">
+                        <div class="staff-info">
+                            <strong>${p.apellidos.toUpperCase()}, ${p.nombres}</strong>
+                            <span class="staff-tag">SYS-ID: ${String(p.id_practicantes).padStart(4, '0')} • FIN-UNIT</span>
                         </div>
-                        <div class="button-group">
-                            <button class="btn-action in" onclick="mark(${u.id_practicantes}, 'entrada', this)">
-                                <i class="fas fa-door-open"></i> Entrada
+                        <div class="btn-group">
+                            <button class="btn-action" onclick="executeRegistry(${p.id_practicantes}, 'entrada', this)">
+                                Entrada
                             </button>
-                            <button class="btn-action out" onclick="mark(${u.id_practicantes}, 'salida', this)">
-                                <i class="fas fa-door-closed"></i> Salida
+                            <button class="btn-action" onclick="executeRegistry(${p.id_practicantes}, 'salida', this)">
+                                Salida
                             </button>
                         </div>
                     </div>
                 `).join('');
             } catch (e) {
-                showMsg("Fallo crítico de sincronización", true);
-                listContainer.innerHTML = `<div style="text-align:center; color:#ef4444; padding:2rem;">
-                    <i class="fas fa-wifi-slash fa-2x"></i>
-                    <p style="margin-top:10px;">Verifique la conexión con la API de Render.</p>
-                </div>`;
+                systemAlert("Fallo de sincronización", true);
+                container.innerHTML = `<p style="text-align:center; color:#ef4444; font-weight:800; padding: 40px;">ERROR DE PROTOCOLO</p>`;
             }
         }
 
-        async function mark(id, type, btn) {
-            const original = btn.innerHTML;
-            const card = btn.closest('.user-item');
-            const siblingBtns = card.querySelectorAll('button');
+        async function executeRegistry(id, type, btn) {
+            const group = btn.closest('.btn-group');
+            const btns = group.querySelectorAll('button');
+            const label = btn.innerText;
 
-            siblingBtns.forEach(b => b.disabled = true);
-            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> ESPERE`;
+            btns.forEach(b => b.disabled = true);
+            btn.innerHTML = `<i class="fas fa-sync fa-spin"></i>`;
 
             try {
-                const res = await fetch(`${API_URL}/asistencia/${id}`, {
+                const res = await fetch(`${API_EP_POST}/${id}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ tipo_registro: type })
                 });
 
                 if (res.ok) {
-                    showMsg(`Acceso de ${type.toUpperCase()} verificado con éxito.`);
+                    systemAlert(`Registro de ${type} confirmado`);
                 } else {
-                    showMsg("Solicitud rechazada por el servidor", true);
+                    const err = await res.json();
+                    systemAlert(err.message || "Fallo en validación", true);
                 }
             } catch (e) {
-                showMsg("Error de comunicación de red", true);
+                systemAlert("Sin respuesta del servidor", true);
             } finally {
-                setTimeout(() => {
-                    siblingBtns.forEach(b => b.disabled = false);
-                    btn.innerHTML = original;
-                }, 1000); 
+                btns.forEach(b => b.disabled = false);
+                btn.innerText = label;
             }
         }
 
-        window.onload = () => { startClock(); loadData(); };
+        window.onload = () => {
+            startEngine();
+            loadAreaTeam();
+        };
     </script>
 </body>
 </html>

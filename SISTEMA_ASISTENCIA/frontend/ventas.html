@@ -3,21 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RRHH | División Ventas</title>
+    <title>ARGRAMETAL | Área Ventas</title>
     
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/9440/9440939.png">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     
     <style>
         :root { 
-            --primary: #ff334b; 
-            --primary-glow: rgba(255, 51, 75, 0.4);
-            --dark-bg: #050810;
-            --surface: rgba(255, 255, 255, 0.04);
-            --border: rgba(255, 255, 255, 0.1);
-            --success: #10b981;
+            --accent: #ef4444; /* Rojo para Ventas */
+            --dark-bg: #020617;
+            --card-bg: #0f172a;
+            --border: rgba(255, 255, 255, 0.08);
+            --text-muted: #94a3b8;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -25,181 +23,173 @@
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle at top right, #2a0a0d, #050810 60%);
             background-color: var(--dark-bg);
+            background-image: 
+                radial-gradient(circle at top right, rgba(239, 68, 68, 0.05) 0%, transparent 50%),
+                url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
             color: white;
-            padding: clamp(15px, 4vw, 40px);
-            overflow-x: hidden;
-        }
-
-        /* Orbes decorativos animados */
-        .orb {
-            position: fixed;
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 75%);
-            filter: blur(80px);
-            z-index: -1;
-            animation: float 15s infinite alternate ease-in-out;
-        }
-
-        @keyframes float {
-            from { transform: translate(-10%, -10%) scale(1); }
-            to { transform: translate(15%, 15%) scale(1.1); }
+            display: flex;
+            justify-content: center;
+            padding: clamp(10px, 3vw, 40px);
         }
 
         .container { 
-            position: relative;
-            z-index: 10;
-            max-width: 900px; 
             width: 100%;
-            background: var(--surface); 
-            padding: clamp(25px, 5vw, 45px); 
-            border-radius: 35px; 
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--border);
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
-            animation: fadeIn 0.8s ease-out;
+            max-width: 1000px;
+            animation: fadeIn 0.6s ease-out;
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .nav-header {
+        /* --- NAVEGACIÓN --- */
+        .top-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 35px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
         }
 
         .btn-back { 
             text-decoration: none; 
-            color: #94a3b8; 
+            color: var(--text-muted); 
             font-weight: 700; 
             display: flex; 
             align-items: center; 
-            gap: 10px;
+            gap: 8px;
             transition: 0.3s;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
         }
-        .btn-back:hover { color: var(--primary); transform: translateX(-5px); }
+        .btn-back:hover { color: white; transform: translateX(-5px); }
 
-        .clock-display { 
+        .clock { 
             font-family: 'JetBrains Mono', monospace;
-            background: rgba(255, 51, 75, 0.1);
-            padding: 10px 22px; 
-            border-radius: 15px; 
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            font-size: 1.1rem;
-            box-shadow: 0 0 15px var(--primary-glow);
+            color: white;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            background: rgba(255,255,255,0.03);
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
         }
 
-        .title-section { margin-bottom: 30px; }
-        .title-section p { color: var(--primary); font-weight: 800; font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 5px; }
-        .title-section h2 { font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; letter-spacing: -1.5px; }
+        /* --- TITULACIÓN --- */
+        .header-section { margin-bottom: 35px; }
+        .header-section span { 
+            color: var(--accent); 
+            font-weight: 800; 
+            font-size: 0.75rem; 
+            letter-spacing: 3px; 
+            text-transform: uppercase;
+        }
+        .header-section h1 { 
+            font-size: clamp(1.8rem, 5vw, 2.4rem); 
+            font-weight: 800; 
+            letter-spacing: -1px;
+            margin-top: 5px;
+        }
 
-        /* Lista de practicantes */
+        /* --- LISTADO DE PERSONAL --- */
         #lista-asistencia { 
             display: grid; 
-            gap: 15px; 
-            max-height: 55vh; 
+            gap: 12px; 
+            max-height: 60vh; 
             overflow-y: auto; 
-            padding-right: 10px;
+            padding-right: 8px;
         }
 
-        #lista-asistencia::-webkit-scrollbar { width: 5px; }
+        #lista-asistencia::-webkit-scrollbar { width: 4px; }
         #lista-asistencia::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 
         .card-practicante { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 20px 30px; 
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 22px;
+            padding: 22px 30px; 
+            background: var(--card-bg);
+            border-radius: 16px;
             border: 1px solid var(--border);
-            transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); 
+            transition: 0.3s ease; 
         }
 
         .card-practicante:hover { 
-            background: rgba(255, 51, 75, 0.05);
-            border-color: var(--primary);
-            transform: translateY(-3px);
+            border-color: rgba(239, 68, 68, 0.3);
+            background: #1e293b;
         }
 
-        .info strong { font-size: 1.1rem; color: #fff; display: block; margin-bottom: 4px; letter-spacing: -0.5px; }
-        .info small { color: #64748b; font-weight: 700; font-size: 0.75rem; display: flex; align-items: center; gap: 6px; text-transform: uppercase; }
+        .info strong { font-size: 1.15rem; color: #fff; display: block; margin-bottom: 2px; }
+        .info small { color: var(--text-muted); font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
 
-        .actions { display: flex; gap: 12px; }
+        .actions { display: flex; gap: 10px; }
 
-        .btn-action { 
-            padding: 12px 22px; 
-            border-radius: 15px; 
-            border: none; 
+        /* --- BOTONES BLANCO PROFESIONAL --- */
+        .btn-mark { 
+            padding: 12px 18px; 
+            border-radius: 8px; 
+            border: 1px solid rgba(255, 255, 255, 0.7); 
+            background: transparent;
             cursor: pointer; 
             font-weight: 800; 
             color: white; 
             transition: 0.3s; 
             display: flex; 
             align-items: center; 
-            gap: 10px; 
+            gap: 8px; 
             font-size: 0.7rem;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .btn-in { background: var(--primary); box-shadow: 0 8px 20px rgba(255, 51, 75, 0.3); }
-        .btn-out { background: #1e293b; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-mark:hover:not(:disabled) { 
+            background: white; 
+            color: var(--dark-bg); 
+            border-color: white;
+            box-shadow: 0 5px 15px rgba(255,255,255,0.1);
+        }
 
-        .btn-action:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.2); }
-        .btn-action:disabled { opacity: 0.3; cursor: not-allowed; }
+        .btn-mark:disabled { opacity: 0.2; cursor: not-allowed; }
 
-        /* Notificaciones flotantes */
+        /* --- NOTIFICACIÓN --- */
         #notification {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            padding: 18px 35px; border-radius: 20px; 
-            background: #0f172a; color: white; border: 1px solid var(--primary);
-            display: none; z-index: 1000; font-weight: 700;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 15px 30px; border-radius: 12px; 
+            background: white; color: var(--dark-bg);
+            display: none; z-index: 1000; font-weight: 800; font-size: 0.85rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            animation: slideUp 0.3s ease-out;
         }
 
-        @keyframes popUp { from { transform: translate(-50%, 100px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+        @keyframes slideUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
 
-        @media (max-width: 650px) {
-            .card-practicante { flex-direction: column; gap: 20px; text-align: center; }
+        @media (max-width: 768px) {
+            .card-practicante { flex-direction: column; gap: 20px; text-align: center; padding: 25px; }
             .actions { width: 100%; }
-            .btn-action { flex: 1; justify-content: center; }
-            .nav-header { flex-direction: column-reverse; gap: 20px; }
+            .btn-mark { flex: 1; justify-content: center; }
         }
     </style>
 </head>
 <body>
 
-    <div class="orb" style="top: -10%; left: -10%;"></div>
-    <div class="orb" style="bottom: -10%; right: -10%; animation-delay: -5s;"></div>
-
     <div id="notification"></div>
 
     <div class="container">
-        <div class="nav-header">
-            <a href="index.html" class="btn-back"><i class="fas fa-chevron-left"></i> Volver al Inicio</a>
-            <div id="reloj" class="clock-display">00:00:00 --</div>
-        </div>
+        <nav class="top-nav">
+            <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i> Áreas del Sistema</a>
+            <div id="reloj" class="clock">00:00:00</div>
+        </nav>
         
-        <header class="title-section">
-            <p>Growth & Revenue</p>
-            <h2>División <span style="color: var(--primary);">Ventas</span></h2>
+        <header class="header-section">
+            <span>ARGRAMETAL S.A.</span>
+            <h1>AREA <span style="color: var(--accent);">Ventas</span></h1>
         </header>
 
         <div id="lista-asistencia">
-            <div style="text-align:center; padding: 50px; opacity: 0.6;">
-                <i class="fas fa-bolt fa-beat" style="font-size: 2rem; color: var(--primary);"></i>
-                <p style="margin-top: 15px; font-weight: 700; letter-spacing: 1px;">CARGANDO EQUIPO COMERCIAL...</p>
+            <div style="text-align:center; padding: 60px; opacity: 0.4;">
+                <i class="fas fa-circle-notch fa-spin" style="font-size: 1.5rem;"></i>
+                <p style="margin-top: 15px; font-weight: 600; font-size: 0.8rem; letter-spacing: 2px;">SINCRONIZANDO EQUIPO...</p>
             </div>
         </div>
     </div>
@@ -212,16 +202,17 @@
         function updateClock() {
             const now = new Date();
             document.getElementById('reloj').innerText = now.toLocaleTimeString('es-PE', { 
-                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
-            }).toUpperCase();
+                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false 
+            });
         }
         setInterval(updateClock, 1000);
         updateClock();
 
         function notify(msg, err = false) {
             const n = document.getElementById('notification');
-            n.style.borderColor = err ? '#ef4444' : '#ff334b';
-            n.innerHTML = `<i class="fas ${err ? 'fa-exclamation-triangle' : 'fa-check-circle'}" style="color: ${err ? '#ef4444' : '#ff334b'}; margin-right:10px;"></i> ${msg}`;
+            n.style.background = err ? '#ef4444' : '#ffffff';
+            n.style.color = err ? '#ffffff' : '#020617';
+            n.innerHTML = `<i class="fas ${err ? 'fa-triangle-exclamation' : 'fa-circle-check'}"></i> ${msg.toUpperCase()}`;
             n.style.display = "block";
             setTimeout(() => n.style.display = "none", 3000);
         }
@@ -232,46 +223,41 @@
                 const res = await fetch(API_GET);
                 const data = await res.json();
                 
-                // Filtrar solo los del área de Ventas
-                const equipoVentas = data.filter(p => p.area.trim() === AREA_FILTRO);
+                const equipo = data.filter(p => p.area.trim() === AREA_FILTRO);
 
-                if(equipoVentas.length === 0) {
-                    container.innerHTML = `<div style="text-align:center; padding: 40px;">
-                        <p style="color:#64748b; font-weight:700;">No hay practicantes registrados en Ventas.</p>
-                    </div>`;
+                if(equipo.length === 0) {
+                    container.innerHTML = `<p style="text-align:center; padding: 40px; color:var(--text-muted);">No hay personal asignado a la división de Ventas.</p>`;
                     return;
                 }
 
-                container.innerHTML = equipoVentas.sort((a,b) => a.apellidos.localeCompare(b.apellidos)).map(p => `
+                container.innerHTML = equipo.sort((a,b) => a.apellidos.localeCompare(b.apellidos)).map(p => `
                     <div class="card-practicante">
                         <div class="info">
                             <strong>${p.apellidos.toUpperCase()}, ${p.nombres}</strong>
-                            <small><i class="fas fa-id-badge"></i> AGENTE: ${String(p.id_practicantes).padStart(4, '0')}</small>
+                            <small>ID: ${String(p.id_practicantes).padStart(4, '0')} • ARGRAMETAL</small>
                         </div>
                         <div class="actions">
-                            <button class="btn-action btn-in" onclick="register(${p.id_practicantes}, 'entrada', this)">
-                                <i class="fas fa-sign-in-alt"></i> Entrada
+                            <button class="btn-mark" onclick="register(${p.id_practicantes}, 'entrada', this)">
+                                Entrada
                             </button>
-                            <button class="btn-action btn-out" onclick="register(${p.id_practicantes}, 'salida', this)">
-                                <i class="fas fa-sign-out-alt"></i> Salida
+                            <button class="btn-mark" onclick="register(${p.id_practicantes}, 'salida', this)">
+                                Salida
                             </button>
                         </div>
                     </div>
                 `).join('');
             } catch (e) { 
-                container.innerHTML = `<p style="text-align:center; color:var(--primary); font-weight:800;">ERROR AL CONECTAR CON EL SERVIDOR</p>`;
-                console.error(e);
+                container.innerHTML = `<p style="text-align:center; color:#ef4444; font-weight:800; padding: 40px;">FALLO DE CONEXIÓN CON EL SERVIDOR</p>`;
             }
         }
 
         async function register(id, tipo, btn) {
             const actionsDiv = btn.closest('.actions');
             const btns = actionsDiv.querySelectorAll('button');
-            const originalContent = btn.innerHTML;
+            const originalText = btn.innerText;
             
-            // Bloqueo de UI
             btns.forEach(b => b.disabled = true);
-            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i>`;
 
             try {
                 const res = await fetch(`${API_POST}/${id}`, { 
@@ -281,16 +267,16 @@
                 });
 
                 if (res.ok) {
-                    notify(`¡REGISTRO DE ${tipo.toUpperCase()} EXITOSO!`);
+                    notify(`MARCACIÓN DE ${tipo} CORRECTA`);
                 } else {
-                    const errorData = await res.json();
-                    notify(errorData.message || "Error al procesar", true);
+                    const errData = await res.json();
+                    notify(errData.message || "Error en proceso", true);
                 }
             } catch (e) { 
-                notify("Fallo de red: Reintente luego", true); 
+                notify("Error de red: Intente de nuevo", true); 
             } finally {
                 btns.forEach(b => b.disabled = false);
-                btn.innerHTML = originalContent;
+                btn.innerText = originalText;
             }
         }
 

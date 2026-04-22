@@ -3,283 +3,305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RRHH | Marketing</title>
+    <title>ARGRAMETAL | Área Marketing</title>
     
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1997/1997974.png">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
         :root { 
-            --primary: #a855f7; /* Morado Marketing */
-            --primary-glow: rgba(168, 85, 247, 0.3);
-            --bg: #0b0f1a;
-            --card: rgba(30, 41, 59, 0.5);
-            --text: #f1f5f9;
+            --accent: #a855f7; /* Morado Profesional Marketing */
+            --bg-dark: #020617;
+            --surface: #0f172a;
+            --surface-alt: #1e293b;
+            --text-main: #f8fafc;
             --text-dim: #94a3b8;
-            --border: rgba(255, 255, 255, 0.06);
+            --border: rgba(255, 255, 255, 0.08);
+            --success: #10b981;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body { 
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg);
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg-dark);
             background-image: 
-                radial-gradient(circle at 0% 0%, rgba(168, 85, 247, 0.12) 0%, transparent 40%),
-                radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.08) 0%, transparent 40%);
-            color: var(--text);
+                radial-gradient(at 0% 0%, rgba(168, 85, 247, 0.05) 0px, transparent 50%),
+                url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            padding: clamp(1.5rem, 5vw, 3rem) 1rem;
+            padding: clamp(20px, 5vh, 50px) 20px;
         }
 
         .container { 
             width: 100%;
-            max-width: 950px;
-            animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            max-width: 1000px;
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Navegación Superior */
-        .top-nav {
+        /* --- NAVEGACIÓN --- */
+        .nav-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 45px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
         }
 
         .btn-back {
-            color: var(--text-dim);
             text-decoration: none;
+            color: var(--text-dim);
             font-size: 0.75rem;
             font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 12px 20px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 15px;
-            border: 1px solid var(--border);
-            text-transform: uppercase;
-            letter-spacing: 1px;
             transition: 0.3s;
         }
-        .btn-back:hover { color: white; background: rgba(168, 85, 247, 0.1); border-color: var(--primary); transform: translateX(-5px); }
+        .btn-back:hover { color: white; transform: translateX(-5px); }
 
-        #reloj {
+        .clock-box {
             font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
             font-weight: 700;
-            color: var(--primary);
-            font-size: 1.1rem;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 10px 22px;
-            border-radius: 15px;
-            border: 1px solid var(--primary-glow);
-            box-shadow: 0 0 20px var(--primary-glow);
+            color: var(--accent);
+            background: rgba(168, 85, 247, 0.05);
+            padding: 8px 18px;
+            border-radius: 10px;
+            border: 1px solid rgba(168, 85, 247, 0.15);
         }
 
-        /* Encabezado Principal */
-        .main-header { margin-bottom: 40px; position: relative; }
-        .main-header p { font-size: 0.7rem; color: var(--primary); text-transform: uppercase; letter-spacing: 4px; font-weight: 800; margin-bottom: 8px; }
-        .main-header h1 { font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 800; letter-spacing: -1.5px; line-height: 1; }
-        .main-header h1 span { font-weight: 400; color: #fff; opacity: 0.8; }
+        /* --- TITULACIÓN --- */
+        .header-section { margin-bottom: 35px; }
+        .header-section span { 
+            font-size: 0.75rem; 
+            color: var(--accent); 
+            text-transform: uppercase; 
+            letter-spacing: 4px; 
+            font-weight: 800; 
+        }
+        .header-section h1 { 
+            font-size: clamp(1.8rem, 5vw, 2.5rem); 
+            font-weight: 800; 
+            letter-spacing: -1.5px; 
+            margin-top: 5px;
+        }
 
-        /* Grid de Personal */
-        .list-wrapper {
+        /* --- LISTADO --- */
+        .staff-list {
             display: grid;
-            gap: 16px;
-            max-height: 55vh;
+            gap: 12px;
+            max-height: 58vh;
             overflow-y: auto;
-            padding-right: 12px;
+            padding-right: 10px;
         }
 
-        .list-wrapper::-webkit-scrollbar { width: 4px; }
-        .list-wrapper::-webkit-scrollbar-thumb { background: var(--primary-glow); border-radius: 10px; }
+        .staff-list::-webkit-scrollbar { width: 4px; }
+        .staff-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 
-        .user-card {
-            background: var(--card);
-            backdrop-filter: blur(10px);
+        .staff-card {
+            background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 22px 32px;
+            border-radius: 16px;
+            padding: 22px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
-        .user-card:hover { 
-            border-color: var(--primary); 
-            background: rgba(168, 85, 247, 0.05);
-            transform: scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            transition: all 0.3s ease;
         }
 
-        .user-info strong { font-size: 1.2rem; display: block; margin-bottom: 5px; color: #fff; letter-spacing: -0.5px; }
-        .user-info span { font-size: 0.75rem; color: var(--text-dim); display: flex; align-items: center; gap: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-        .user-info i { color: var(--primary); }
+        .staff-card:hover {
+            border-color: rgba(168, 85, 247, 0.3);
+            background: var(--surface-alt);
+        }
 
-        /* Botones de Acción */
-        .btn-actions { display: flex; gap: 12px; }
+        .staff-info strong { 
+            font-size: 1.15rem; 
+            display: block; 
+            margin-bottom: 4px; 
+            color: #fff; 
+        }
 
-        .btn {
-            border: none;
-            cursor: pointer;
-            padding: 14px 24px;
-            border-radius: 16px;
+        .staff-tag { 
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem; 
+            color: var(--text-dim); 
+            background: rgba(255,255,255,0.03);
+            padding: 3px 8px;
+            border-radius: 5px;
+            border: 1px solid var(--border);
+        }
+
+        /* --- BOTONES --- */
+        .btn-group { display: flex; gap: 10px; }
+
+        .btn-action {
+            height: 44px;
+            min-width: 130px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            background: transparent;
+            color: white;
+            border-radius: 8px;
             font-weight: 800;
             font-size: 0.7rem;
             text-transform: uppercase;
-            color: white;
+            letter-spacing: 1px;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 10px;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            letter-spacing: 1px;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
         }
 
-        .btn-in { background: linear-gradient(135deg, #7c3aed, #a855f7); box-shadow: 0 10px 20px rgba(124, 58, 237, 0.3); }
-        .btn-out { background-color: #1e293b; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-action:hover:not(:disabled) {
+            background: white;
+            color: var(--bg-dark);
+            border-color: white;
+        }
 
-        .btn:hover:not(:disabled) { transform: translateY(-3px); filter: brightness(1.2); }
-        .btn:active { transform: translateY(0); }
-        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .btn-action:disabled { opacity: 0.2; cursor: not-allowed; }
 
-        /* Notificación Toast */
-        #toast {
-            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
-            padding: 16px 35px; border-radius: 20px;
-            background: #1e1b4b; color: white;
-            border: 1px solid var(--primary);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+        /* --- NOTIFICACIÓN --- */
+        #notification {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            padding: 16px 28px; border-radius: 12px;
+            background: white; color: var(--bg-dark);
             display: none; z-index: 1000;
-            font-size: 0.9rem; font-weight: 700;
-            animation: toastUp 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            font-size: 0.8rem; font-weight: 800;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            animation: slideUp 0.3s ease;
         }
 
-        @keyframes toastUp { from { transform: translate(-50%, 40px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+        @keyframes slideUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
 
-        @media (max-width: 650px) {
-            .user-card { flex-direction: column; text-align: center; gap: 20px; padding: 30px; }
-            .btn-actions { width: 100%; }
-            .btn { flex: 1; justify-content: center; }
-            .main-header h1 { font-size: 2rem; }
+        @media (max-width: 768px) {
+            .staff-card { flex-direction: column; text-align: center; gap: 20px; padding: 25px; }
+            .btn-group { width: 100%; }
+            .btn-action { flex: 1; }
+            .nav-header { flex-direction: column-reverse; gap: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <div id="toast"></div>
+    <div id="notification"></div>
 
     <div class="container">
-        <nav class="top-nav">
-            <a href="lista.html" class="btn-back"><i class="fas fa-chevron-left"></i>Volver</a>
-            <div id="reloj">00:00:00 --</div>
+        <nav class="nav-header">
+            <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i> Áreas del Sistema</a>
+            <div id="reloj" class="clock-box">00:00:00</div>
         </nav>
 
-        <header class="main-header">
-            <p>Creative Strategy Team</p>
-            <h1>Gestión <span>Marketing</span></h1>
+        <header class="header-section">
+            <span>ARGRAMETAL S.A.</span>
+            <h1>ÁREA <span style="color: var(--accent);">MARKETING</span></h1>
         </header>
 
-        <div id="lista-asistencia" class="list-wrapper">
-            <div style="text-align:center; padding: 80px; opacity:0.6;">
-                <i class="fas fa-wand-magic-sparkles fa-beat" style="font-size: 2.5rem; color: var(--primary);"></i>
-                <p style="margin-top: 20px; font-weight: 800; font-size: 0.75rem; letter-spacing: 2px;">SINCRONIZANDO TALENTO...</p>
+        <main id="lista-asistencia" class="staff-list">
+            <div style="text-align:center; padding: 80px; opacity: 0.4;">
+                <i class="fas fa-circle-notch fa-spin" style="font-size: 1.5rem; color: var(--accent);"></i>
+                <p style="margin-top: 15px; font-weight: 700; font-size: 0.75rem; letter-spacing: 3px;">SINCRONIZANDO EQUIPO...</p>
             </div>
-        </div>
+        </main>
     </div>
 
     <script>
-        const API_URL = "https://asistencia-recursos.onrender.com/api";
-        const AREA = "Marketing";
+        const API_GET = "https://asistencia-recursos.onrender.com/api/practicantes";
+        const API_POST = "https://asistencia-recursos.onrender.com/api/asistencia";
+        const AREA_FILTRO = "Marketing";
 
         function updateClock() {
-            const el = document.getElementById('reloj');
             setInterval(() => {
-                el.textContent = new Date().toLocaleTimeString('es-PE', { 
-                    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
-                }).toUpperCase();
+                document.getElementById('reloj').textContent = new Date().toLocaleTimeString('es-PE', { 
+                    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false 
+                });
             }, 1000);
         }
 
-        function notify(msg, err = false) {
-            const t = document.getElementById('toast');
-            t.style.display = 'block';
-            t.style.borderColor = err ? '#ef4444' : 'var(--primary)';
-            t.innerHTML = `<i class="fas ${err ? 'fa-triangle-exclamation' : 'fa-circle-check'}" style="margin-right:10px; color:${err ? '#ef4444' : 'var(--primary)'}"></i> ${msg}`;
-            setTimeout(() => t.style.display = 'none', 3500);
+        function notify(text, isError = false) {
+            const toast = document.getElementById('notification');
+            toast.style.display = 'block';
+            toast.style.background = isError ? '#ef4444' : '#ffffff';
+            toast.style.color = isError ? '#ffffff' : '#020617';
+            toast.innerHTML = `<i class="fas ${isError ? 'fa-triangle-exclamation' : 'fa-circle-check'}"></i> &nbsp; ${text.toUpperCase()}`;
+            setTimeout(() => toast.style.display = 'none', 3000);
         }
 
-        async function cargarDatos() {
+        async function loadTeam() {
             const container = document.getElementById('lista-asistencia');
             try {
-                const res = await fetch(`${API_URL}/practicantes?area=${encodeURIComponent(AREA)}`);
+                const res = await fetch(API_GET);
                 const data = await res.json();
+                
+                const equipo = data.filter(p => p.area.trim() === AREA_FILTRO);
 
-                if (!data.length) {
-                    container.innerHTML = `<div style="text-align:center; padding: 50px; opacity:0.4;">
-                        <i class="fas fa-ghost" style="font-size: 2rem; margin-bottom:15px;"></i>
-                        <p style="font-weight:700;">No hay creativos asignados a esta división.</p>
-                    </div>`;
+                if (equipo.length === 0) {
+                    container.innerHTML = `<p style="text-align:center; padding: 40px; color:var(--text-dim);">No hay personal registrado en Marketing.</p>`;
                     return;
                 }
 
-                data.sort((a,b) => a.apellidos.localeCompare(b.apellidos));
-
-                container.innerHTML = data.map(p => `
-                    <div class="user-card">
-                        <div class="user-info">
+                container.innerHTML = equipo.sort((a,b) => a.apellidos.localeCompare(b.apellidos)).map(p => `
+                    <div class="staff-card">
+                        <div class="staff-info">
                             <strong>${p.apellidos.toUpperCase()}, ${p.nombres}</strong>
-                            <span><i class="fas fa-fingerprint"></i> ID: ${String(p.id_practicantes).padStart(4, '0')}</span>
+                            <span class="staff-tag">ID: ${String(p.id_practicantes).padStart(4, '0')} • ARGRAMETAL</span>
                         </div>
-                        <div class="btn-actions">
-                            <button class="btn btn-in" onclick="marcar(${p.id_practicantes}, 'entrada', this)">
-                                <i class="fas fa-bolt"></i> Entrada
+                        <div class="btn-group">
+                            <button class="btn-action" onclick="register(${p.id_practicantes}, 'entrada', this)">
+                                Entrada
                             </button>
-                            <button class="btn btn-out" onclick="marcar(${p.id_practicantes}, 'salida', this)">
-                                <i class="fas fa-moon"></i> Salida
+                            <button class="btn-action" onclick="register(${p.id_practicantes}, 'salida', this)">
+                                Salida
                             </button>
                         </div>
                     </div>
                 `).join('');
             } catch (e) {
-                notify("Falla crítica al conectar con la base de datos", true);
-                container.innerHTML = `<p style="text-align:center; color:#ef4444; font-weight:800; padding: 40px; letter-spacing:1px;">ERROR DE ENLACE</p>`;
+                notify("Fallo de conexión", true);
+                container.innerHTML = `<p style="text-align:center; color:#ef4444; font-weight:800; padding: 40px;">ERROR DE SERVIDOR</p>`;
             }
         }
 
-        async function marcar(id, tipo, btn) {
-            const btns = btn.closest('.btn-actions').querySelectorAll('button');
-            const originalHTML = btn.innerHTML;
-            
+        async function register(id, tipo, btn) {
+            const btns = btn.closest('.btn-group').querySelectorAll('button');
+            const originalText = btn.innerText;
+
             btns.forEach(b => b.disabled = true);
-            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i>`;
 
             try {
-                const res = await fetch(`${API_URL}/asistencia/${id}`, {
+                const res = await fetch(`${API_POST}/${id}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ tipo_registro: tipo })
                 });
-                
-                if (res.ok) notify(`MARCACIÓN DE ${tipo.toUpperCase()} EXITOSA`);
-                else notify("Error en validación de credenciales", true);
+
+                if (res.ok) {
+                    notify(`MARCACIÓN DE ${tipo} CORRECTA`);
+                } else {
+                    const err = await res.json();
+                    notify(err.message || "Error en proceso", true);
+                }
             } catch (e) {
-                notify("Error de red: Terminal fuera de línea", true);
+                notify("Error de red", true);
             } finally {
                 btns.forEach(b => b.disabled = false);
-                btn.innerHTML = originalHTML;
+                btn.innerText = originalText;
             }
         }
 
         window.onload = () => {
             updateClock();
-            cargarDatos();
+            loadTeam();
         };
     </script>
 </body>

@@ -3,249 +3,305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RRHH | Logística</title>
+    <title>ARGRAMETAL | Área Logistica</title>
     
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2312/2312701.png">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
         :root { 
-            --primary: #fbbf24; 
-            --primary-glow: rgba(251, 191, 36, 0.15);
-            --danger: #ef4444;
+            --accent: #f59e0b; /* Ámbar Logística */
             --bg-dark: #020617;
-            --card-bg: rgba(255, 255, 255, 0.02);
+            --surface: #0f172a;
+            --surface-alt: #1e293b;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
             --border: rgba(255, 255, 255, 0.08);
-            --text-muted: #94a3b8;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(245, 158, 11, 0.05) 0px, transparent 50%),
+                url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            background: radial-gradient(circle at top right, #1e1b01, #020617 80%);
-            background-attachment: fixed;
-            color: white;
-            padding: clamp(1rem, 3vw, 2rem);
-        }
-
-        /* Elementos decorativos de fondo */
-        .glow-orb {
-            position: fixed; width: 500px; height: 500px;
-            background: var(--primary); filter: blur(180px);
-            opacity: 0.04; z-index: -1; border-radius: 50%;
+            padding: clamp(20px, 5vh, 50px) 20px;
         }
 
         .container { 
             width: 100%;
-            max-width: 900px; 
-            background: rgba(15, 23, 42, 0.6); 
-            padding: clamp(1.5rem, 5vw, 3.5rem); 
-            border-radius: 45px; 
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border: 1px solid var(--border);
-            box-shadow: 0 60px 120px -30px rgba(0,0,0,0.7);
-            animation: appEntry 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            max-width: 1000px;
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @keyframes appEntry { from { opacity: 0; transform: scale(0.98) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        .nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; gap: 1rem; flex-wrap: wrap; }
+        /* --- NAVEGACIÓN --- */
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
 
         .btn-back {
-            color: var(--text-muted); text-decoration: none; font-weight: 700; font-size: 0.85rem;
-            display: flex; align-items: center; gap: 10px; transition: 0.4s;
-            background: rgba(255,255,255,0.04); padding: 12px 22px; border-radius: 18px;
-            text-transform: uppercase; letter-spacing: 1.5px; border: 1px solid transparent;
+            text-decoration: none;
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
         }
+        .btn-back:hover { color: white; transform: translateX(-5px); }
 
-        .btn-back:hover { color: var(--primary); background: rgba(251, 191, 36, 0.05); border-color: var(--primary-glow); transform: translateX(-6px); }
-
-        #reloj {
+        .clock-box {
             font-family: 'JetBrains Mono', monospace;
-            font-weight: 800; color: var(--primary); font-size: 1.3rem;
-            background: rgba(251, 191, 36, 0.08); padding: 10px 20px; border-radius: 16px;
-            border: 1px solid var(--primary-glow); text-shadow: 0 0 15px var(--primary-glow);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent);
+            background: rgba(245, 158, 11, 0.05);
+            padding: 8px 18px;
+            border-radius: 10px;
+            border: 1px solid rgba(245, 158, 11, 0.15);
         }
 
-        .area-title { position: relative; }
-        .area-tag { 
-            display: inline-block; background: var(--primary-glow); color: var(--primary);
-            padding: 6px 16px; border-radius: 12px; font-size: 0.7rem;
-            font-weight: 800; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 12px;
+        /* --- TÍTULO DE ÁREA --- */
+        .header-section { margin-bottom: 35px; }
+        .header-section span { 
+            font-size: 0.75rem; 
+            color: var(--accent); 
+            text-transform: uppercase; 
+            letter-spacing: 4px; 
+            font-weight: 800; 
         }
-        .area-title h2 { font-size: clamp(2rem, 6vw, 2.8rem); font-weight: 800; letter-spacing: -2px; }
-
-        .scroll-area { margin-top: 2.5rem; display: grid; gap: 16px; max-height: 52vh; overflow-y: auto; padding-right: 12px; }
-        .scroll-area::-webkit-scrollbar { width: 4px; }
-        .scroll-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-
-        .item-row { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 1.5rem 2.2rem; background: var(--card-bg);
-            border-radius: 28px; border: 1px solid var(--border); transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        .header-section h1 { 
+            font-size: clamp(1.8rem, 5vw, 2.5rem); 
+            font-weight: 800; 
+            letter-spacing: -1.5px; 
+            margin-top: 5px;
         }
 
-        .item-row:hover { background: rgba(251, 191, 36, 0.02); border-color: var(--primary); transform: translateX(8px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        /* --- LISTADO DE PERSONAL --- */
+        .staff-list {
+            display: grid;
+            gap: 12px;
+            max-height: 58vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
 
-        .user-meta strong { font-size: 1.15rem; color: #fff; display: block; margin-bottom: 4px; }
-        .user-meta span { color: var(--text-muted); font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-        .user-meta i { color: var(--primary); font-size: 0.9rem; }
+        .staff-list::-webkit-scrollbar { width: 4px; }
+        .staff-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 
-        .actions { display: flex; gap: 12px; }
+        .staff-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 22px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
 
-        .btn-mark {
-            padding: 14px 24px; border-radius: 18px; border: none; cursor: pointer;
-            font-weight: 800; font-size: 0.8rem; text-transform: uppercase;
-            display: flex; align-items: center; gap: 10px; transition: 0.3s; color: white;
+        .staff-card:hover {
+            border-color: rgba(245, 158, 11, 0.3);
+            background: var(--surface-alt);
+        }
+
+        .staff-info strong { 
+            font-size: 1.15rem; 
+            display: block; 
+            margin-bottom: 4px; 
+            color: #fff; 
+        }
+
+        .staff-tag { 
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem; 
+            color: var(--text-dim); 
+            background: rgba(255,255,255,0.03);
+            padding: 3px 8px;
+            border-radius: 5px;
+            border: 1px solid var(--border);
+        }
+
+        /* --- ACCIONES --- */
+        .btn-group { display: flex; gap: 10px; }
+
+        .btn-action {
+            height: 44px;
+            min-width: 130px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            background: transparent;
+            color: white;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.7rem;
+            text-transform: uppercase;
             letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
         }
 
-        .btn-in { background: #b45309; box-shadow: 0 4px 12px rgba(180, 83, 9, 0.2); }
-        .btn-out { background: #334155; box-shadow: 0 4px 12px rgba(51, 65, 85, 0.2); }
-        
-        .btn-mark:hover:not(:disabled) { transform: translateY(-3px); filter: brightness(1.2); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-        .btn-mark:disabled { opacity: 0.2; cursor: not-allowed; filter: grayscale(1); }
-
-        #toast {
-            position: fixed; bottom: 30px; right: 30px; padding: 20px 35px; border-radius: 25px;
-            background: #0f172a; color: white; box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-            display: none; z-index: 10000; border: 1px solid var(--border);
-            font-weight: 700; font-size: 0.95rem; animation: toastSlide 0.5s ease-out;
+        .btn-action:hover:not(:disabled) {
+            background: white;
+            color: var(--bg-dark);
+            border-color: white;
         }
 
-        @keyframes toastSlide { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .btn-action:disabled { opacity: 0.2; cursor: not-allowed; }
+
+        /* --- SISTEMA DE TOAST --- */
+        #notification {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            padding: 16px 28px; border-radius: 12px;
+            background: white; color: var(--bg-dark);
+            display: none; z-index: 1000;
+            font-size: 0.8rem; font-weight: 800;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
 
         @media (max-width: 768px) {
-            .nav-header { flex-direction: column-reverse; text-align: center; }
-            .item-row { flex-direction: column; text-align: center; gap: 1.5rem; padding: 2rem; }
-            .actions { width: 100%; }
-            .btn-mark { flex: 1; justify-content: center; }
+            .staff-card { flex-direction: column; text-align: center; gap: 20px; padding: 25px; }
+            .btn-group { width: 100%; }
+            .btn-action { flex: 1; }
+            .nav-header { flex-direction: column-reverse; gap: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="glow-orb" style="top: -100px; right: -100px;"></div>
-    <div class="glow-orb" style="bottom: -100px; left: -100px;"></div>
+    <div id="notification"></div>
 
-    <div id="toast"></div>
-
-    <main class="container">
+    <div class="container">
         <nav class="nav-header">
-            <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i>Volver</a>
-            <div id="reloj">--:--:-- --</div>
+            <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i> Áreas del Sistema</a>
+            <div id="reloj" class="clock-box">00:00:00</div>
         </nav>
 
-        <header class="area-title">
-            <span class="area-tag">Operations & Supply Chain</span>
-            <h2>Área <span style="color: var(--primary);">Logística</span></h2>
+        <header class="header-section">
+            <span>ARGRAMETAL S.A.</span>
+            <h1>ÁREA <span style="color: var(--accent);">LOGÍSTICA</span></h1>
         </header>
 
-        <section id="lista-asistencia" class="scroll-area">
-            <div style="text-align:center; padding: 80px; color: var(--text-muted);">
-                <i class="fas fa-box-open fa-spin" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 20px;"></i>
-                <p style="letter-spacing: 3px; font-weight: 700; font-size: 0.85rem;">CARGANDO MANIFIESTO...</p>
+        <main id="lista-asistencia" class="staff-list">
+            <div style="text-align:center; padding: 80px; opacity: 0.4;">
+                <i class="fas fa-circle-notch fa-spin" style="font-size: 1.5rem; color: var(--accent);"></i>
+                <p style="margin-top: 15px; font-weight: 700; font-size: 0.75rem; letter-spacing: 3px;">SINCRONIZANDO MANIFIESTO...</p>
             </div>
-        </section>
-    </main>
+        </main>
+    </div>
 
     <script>
-        const API_BASE = "https://asistencia-recursos.onrender.com/api";
+        const API_GET = "https://asistencia-recursos.onrender.com/api/practicantes";
+        const API_POST = "https://asistencia-recursos.onrender.com/api/asistencia";
         const AREA_NAME = "Logística";
 
-        function updateTime() {
-            const clockEl = document.getElementById('reloj');
-            const tick = () => {
-                clockEl.textContent = new Date().toLocaleTimeString('es-PE', { 
-                    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
-                }).toUpperCase();
-            };
-            tick();
-            setInterval(tick, 1000);
+        function startClock() {
+            setInterval(() => {
+                document.getElementById('reloj').textContent = new Date().toLocaleTimeString('es-PE', { 
+                    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false 
+                });
+            }, 1000);
         }
 
-        function notify(msg, error = false) {
-            const t = document.getElementById('toast');
-            t.innerHTML = `<i class="fas ${error ? 'fa-exclamation-triangle' : 'fa-check-circle'}" style="color:${error ? '#ef4444' : '#fbbf24'}; margin-right:12px;"></i> ${msg}`;
-            t.style.display = 'block';
-            setTimeout(() => t.style.display = 'none', 3500);
+        function notify(text, isError = false) {
+            const toast = document.getElementById('notification');
+            toast.style.display = 'block';
+            toast.style.background = isError ? '#ef4444' : '#ffffff';
+            toast.style.color = isError ? '#ffffff' : '#020617';
+            toast.innerHTML = `<i class="fas ${isError ? 'fa-triangle-exclamation' : 'fa-circle-check'}"></i> &nbsp; ${text.toUpperCase()}`;
+            setTimeout(() => toast.style.display = 'none', 3000);
         }
 
-        async function fetchPracticantes() {
+        async function loadLogisticsTeam() {
             const container = document.getElementById('lista-asistencia');
             try {
-                const res = await fetch(`${API_BASE}/practicantes?area=${encodeURIComponent(AREA_NAME)}`);
+                const res = await fetch(API_GET);
                 const data = await res.json();
+                
+                const equipo = data.filter(p => p.area.trim() === AREA_NAME);
 
-                if(!data.length) {
-                    container.innerHTML = `<div style="text-align:center; padding: 60px; opacity:0.5;">
-                        <i class="fas fa-archive fa-3x" style="margin-bottom:15px; display:block;"></i>
-                        <p>No hay personal asignado a este almacén.</p>
-                    </div>`;
+                if (equipo.length === 0) {
+                    container.innerHTML = `<p style="text-align:center; padding: 40px; color:var(--text-dim);">No hay personal registrado en Logística.</p>`;
                     return;
                 }
 
-                container.innerHTML = data.sort((a,b) => a.apellidos.localeCompare(b.apellidos)).map(p => `
-                    <div class="item-row">
-                        <div class="user-meta">
+                container.innerHTML = equipo.sort((a,b) => a.apellidos.localeCompare(b.apellidos)).map(p => `
+                    <div class="staff-card">
+                        <div class="staff-info">
                             <strong>${p.apellidos.toUpperCase()}, ${p.nombres}</strong>
-                            <span><i class="fas fa-barcode"></i> SKU-ID: ${p.id_practicantes}</span>
+                            <span class="staff-tag">ID: ${String(p.id_practicantes).padStart(4, '0')} • ARGRAMETAL</span>
                         </div>
-                        <div class="actions">
-                            <button class="btn-mark btn-in" onclick="postAsistencia(${p.id_practicantes}, 'entrada', this)">
-                                <i class="fas fa-dolly"></i> ENTRADA
+                        <div class="btn-group">
+                            <button class="btn-action" onclick="register(${p.id_practicantes}, 'entrada', this)">
+                                Entrada
                             </button>
-                            <button class="btn-mark btn-out" onclick="postAsistencia(${p.id_practicantes}, 'salida', this)">
-                                <i class="fas fa-box"></i> SALIDA
+                            <button class="btn-action" onclick="register(${p.id_practicantes}, 'salida', this)">
+                                Salida
                             </button>
                         </div>
                     </div>
                 `).join('');
             } catch (e) {
-                notify("Fallo de enlace con el servidor central", true);
-                container.innerHTML = `<p style="text-align:center; color:#ef4444; padding: 40px; font-weight:700;">ERROR DE SINCRONIZACIÓN</p>`;
+                notify("Error de sincronización", true);
+                container.innerHTML = `<p style="text-align:center; color:#ef4444; font-weight:800; padding: 40px;">FALLO DE RED</p>`;
             }
         }
 
-        async function postAsistencia(id, tipo, btn) {
-            const originalContent = btn.innerHTML;
-            const parent = btn.closest('.actions');
-            const btns = parent.querySelectorAll('button');
+        async function register(id, tipo, btn) {
+            const btns = btn.closest('.btn-group').querySelectorAll('button');
+            const originalText = btn.innerText;
 
             btns.forEach(b => b.disabled = true);
-            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i>`;
 
             try {
-                const res = await fetch(`${API_BASE}/asistencia/${id}`, {
+                const res = await fetch(`${API_POST}/${id}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ tipo_registro: tipo })
                 });
-                
-                if(res.ok) {
-                    notify(`LOGÍSTICA: ${tipo.toUpperCase()} confirmada.`);
+
+                if (res.ok) {
+                    notify(`MARCACIÓN DE ${tipo} REGISTRADA`);
                 } else {
-                    notify("Error de validación en el servidor", true);
+                    const err = await res.json();
+                    notify(err.message || "Error en proceso", true);
                 }
             } catch (e) {
-                notify("Fallo crítico de comunicación", true);
+                notify("Sin respuesta del servidor", true);
             } finally {
-                setTimeout(() => {
-                    btns.forEach(b => b.disabled = false);
-                    btn.innerHTML = originalContent;
-                }, 600);
+                btns.forEach(b => b.disabled = false);
+                btn.innerText = originalText;
             }
         }
 
-        window.onload = () => { updateTime(); fetchPracticantes(); };
+        window.onload = () => {
+            startClock();
+            loadLogisticsTeam();
+        };
     </script>
 </body>
 </html>
