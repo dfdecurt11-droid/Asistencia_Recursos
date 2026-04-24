@@ -11,6 +11,8 @@ const pool = new Pool({
     ssl: { rejectUnauthorized: false }
 });
 
+// --- GESTIÓN DE PRACTICANTES ---
+
 app.get('/api/practicantes', async (req, res) => {
     const { area } = req.query;
     try {
@@ -40,6 +42,30 @@ app.post('/api/practicantes', async (req, res) => {
         res.status(500).json({ error: 'Error al guardar' });
     }
 });
+
+app.put('/api/practicantes/:id', async (req, res) => {
+    const { id } = req.params;
+    const { nombres, apellidos, area } = req.body;
+    try {
+        await pool.query('UPDATE practicantes SET nombres=$1, apellidos=$2, area=$3 WHERE id_practicantes=$4', [nombres, apellidos, area, id]);
+        res.json({ message: 'Actualizado' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error' });
+    }
+});
+
+app.delete('/api/practicantes/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        await pool.query('DELETE FROM asistencia WHERE id_practicantes=$1', [id]);
+        await pool.query('DELETE FROM practicantes WHERE id_practicantes=$1', [id]);
+        res.json({ message: 'Eliminado' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error' });
+    }
+});
+
+// --- GESTIÓN DE ASISTENCIA ---
 
 app.post('/api/asistencia/:id', async (req, res) => {
     const { id } = req.params;
@@ -96,28 +122,6 @@ app.get('/api/reporte', async (req, res) => {
     }
 });
 
-app.put('/api/practicantes/:id', async (req, res) => {
-    const { id } = req.params;
-    const { nombres, apellidos, area } = req.body;
-    try {
-        await pool.query('UPDATE practicantes SET nombres=$1, apellidos=$2, area=$3 WHERE id_practicantes=$4', [nombres, apellidos, area, id]);
-        res.json({ message: 'Actualizado' });
-    } catch (error) {
-        res.status(500).json({ error: 'Error' });
-    }
-});
-
-app.delete('/api/practicantes/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        await pool.query('DELETE FROM asistencia WHERE id_practicantes=$1', [id]);
-        await pool.query('DELETE FROM practicantes WHERE id_practicantes=$1', [id]);
-        res.json({ message: 'Eliminado' });
-    } catch (error) {
-        res.status(500).json({ error: 'Error' });
-    }
-});
-
 app.delete('/api/reset', async (req, res) => {
     try {
         await pool.query('TRUNCATE TABLE asistencia RESTART IDENTITY CASCADE');
@@ -127,5 +131,26 @@ app.delete('/api/reset', async (req, res) => {
     }
 });
 
+// --- MÓDULO DE PAGOS Y ENTREGABLES ---
+
+app.post('/api/pagos', async (req, res) => {
+    const { nombre, entregables, monto_unidad, total } = req.body;
+    
+    try {
+        const query = 'INSERT INTO pagos (practicante, cant_entregables, monto_por_entregable, total_pagado, fecha) VALUES ($1, $2, $3, $4, NOW())';
+        const values = [nombre, entregables, monto_unidad, total];
+        
+        await pool.query(query, values); // Usando el mismo pool configurado arriba
+        res.status(200).json({ message: "Pago guardado exitosamente" });
+    } catch (err) {
+        console.error("Error al registrar pago:", err);
+        res.status(500).json({ error: "Error al registrar el pago" });
+    }
+});
+
+// --- INICIO DEL SERVIDOR ---
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Puerto ${PORT}`));
+app.listen(PORT, () => {
+    console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
+});

@@ -22,6 +22,7 @@
             --border-color: #e2e8f0;
             --success: #10b981;
             --error: #ef4444;
+            --accent-payment: #0ea5e9; /* Color para pagos */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -41,7 +42,7 @@
             padding: 40px; 
             border-radius: 24px; 
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05); 
-            width: 100%; max-width: 440px; 
+            width: 100%; max-width: 460px; 
             border: 1px solid var(--border-color);
             position: relative;
         }
@@ -84,7 +85,6 @@
             color: var(--text-main);
         }
 
-        input::placeholder { color: #cbd5e1; }
         input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08); }
         input:focus + i { color: var(--primary); }
 
@@ -97,21 +97,31 @@
         }
 
         .btn-add:hover { background: var(--primary-dark); transform: translateY(-1px); }
-        .btn-add:active { transform: translateY(0); }
-        .btn-add:disabled { background: var(--text-muted); cursor: not-allowed; opacity: 0.7; }
 
-        .secondary-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
-        .btn-nav { 
-            background: transparent; color: var(--text-muted); 
-            border: 1px solid var(--border-color); padding: 12px; 
-            border-radius: 12px; font-size: 0.85rem; font-weight: 600; 
-            cursor: pointer; display: flex; align-items: center; 
-            justify-content: center; gap: 8px; transition: 0.2s; 
+        /* Contenedor de botones inferiores optimizado */
+        .secondary-btns { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 10px; 
+            margin-top: 24px; 
         }
 
-        .btn-nav:hover { background: #f1f5f9; color: var(--text-main); border-color: #cbd5e1; }
+        .btn-nav { 
+            background: transparent; color: var(--text-muted); 
+            border: 1px solid var(--border-color); padding: 12px 8px; 
+            border-radius: 12px; font-size: 0.75rem; font-weight: 700; 
+            cursor: pointer; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 6px; transition: 0.2s; 
+        }
 
-        /* Toast Estilo Moderno */
+        .btn-nav i { font-size: 1.1rem; }
+
+        .btn-nav:hover { background: #f1f5f9; color: var(--text-main); border-color: #cbd5e1; }
+        
+        /* Estilo especial para el botón de pagos */
+        .btn-payment { border-color: rgba(14, 165, 233, 0.3); color: var(--accent-payment); }
+        .btn-payment:hover { background: #f0f9ff; color: var(--accent-payment); border-color: var(--accent-payment); }
+
         #toast-container { position: fixed; top: 24px; right: 24px; z-index: 9999; }
         .toast { 
             background: white; padding: 16px 20px; border-radius: 16px; margin-bottom: 12px; 
@@ -128,6 +138,7 @@
         @media (max-width: 480px) {
             .card { padding: 30px 20px; border: none; box-shadow: none; background: transparent; }
             body { background: white; align-items: flex-start; }
+            .secondary-btns { grid-template-columns: repeat(3, 1fr); }
         }
     </style>
 </head>
@@ -137,7 +148,7 @@
 
 <div class="card">
     <div class="header-section">
-        <span class="brand-tag">Recursos Humanos</span>
+        <span class="brand-tag">Argrametal | RRHH</span>
         <h2>Registro de Ingreso</h2>
         <p class="subtitle">Complete los datos del practicante</p>
     </div>
@@ -184,10 +195,16 @@
     
     <div class="secondary-btns">
         <button class="btn-nav" onclick="location.href='lista.html'">
-            <i class="fas fa-list-ul"></i> Áreas
+            <i class="fas fa-list-ul"></i>
+            <span>Áreas</span>
+        </button>
+        <button class="btn-nav btn-payment" onclick="location.href='pagos.html'">
+            <i class="fas fa-money-bill-transfer"></i>
+            <span>Pagos</span>
         </button>
         <button class="btn-nav" onclick="location.href='reporte.html'">
-            <i class="fas fa-chart-pie"></i> Reportes
+            <i class="fas fa-chart-pie"></i>
+            <span>Reportes</span>
         </button>
     </div>
 </div>
@@ -240,7 +257,7 @@
         const are = document.getElementById('selArea').value;
 
         if(!nom || !ape || !are) {
-            mostrarToast("Debe completar todos los campos del formulario.", "error");
+            mostrarToast("Complete todos los campos del formulario.", "error");
             return;
         }
 
@@ -257,12 +274,12 @@
             });
             
             if(res.ok) {
-                mostrarToast(`Registro completado: ${nom} ${ape} en ${are}.`);
+                mostrarToast(`Registro completado con éxito.`);
                 document.getElementById('txtNombres').value = "";
                 document.getElementById('txtApellidos').value = "";
                 document.getElementById('selArea').value = "";
             } else {
-                mostrarToast("El servidor rechazó la solicitud de registro.", "error");
+                mostrarToast("Error al procesar el registro en el servidor.", "error");
             }
         } catch (e) { 
             mostrarToast("Error de conexión. Verifique su red.", "error"); 
