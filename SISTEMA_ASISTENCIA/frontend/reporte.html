@@ -13,7 +13,7 @@
         :root {
             --primary: #1e293b; 
             --accent: #2563eb;  
-            --ventas: #ef4444; /* CAMBIADO A ROJO */
+            --ventas: #ef4444;
             --finanzas: #059669; --marketing: #7c3aed;
             --logistica: #d97706; --mejora: #0891b2; --recursos: #be185d;
             --bg-body: #f8fafc;
@@ -200,8 +200,8 @@
                     <th style="width: 60px;">N°</th>
                     <th>Colaborador</th>
                     <th>Departamento</th>
-                    <th>H. Entrada</th>
-                    <th>H. Salida</th>
+                    <th>Ult. Entrada</th>
+                    <th>Ult. Salida</th>
                     <th>Acumulado</th>
                     <th style="text-align: center;">Gestión</th>
                 </tr>
@@ -211,6 +211,7 @@
     </div>
 </div>
 
+<!-- Ventanas Modales -->
 <div class="modal-overlay" id="modalEdit">
     <div class="modal-card">
         <div class="modal-header-pro">
@@ -281,7 +282,7 @@
 
     const AREA_COLORS = {
         'Todos': [30, 41, 59], 
-        'Ventas': [239, 68, 68], /* ROJO PDF */
+        'Ventas': [239, 68, 68], 
         'Finanzas': [5, 150, 105],
         'Marketing': [124, 58, 237], 'Logística': [217, 119, 6], 
         'Mejora Continua': [8, 145, 178], 'Recursos Humanos': [190, 24, 93]
@@ -317,7 +318,6 @@
     function render(list) {
         const body = document.getElementById('tableBody');
         body.innerHTML = list.map((p, index) => {
-            // AJUSTADO PARA MOSTRAR FECHA Y HORA
             const formatDT = (s) => {
                 if(!s) return '--:--';
                 const d = new Date(s);
@@ -344,7 +344,7 @@
                     <td><span style="font-weight:800; color: var(--accent);" class="mono">${p.horas_acumuladas ? p.horas_acumuladas.substring(0, 5) : "00:00"}</span></td>
                     <td>
                         <div style="display:flex; gap:6px; justify-content:center;">
-                            <button title="Reporte Individual" class="action-btn" onclick="generateIndividualPDF(${p.id_practicantes})"><i class="fas fa-print"></i></button>
+                            <button title="Reporte Detallado" class="action-btn" onclick="generateIndividualPDF(${p.id_practicantes})"><i class="fas fa-print"></i></button>
                             <button title="Editar" class="action-btn" onclick="openEdit(${p.id_practicantes})"><i class="fas fa-pen"></i></button>
                             <button title="Dar de baja" class="action-btn delete-btn" onclick="askDelete(${p.id_practicantes}, '${p.nombres}', '${p.apellidos}')"><i class="fas fa-trash-alt"></i></button>
                         </div>
@@ -414,43 +414,95 @@
         doc.save(`Reporte_General_${currentArea.replace(" ", "_")}.pdf`);
     }
 
-    function generateIndividualPDF(id) {
+    async function generateIndividualPDF(id) {
         const p = allData.find(x => x.id_practicantes === id);
         if(!p) return;
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('p', 'mm', 'a4');
-        const areaColor = AREA_COLORS[p.area.trim()] || [30, 41, 59];
-        
-        doc.setFillColor(...areaColor);
-        doc.rect(0, 0, 210, 15, 'F');
-        doc.setTextColor(areaColor[0], areaColor[1], areaColor[2]);
-        doc.setFontSize(22);
-        doc.setFont("helvetica", "bold");
-        doc.text("KARDEX INDIVIDUAL DE ASISTENCIA", 15, 30);
-        
-        doc.setFontSize(9);
-        doc.setFont("helvetica", "normal");
-        doc.setTextColor(100);
-        doc.text(`Fecha/Hora de impresión: ${getFullTimestamp()}`, 15, 37);
 
-        doc.setDrawColor(areaColor[0], areaColor[1], areaColor[2]);
-        doc.setLineWidth(0.5);
-        doc.line(15, 40, 195, 40);
-        
-        doc.autoTable({
-            body: [
-                ['COLABORADOR:', `${p.nombres} ${p.apellidos.toUpperCase()}`],
-                ['ÁREA ASIGNADA:', p.area.toUpperCase()],
-                ['TIEMPO ACUMULADO:', p.horas_acumuladas || "00:00:00"],
-                ['ID REGISTRO:', p.id_practicantes]
-            ],
-            startY: 48,
-            theme: 'plain',
-            styles: { fontSize: 10, cellPadding: 3 },
-            columnStyles: { 0: { fontStyle: 'bold', width: 45 } }
-        });
-        
-        doc.save(`Ficha_${p.apellidos}.pdf`);
+        try {
+            // LLAMADA AL HISTORIAL COMPLETO
+            const resp = await fetch(`${API}/asistencia/${id}`);
+            const historial = await resp.json();
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            const areaColor = AREA_COLORS[p.area.trim()] || [30, 41, 59];
+            
+            // Encabezado
+            doc.setFillColor(...areaColor);
+            doc.rect(0, 0, 210, 25, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(18);
+            doc.setFont("helvetica", "bold");
+            doc.text("KARDEX INDIVIDUAL DE ASISTENCIA", 15, 17);
+            
+            // Info Personal
+            doc.setTextColor(40, 40, 40);
+            doc.setFontSize(10);
+            doc.text("RESUMEN DEL COLABORADOR", 15, 35);
+            
+            doc.autoTable({
+                body: [
+                    ['COLABORADOR:', `${p.apellidos.toUpperCase()}, ${p.nombres}`],
+                    ['ÁREA ASIGNADA:', p.area.toUpperCase()],
+                    ['TOTAL ACUMULADO:', p.horas_acumuladas || "00:00:00"],
+                    ['FECHA EMISIÓN:', getFullTimestamp()]
+                ],
+                startY: 38,
+                theme: 'plain',
+                styles: { fontSize: 9, cellPadding: 2 },
+                columnStyles: { 0: { fontStyle: 'bold', width: 40 } }
+            });
+
+            // Tabla Detallada de Marcaciones
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "bold");
+            doc.text("DETALLE DIARIO DE MARCACIONES", 15, doc.lastAutoTable.finalY + 12);
+
+            const rowsHistorial = historial.map((reg, index) => {
+                const fEntrada = reg.hora_entrada ? new Date(reg.hora_entrada) : null;
+                const fSalida = reg.hora_salida ? new Date(reg.hora_salida) : null;
+                
+                return [
+                    index + 1,
+                    fEntrada ? fEntrada.toLocaleDateString('es-ES') : '---',
+                    fEntrada ? fEntrada.toLocaleTimeString('es-ES', { hour: '2-digit', minute:'2-digit', hour12: true }) : '---',
+                    fSalida ? fSalida.toLocaleTimeString('es-ES', { hour: '2-digit', minute:'2-digit', hour12: true }) : 'En curso',
+                    reg.horas_trabajadas || '---'
+                ];
+            });
+
+            doc.autoTable({
+                head: [['N°', 'FECHA', 'ENTRADA', 'SALIDA', 'TIEMPO JORNADA']],
+                body: rowsHistorial,
+                startY: doc.lastAutoTable.finalY + 16,
+                styles: { fontSize: 8.5 },
+                headStyles: { fillColor: areaColor, textColor: 255 },
+                alternateRowStyles: { fillColor: [245, 247, 250] },
+                columnStyles: {
+                    0: { halign: 'center' },
+                    1: { halign: 'center' },
+                    2: { halign: 'center' },
+                    3: { halign: 'center' },
+                    4: { halign: 'right', fontStyle: 'bold' }
+                }
+            });
+
+            // Pie de página
+            const totalPages = doc.internal.getNumberOfPages();
+            for(let i = 1; i <= totalPages; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8);
+                doc.setTextColor(150);
+                doc.text(`Sistema ARGRAMETAL - Reporte generado el ${getFullTimestamp()} - Pág. ${i}/${totalPages}`, 15, 285);
+            }
+
+            doc.save(`Kardex_${p.apellidos}.pdf`);
+            showToast("Reporte detallado generado");
+
+        } catch (error) {
+            console.error(error);
+            showToast("Error al obtener historial detallado");
+        }
     }
 
     function openEdit(id) {
