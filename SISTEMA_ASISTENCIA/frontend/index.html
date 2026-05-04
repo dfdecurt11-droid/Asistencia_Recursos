@@ -96,7 +96,8 @@
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
         }
 
-        .btn-add:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3); }
+        .btn-add:hover:not(:disabled) { background: var(--primary-dark); transform: translateY(-2px); }
+        .btn-add:disabled { background: #cbd5e1; cursor: not-allowed; box-shadow: none; }
 
         .secondary-btns { 
             display: grid; 
@@ -136,6 +137,8 @@
             margin: 20px 0; font-family: 'Courier New', Courier, monospace;
         }
 
+        .pin-input:disabled { background: #f8fafc; color: #94a3b8; border-color: #cbd5e1; }
+
         /* TOASTS */
         #toast-container { position: fixed; top: 24px; right: 24px; z-index: 9999; }
         .toast { 
@@ -164,16 +167,17 @@
 <!-- Modal de Seguridad -->
 <div id="modalSeguridad">
     <div class="modal-content">
-        <div style="background: #eff6ff; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
-            <i class="fas fa-lock" style="font-size: 1.5rem; color: var(--primary);"></i>
+        <div id="modalIconContainer" style="background: #eff6ff; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+            <i id="modalIcon" class="fas fa-lock" style="font-size: 1.5rem; color: var(--primary);"></i>
         </div>
-        <h3 style="font-size: 1.2rem; font-weight: 800;">Acceso Restringido</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 5px;">Ingrese el PIN de administrador</p>
+        <h3 id="modalTitle" style="font-size: 1.2rem; font-weight: 800;">Acceso Restringido</h3>
+        <p id="modalStatus" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 5px;">Ingrese el PIN de administrador</p>
         
         <input type="password" id="pinAdmin" class="pin-input" placeholder="*****" maxlength="5" inputmode="numeric">
         
-        <button onclick="validarPin()" class="btn-add" style="padding: 14px;">ENTRAR</button>
-        <button onclick="cerrarModal()" style="background: none; border: none; color: var(--text-muted); margin-top: 15px; font-size: 0.8rem; cursor: pointer; font-weight: 600;">Cancelar</button>
+        <div id="intentosMsg" style="font-size: 0.75rem; font-weight: 700; color: var(--error); margin-bottom: 10px; display: none;"></div>
+        
+        <button onclick="cerrarModal()" id="btnCancelarModal" style="background: none; border: none; color: var(--text-muted); margin-top: 5px; font-size: 0.8rem; cursor: pointer; font-weight: 600;">Cancelar</button>
     </div>
 </div>
 
@@ -242,7 +246,10 @@
 
 <script>
     const API_URL = "https://asistencia-recursos.onrender.com/api/practicantes";
-    const PIN_ADMIN = "26113"; // NUEVO PIN ACTUALIZADO
+    const PIN_ADMIN = "26113"; 
+    
+    let intentosFallidos = 0;
+    let bloqueado = false;
 
     function updateClock() {
         const now = new Date();
@@ -253,30 +260,86 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // --- LÓGICA DE SEGURIDAD ---
+    // --- LÓGICA DE SEGURIDAD AUTO-DETECT ---
     function solicitarAcceso() {
+        if (bloqueado) return;
         document.getElementById('modalSeguridad').style.display = 'flex';
         document.getElementById('pinAdmin').focus();
     }
 
     function cerrarModal() {
+        if (bloqueado) return;
         document.getElementById('modalSeguridad').style.display = 'none';
         document.getElementById('pinAdmin').value = '';
+        document.getElementById('intentosMsg').style.display = 'none';
     }
 
-    function validarPin() {
-        const pin = document.getElementById('pinAdmin').value;
-        if(pin === PIN_ADMIN) {
+    // Escuchar el input del PIN
+    document.getElementById('pinAdmin').addEventListener('input', (e) => {
+        const pinIngresado = e.target.value;
+        
+        // Si llega a los 5 dígitos, valida automáticamente
+        if (pinIngresado.length === 5) {
+            validarPin(pinIngresado);
+        }
+    });
+
+    function validarPin(pin) {
+        if (pin === PIN_ADMIN) {
             location.href = 'pagos.html';
         } else {
-            mostrarToast("PIN Incorrecto. Acceso denegado.", "error");
-            document.getElementById('pinAdmin').value = '';
+            intentosFallidos++;
+            const restantes = 3 - intentosFallidos;
+            
+            if (intentosFallidos >= 3) {
+                bloquearSistema();
+            } else {
+                mostrarToast(`PIN incorrecto. Te quedan ${restantes} intentos.`, "error");
+                document.getElementById('pinAdmin').value = '';
+                const msg = document.getElementById('intentosMsg');
+                msg.innerText = `Intentos restantes: ${restantes}`;
+                msg.style.display = 'block';
+            }
         }
     }
 
-    document.getElementById('pinAdmin').addEventListener('keypress', (e) => {
-        if(e.key === 'Enter') validarPin();
-    });
+    function bloquearSistema() {
+        bloqueado = true;
+        const input = document.getElementById('pinAdmin');
+        const status = document.getElementById('modalStatus');
+        const icon = document.getElementById('modalIcon');
+        const msg = document.getElementById('intentosMsg');
+        
+        input.disabled = true;
+        input.value = '';
+        msg.style.display = 'none';
+        icon.className = "fas fa-hourglass-half";
+        icon.style.color = "var(--error)";
+        
+        let segundos = 30;
+        const intervalo = setInterval(() => {
+            segundos--;
+            status.innerText = `Sistema bloqueado. Reintente en ${segundos}s`;
+            if (segundos <= 0) {
+                clearInterval(intervalo);
+                desbloquearSistema();
+            }
+        }, 1000);
+    }
+
+    function desbloquearSistema() {
+        bloqueado = false;
+        intentosFallidos = 0;
+        const input = document.getElementById('pinAdmin');
+        const status = document.getElementById('modalStatus');
+        const icon = document.getElementById('modalIcon');
+        
+        input.disabled = false;
+        status.innerText = "Ingrese el PIN de administrador";
+        icon.className = "fas fa-lock";
+        icon.style.color = "var(--primary)";
+        input.focus();
+    }
 
     // --- GESTIÓN DE REGISTRO ---
     function mostrarToast(mensaje, tipo = 'success') {
