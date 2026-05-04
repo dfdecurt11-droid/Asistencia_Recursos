@@ -67,6 +67,34 @@ app.delete('/api/practicantes/:id', async (req, res) => {
 
 // --- GESTIÓN DE ASISTENCIA ---
 
+// NUEVO: Endpoint para obtener el historial detallado de un practicante (Soluciona el error 404)
+app.get('/api/asistencia/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const query = `
+            SELECT 
+                id, 
+                hora_entrada, 
+                hora_salida,
+                COALESCE(
+                    TO_CHAR(
+                        (CEIL(EXTRACT(EPOCH FROM (COALESCE(hora_salida, CURRENT_TIMESTAMP) - hora_entrada)) / 60) * INTERVAL '1 minute'), 
+                        'HH24:MI'
+                    ), 
+                    '00:00'
+                ) AS horas_trabajadas
+            FROM asistencia 
+            WHERE id_practicantes = $1 
+            ORDER BY hora_entrada DESC
+        `;
+        const result = await pool.query(query, [id]);
+        res.json(result.rows);
+    } catch (error) {
+        console.error("Error al obtener historial detallado:", error);
+        res.status(500).json({ error: 'Error al obtener historial' });
+    }
+});
+
 app.post('/api/asistencia/:id', async (req, res) => {
     const { id } = req.params;
     const tipo = req.body.tipo_registro || req.body.tipo;
