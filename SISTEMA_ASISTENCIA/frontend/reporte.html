@@ -16,6 +16,8 @@
             --ventas: #ef4444;
             --finanzas: #059669; --marketing: #7c3aed;
             --logistica: #d97706; --mejora: #0891b2; --recursos: #be185d;
+            /* NUEVO COLOR AZUL MARINO PARA GESTIÓN DE PROYECTOS */
+            --proyectos: #001f3f; 
             --bg-body: #f8fafc;
             --surface: #ffffff;
             --text-main: #0f172a;
@@ -97,6 +99,7 @@
         .bg-logistica { background-color: var(--logistica); }
         .bg-mejora { background-color: var(--mejora); }
         .bg-recursos { background-color: var(--recursos); }
+        .bg-proyectos { background-color: var(--proyectos); }
 
         .action-btn { 
             width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--border-color); 
@@ -190,7 +193,8 @@
             <button class="tab tab-logistica" onclick="setFilter('Logística', this)">LOGÍSTICA</button>
             <button class="tab tab-mejora" onclick="setFilter('Mejora Continua', this)">M. CONTINUA</button>
             <button class="tab tab-recursos" onclick="setFilter('Recursos Humanos', this)">RR.HH.</button>
-            <button class="tab tab-recursos" onclick="setFilter('Gestión de Proyectos', this)">PMO.</button>
+            <!-- NUEVA PESTAÑA DE GESTIÓN DE PROYECTOS -->
+            <button class="tab tab-proyectos" onclick="setFilter('Gestión de Proyectos', this)">G. PROYECTOS</button>
         </div>
     </section>
 
@@ -282,17 +286,27 @@
     let currentArea = "Todos";
     let practicanteAEliminar = null;
 
+    // COLORES ACTUALIZADOS CON AZUL MARINO PARA GESTIÓN DE PROYECTOS
     const AREA_COLORS = {
         'Todos': [30, 41, 59], 
         'Ventas': [239, 68, 68], 
         'Finanzas': [5, 150, 105],
-        'Marketing': [124, 58, 237], 'Logística': [217, 119, 6], 
-        'Mejora Continua': [8, 145, 178], 'Recursos Humanos': [190, 24, 93]
+        'Marketing': [124, 58, 237], 
+        'Logística': [217, 119, 6], 
+        'Mejora Continua': [8, 145, 178], 
+        'Recursos Humanos': [190, 24, 93],
+        'Gestión de Proyectos': [0, 31, 63] // Azul Marino Profundo (Navy)
     };
 
+    // CLASES CSS PARA LOS BADGES
     const AREA_CLASSES = {
-        'Ventas': 'bg-ventas', 'Finanzas': 'bg-finanzas', 'Marketing': 'bg-marketing',
-        'Logística': 'bg-logistica', 'Mejora Continua': 'bg-mejora', 'Recursos Humanos': 'bg-recursos'
+        'Ventas': 'bg-ventas', 
+        'Finanzas': 'bg-finanzas', 
+        'Marketing': 'bg-marketing',
+        'Logística': 'bg-logistica', 
+        'Mejora Continua': 'bg-mejora', 
+        'Recursos Humanos': 'bg-recursos',
+        'Gestión de Proyectos': 'bg-proyectos'
     };
 
     document.getElementById('currentDateDisplay').innerText = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
@@ -421,7 +435,6 @@
         if(!p) return;
 
         try {
-            // LLAMADA AL HISTORIAL COMPLETO
             const resp = await fetch(`${API}/asistencia/${id}`);
             const historial = await resp.json();
 
@@ -429,7 +442,6 @@
             const doc = new jsPDF('p', 'mm', 'a4');
             const areaColor = AREA_COLORS[p.area.trim()] || [30, 41, 59];
             
-            // Encabezado
             doc.setFillColor(...areaColor);
             doc.rect(0, 0, 210, 25, 'F');
             doc.setTextColor(255, 255, 255);
@@ -437,7 +449,6 @@
             doc.setFont("helvetica", "bold");
             doc.text("KARDEX INDIVIDUAL DE ASISTENCIA", 15, 17);
             
-            // Info Personal
             doc.setTextColor(40, 40, 40);
             doc.setFontSize(10);
             doc.text("RESUMEN DEL COLABORADOR", 15, 35);
@@ -455,7 +466,6 @@
                 columnStyles: { 0: { fontStyle: 'bold', width: 40 } }
             });
 
-            // Tabla Detallada de Marcaciones
             doc.setFontSize(11);
             doc.setFont("helvetica", "bold");
             doc.text("DETALLE DIARIO DE MARCACIONES", 15, doc.lastAutoTable.finalY + 12);
@@ -489,7 +499,6 @@
                 }
             });
 
-            // Pie de página
             const totalPages = doc.internal.getNumberOfPages();
             for(let i = 1; i <= totalPages; i++) {
                 doc.setPage(i);

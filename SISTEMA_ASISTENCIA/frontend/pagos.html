@@ -17,64 +17,138 @@
         :root {
             --primary: #1e293b; 
             --accent: #0ea5e9;  
-            --bg-body: #f8fafc;
+            --bg-body: #f1f5f9;
             --surface: #ffffff;
             --text-main: #0f172a;
-            --text-muted: #475569;
-            --border-color: #cbd5e1;
-            --danger: #dc2626;
-            --success: #059669;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --danger: #ef4444;
+            --success: #10b981;
             --pdf-red: #e11d48;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); padding: 2rem; color: var(--text-main); }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-body); 
+            color: var(--text-main);
+            line-height: 1.5;
+            padding: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            body { padding: 2rem; }
+        }
 
         .container { 
-            max-width: 1250px; margin: auto; background: var(--surface); 
-            border-radius: 12px; padding: 2.5rem; 
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            max-width: 1200px; 
+            margin: auto; 
+            background: var(--surface); 
+            border-radius: 16px; 
+            padding: 1.5rem; 
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--border-color);
         }
 
+        @media (min-width: 768px) {
+            .container { padding: 2.5rem; }
+        }
+
+        /* HEADER */
         .header { 
-            display: flex; justify-content: space-between; align-items: flex-end;
-            margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 2px solid var(--bg-body); 
+            display: flex; 
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem; 
+            padding-bottom: 1.5rem; 
+            border-bottom: 2px solid var(--bg-body); 
+        }
+
+        @media (min-width: 768px) {
+            .header { flex-direction: row; justify-content: space-between; align-items: center; }
         }
         
         .brand h2 { font-weight: 800; letter-spacing: -0.025em; font-size: 1.5rem; color: var(--primary); }
         .brand h2 span { color: var(--accent); }
-        .nav-back { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 8px; margin-bottom: 10px; transition: 0.2s; }
+        .nav-back { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 8px; transition: 0.2s; }
         .nav-back:hover { color: var(--accent); }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
-        .stat-card { background: var(--surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 1.25rem; }
-        .stat-icon { width: 48px; height: 48px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: #f0f9ff; color: var(--accent); font-size: 1.2rem; }
+        .header-info { text-align: left; }
+        @media (min-width: 768px) { .header-info { text-align: right; } }
 
+        /* RELOJ Y FECHA */
+        #clock { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; color: var(--accent); font-weight: 700; display: block; }
+        #dateNow { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); margin-bottom: 10px; }
+
+        /* STATS */
+        .stats-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2rem; }
+        @media (min-width: 640px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        .stat-card { 
+            background: var(--surface); 
+            padding: 1.25rem; 
+            border-radius: 12px; 
+            border: 1px solid var(--border-color); 
+            display: flex; 
+            align-items: center; 
+            gap: 1rem;
+            transition: transform 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-3px); }
+        .stat-icon { width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: #f0f9ff; color: var(--accent); font-size: 1.1rem; }
+
+        /* FORMULARIO */
         .form-container {
-            background: #f1f5f9; padding: 2rem; border-radius: 8px; margin-bottom: 2.5rem;
-            display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 1.25rem; align-items: end;
+            background: #f8fafc; 
+            padding: 1.5rem; 
+            border-radius: 12px; 
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            display: grid; 
+            grid-template-columns: 1fr; 
+            gap: 1.25rem; 
+            align-items: end;
         }
 
-        .field label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 8px; }
-        .field select, .field input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.9rem; }
+        @media (min-width: 1024px) {
+            .form-container { grid-template-columns: 2fr 1fr 1fr auto; }
+        }
 
-        .btn-add { background: var(--primary); color: white; border: none; padding: 0 24px; border-radius: 6px; font-weight: 700; cursor: pointer; height: 45px; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
-        .btn-add:hover { background: #000; transform: translateY(-1px); }
+        .field label { display: block; font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.025em; }
+        .field select, .field input { 
+            width: 100%; 
+            padding: 10px 12px; 
+            border: 1px solid var(--border-color); 
+            border-radius: 8px; 
+            font-size: 0.95rem; 
+            background: white;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .field select:focus, .field input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1); }
 
-        .btn-report-all { background: var(--pdf-red); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; margin-bottom: 15px; font-size: 0.85rem; }
+        .btn-add { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; width: 100%; }
+        .btn-add:hover { background: #000; }
 
-        .table-container { border-radius: 8px; border: 1px solid var(--border-color); overflow: hidden; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: var(--primary); color: white; padding: 14px 20px; text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        td { padding: 16px 20px; border-bottom: 1px solid var(--bg-body); font-size: 0.9rem; }
+        .btn-report-all { background: var(--pdf-red); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; transition: 0.2s; }
+        .btn-report-all:hover { opacity: 0.9; transform: scale(1.02); }
 
-        .btn-action { border: none; background: none; cursor: pointer; padding: 5px; font-size: 1.1rem; transition: 0.2s; }
-        .btn-pdf { color: var(--pdf-red); }
-        .btn-delete { color: #94a3b8; }
-        .btn-delete:hover { color: var(--danger); }
+        /* TABLA */
+        .table-wrapper { overflow-x: auto; margin-top: 1rem; border-radius: 12px; border: 1px solid var(--border-color); }
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        th { background: #f8fafc; color: var(--text-muted); padding: 12px 20px; text-align: left; font-size: 0.75rem; text-transform: uppercase; font-weight: 700; border-bottom: 1px solid var(--border-color); }
+        td { padding: 14px 20px; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background-color: #fcfcfd; }
+
+        .btn-action { border: none; background: #f1f5f9; cursor: pointer; width: 32px; height: 32px; border-radius: 6px; font-size: 1rem; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; }
+        .btn-pdf { color: var(--pdf-red); margin-right: 5px; }
+        .btn-pdf:hover { background: #fee2e2; }
+        .btn-delete { color: var(--text-muted); }
+        .btn-delete:hover { background: #fee2e2; color: var(--danger); }
         
-        .badge-area { background: #e2e8f0; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
+        .badge-area { background: #f1f5f9; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; color: var(--primary); border: 1px solid var(--border-color); }
         .mono { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
     </style>
 </head>
@@ -83,13 +157,14 @@
 <div class="container">
     <header class="header">
         <div class="brand">
-            <a href="index.html" class="nav-back"><i class="fas fa-arrow-left"></i> Panel Principal</a>
+            <a href="index.html" class="nav-back"><i class="fas fa-arrow-left"></i> VOLVER AL PANEL</a>
             <h2>ARGRAMETAL <span>PAGOS</span></h2>
         </div>
-        <div style="text-align: right;">
-            <p id="dateNow" style="font-size: 0.9rem; font-weight: 600; color: var(--primary);"></p>
+        <div class="header-info">
+            <span id="clock">00:00:00 PM</span>
+            <p id="dateNow"></p>
             <button class="btn-report-all" onclick="generateGeneralReport()">
-                <i class="fas fa-file-pdf"></i> REPORTE CONSOLIDADO
+                <i class="fas fa-file-pdf"></i> REPORTE GENERAL
             </button>
         </div>
     </header>
@@ -98,22 +173,22 @@
         <div class="stat-card">
             <div class="stat-icon"><i class="fas fa-wallet"></i></div>
             <div>
-                <p style="font-size: 0.65rem; color: var(--text-muted); font-weight: 800;">TOTAL A PAGAR</p>
-                <h4 id="grandTotal" class="mono">S/ 0.00</h4>
+                <p style="font-size: 0.65rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Monto Total Acumulado</p>
+                <h4 id="grandTotal" class="mono" style="font-size: 1.25rem; color: var(--success);">S/ 0.00</h4>
             </div>
         </div>
         <div class="stat-card">
             <div class="stat-icon"><i class="fas fa-box"></i></div>
             <div>
-                <p style="font-size: 0.65rem; color: var(--text-muted); font-weight: 800;">TOTAL ENTREGABLES</p>
-                <h4 id="totalDeliveries" class="mono">0</h4>
+                <p style="font-size: 0.65rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Total Entregables</p>
+                <h4 id="totalDeliveries" class="mono" style="font-size: 1.25rem;">0</h4>
             </div>
         </div>
     </div>
 
     <section class="form-container">
         <div class="field">
-            <label>Practicante</label>
+            <label>Seleccionar Practicante</label>
             <select id="pSelect">
                 <option value="">Cargando practicantes...</option>
             </select>
@@ -127,17 +202,17 @@
             <input type="number" id="pMonto" value="50" min="0">
         </div>
         <button class="btn-add" onclick="addPayment()">
-            <i class="fas fa-plus-circle"></i> REGISTRAR
+            <i class="fas fa-plus"></i> REGISTRAR PAGO
         </button>
     </section>
 
-    <div class="table-container">
+    <div class="table-wrapper">
         <table>
             <thead>
                 <tr>
                     <th>Practicante</th>
-                    <th>Área</th>
-                    <th>Entregables</th>
+                    <th>Área de Trabajo</th>
+                    <th>Cant.</th>
                     <th>Subtotal Bruto</th>
                     <th style="text-align: center;">Acciones</th>
                 </tr>
@@ -149,10 +224,27 @@
 
 <script>
     let dbPracticantes = [];
-    let payments = {}; // { "Nombre": { area, total, entregables, logs: [] } }
+    let payments = {}; 
     const API_URL = "https://asistencia-recursos.onrender.com/api/practicantes";
 
-    document.getElementById('dateNow').innerText = new Intl.DateTimeFormat('es-PE', { dateStyle: 'long' }).format(new Date());
+    // Función del Reloj 12h
+    function updateClock() {
+        const now = new Date();
+        let hours = now.getHours();
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        
+        hours = hours % 12;
+        hours = hours ? hours : 12; // el 0 es 12
+        const strTime = `${String(hours).padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
+        
+        document.getElementById('clock').innerText = strTime;
+    }
+
+    document.getElementById('dateNow').innerText = new Intl.DateTimeFormat('es-PE', { dateStyle: 'full' }).format(new Date());
+    setInterval(updateClock, 1000);
+    updateClock();
 
     async function init() {
         try {
@@ -174,13 +266,13 @@
 
     function addPayment() {
         const select = document.getElementById('pSelect');
+        if(select.value === "") return Swal.fire('Atención', 'Seleccione un practicante', 'warning');
+
         const nombre = select.options[select.selectedIndex].text;
         const area = select.options[select.selectedIndex].dataset.area;
         const cant = parseInt(document.getElementById('pCant').value);
         const monto = parseFloat(document.getElementById('pMonto').value);
         const fecha = new Date().toLocaleDateString('es-PE');
-
-        if(select.value === "") return Swal.fire('Atención', 'Seleccione un practicante', 'warning');
 
         if (!payments[nombre]) {
             payments[nombre] = { area, total: 0, entregables: 0, logs: [] };
@@ -191,7 +283,15 @@
         payments[nombre].entregables += cant;
 
         renderTable();
-        Swal.fire({ icon: 'success', title: 'Registro exitoso', toast: true, position: 'top-end', showConfirmButton: false, timer: 1500 });
+        Swal.fire({ 
+            icon: 'success', 
+            title: 'Pago Registrado', 
+            text: `${nombre} ha sido actualizado`,
+            toast: true, 
+            position: 'top-end', 
+            showConfirmButton: false, 
+            timer: 2000 
+        });
     }
 
     function renderTable() {
@@ -205,35 +305,46 @@
             gCant += p.entregables;
             html += `
                 <tr>
-                    <td><strong>${nom}</strong></td>
+                    <td><div style="font-weight:700">${nom}</div></td>
                     <td><span class="badge-area">${p.area}</span></td>
                     <td class="mono">${p.entregables}</td>
-                    <td class="mono" style="color:var(--success)">S/ ${p.total.toFixed(2)}</td>
+                    <td class="mono" style="color:var(--success); font-weight:700">S/ ${p.total.toFixed(2)}</td>
                     <td style="text-align:center;">
-                        <button class="btn-action btn-pdf" onclick="generateIndividualReport('${nom}')" title="Generar Boleta Detallada">
+                        <button class="btn-action btn-pdf" onclick="generateIndividualReport('${nom}')" title="Boleta Detallada">
                             <i class="fas fa-file-invoice-dollar"></i>
                         </button>
-                        <button class="btn-action btn-delete" onclick="deleteEntry('${nom}')">
+                        <button class="btn-action btn-delete" onclick="deleteEntry('${nom}')" title="Eliminar">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </td>
                 </tr>`;
         });
 
-        body.innerHTML = html || '<tr><td colspan="5" style="text-align:center; padding:3rem; color:#94a3b8">Esperando registros de pago...</td></tr>';
+        body.innerHTML = html || '<tr><td colspan="5" style="text-align:center; padding:4rem; color:#94a3b8"><i class="fas fa-inbox" style="display:block; font-size:2rem; margin-bottom:10px; opacity:0.3"></i> No hay pagos registrados hoy</td></tr>';
         document.getElementById('grandTotal').innerText = `S/ ${gTotal.toFixed(2)}`;
         document.getElementById('totalDeliveries').innerText = gCant;
     }
 
     function deleteEntry(nom) {
-        delete payments[nom];
-        renderTable();
+        Swal.fire({
+            title: '¿Eliminar registro?',
+            text: `Se borrarán los datos de pago para ${nom}`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#1e293b',
+            cancelButtonColor: '#ef4444',
+            confirmButtonText: 'Sí, borrar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                delete payments[nom];
+                renderTable();
+            }
+        });
     }
 
-    // --- MOTOR DE REPORTES PDF ---
-
     function generateGeneralReport() {
-        if(Object.keys(payments).length === 0) return Swal.fire('Error', 'No hay datos en la sesión', 'error');
+        if(Object.keys(payments).length === 0) return Swal.fire('Error', 'No hay datos para exportar', 'error');
         
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
@@ -242,9 +353,9 @@
         doc.setFontSize(18); doc.setTextColor(30, 41, 59);
         doc.text("ARGRAMETAL S.A.C.", 14, 22);
         doc.setFontSize(10); doc.setTextColor(100);
-        doc.text("REPORTE RESUMEN DE PAGOS ACUMULADOS", 14, 28);
+        doc.text("REPORTE CONSOLIDADO DE PAGOS", 14, 28);
         doc.setFontSize(9);
-        doc.text(`Generado el: ${now}`, 14, 34);
+        doc.text(`Fecha de emisión: ${now}`, 14, 34);
 
         const tableData = Object.keys(payments).map(nom => [
             nom, payments[nom].area, payments[nom].entregables, `S/ ${payments[nom].total.toFixed(2)}`
@@ -252,13 +363,13 @@
 
         doc.autoTable({
             startY: 40,
-            head: [['Practicante', 'Área', 'Total Entregables', 'Monto Acumulado']],
+            head: [['Practicante', 'Área', 'Entregables', 'Total']],
             body: tableData,
             theme: 'grid',
             headStyles: { fillColor: [30, 41, 59] }
         });
 
-        doc.save(`Argrametal_Resumen_${Date.now()}.pdf`);
+        doc.save(`Argrametal_General_${Date.now()}.pdf`);
     }
 
     function generateIndividualReport(nom) {
@@ -267,53 +378,38 @@
         const doc = new jsPDF();
         const now = new Date().toLocaleString('es-PE');
 
-        // Encabezado
         doc.setFillColor(30, 41, 59);
         doc.rect(0, 0, 210, 45, 'F');
-        
         doc.setTextColor(255, 255, 255);
         doc.setFontSize(22);
         doc.text("ARGRAMETAL", 14, 20);
         doc.setFontSize(11);
-        doc.text("BOLETA DE PAGO DETALLADA POR ENTREGABLE", 14, 30);
+        doc.text("BOLETA DE PAGO DETALLADA", 14, 30);
 
-        // Datos del receptor y tiempo
         doc.setTextColor(30, 41, 59);
         doc.setFontSize(11);
         doc.text(`PRACTICANTE: ${nom}`, 14, 60);
         doc.text(`DEPARTAMENTO: ${p.area}`, 14, 67);
         doc.setFontSize(10);
         doc.setTextColor(120);
-        doc.text(`FECHA/HORA DE EMISIÓN: ${now}`, 14, 74);
+        doc.text(`EMITIDO: ${now}`, 14, 74);
 
-        // Tabla de historial detallado
         const logData = p.logs.map(l => [l.fecha, l.cant, `S/ ${l.monto.toFixed(2)}`, `S/ ${l.subtotal.toFixed(2)}`]);
 
         doc.autoTable({
             startY: 85,
-            head: [['Fecha de Entrega', 'Cantidad', 'Costo Unitario', 'Subtotal']],
+            head: [['Fecha', 'Cantidad', 'Costo U.', 'Subtotal']],
             body: logData,
             theme: 'striped',
-            headStyles: { fillColor: [14, 165, 233] },
-            styles: { fontSize: 10 }
+            headStyles: { fillColor: [14, 165, 233] }
         });
 
         const finalY = doc.lastAutoTable.finalY + 15;
-        
-        // Resumen
-        doc.setDrawColor(200);
-        doc.line(120, finalY, 195, finalY);
         doc.setFontSize(13);
         doc.setTextColor(30, 41, 59);
-        doc.text(`TOTAL A PAGAR:`, 120, finalY + 10);
-        doc.setTextColor(5, 150, 105);
-        doc.text(`S/ ${p.total.toFixed(2)}`, 165, finalY + 10);
+        doc.text(`TOTAL A PAGAR: S/ ${p.total.toFixed(2)}`, 140, finalY + 10);
 
-        doc.setTextColor(150);
-        doc.setFontSize(8);
-        doc.text(`Este documento certifica los pagos registrados hasta el ${now}.`, 14, 285);
-
-        doc.save(`Boleta_Pago_${nom.replace(" ","_")}.pdf`);
+        doc.save(`Boleta_${nom.replace(" ","_")}.pdf`);
     }
 
     init();

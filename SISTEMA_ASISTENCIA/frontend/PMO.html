@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ARGRAMETAL | Área PMO</title>
+    <title>ARGRAMETAL | Área Gestión de Proyectos</title>
     
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/9440/9440939.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,7 +11,9 @@
     
     <style>
         :root { 
-            --accent: #6366f1; /* Indigo para PMO */
+            /* COLOR ACTUALIZADO A AZUL MARINO PROFUNDO */
+            --accent: #001f3f; 
+            --accent-glow: #003366;
             --dark-bg: #020617;
             --card-bg: #0f172a;
             --border: rgba(255, 255, 255, 0.08);
@@ -25,7 +27,7 @@
             min-height: 100vh;
             background-color: var(--dark-bg);
             background-image: 
-                radial-gradient(circle at top right, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at top right, rgba(0, 31, 63, 0.2) 0%, transparent 50%),
                 url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
             color: white;
             display: flex;
@@ -79,7 +81,7 @@
         /* --- TITULACIÓN --- */
         .header-section { margin-bottom: 35px; }
         .header-section span { 
-            color: var(--accent); 
+            color: #3b82f6; /* Azul brillante para el subtítulo */
             font-weight: 800; 
             font-size: 0.75rem; 
             letter-spacing: 3px; 
@@ -96,7 +98,7 @@
         #lista-asistencia { 
             display: grid; 
             gap: 12px; 
-            max-height: 60vh; 
+            max-height: 65vh; 
             overflow-y: auto; 
             padding-right: 8px;
         }
@@ -116,7 +118,7 @@
         }
 
         .card-practicante:hover { 
-            border-color: rgba(99, 102, 241, 0.4);
+            border-color: #3b82f6;
             background: #1e293b;
         }
 
@@ -125,7 +127,7 @@
 
         .actions { display: flex; gap: 10px; }
 
-        /* --- BOTONES BLANCO PROFESIONAL --- */
+        /* --- BOTONES PROFESIONALES --- */
         .btn-mark { 
             padding: 12px 18px; 
             border-radius: 8px; 
@@ -152,7 +154,6 @@
 
         .btn-mark:disabled { opacity: 0.2; cursor: not-allowed; }
 
-        /* --- NOTIFICACIÓN --- */
         #notification {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             padding: 15px 30px; border-radius: 12px; 
@@ -177,19 +178,20 @@
 
     <div class="container">
         <nav class="top-nav">
-            <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i> Áreas del Sistema</a>
+            <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver a Áreas</a>
             <div id="reloj" class="clock">00:00:00</div>
         </nav>
         
         <header class="header-section">
             <span>ARGRAMETAL S.A.</span>
-            <h1>AREA <span style="color: var(--accent);">PMO</span></h1>
+            <!-- TITULO ACTUALIZADO -->
+            <h1>GESTIÓN DE <span style="color: #3b82f6;">PROYECTOS</span></h1>
         </header>
 
         <div id="lista-asistencia">
             <div style="text-align:center; padding: 60px; opacity: 0.4;">
                 <i class="fas fa-circle-notch fa-spin" style="font-size: 1.5rem;"></i>
-                <p style="margin-top: 15px; font-weight: 600; font-size: 0.8rem; letter-spacing: 2px;">SINCRONIZANDO EQUIPO PMO...</p>
+                <p style="margin-top: 15px; font-weight: 600; font-size: 0.8rem; letter-spacing: 2px;">SINCRONIZANDO EQUIPO...</p>
             </div>
         </div>
     </div>
@@ -197,7 +199,9 @@
     <script>
         const API_GET = "https://asistencia-recursos.onrender.com/api/practicantes";
         const API_POST = "https://asistencia-recursos.onrender.com/api/asistencia";
-        const AREA_FILTRO = "PMO"; // Filtro específico para esta área
+        
+        // FILTRO EXACTO PARA COINCIDIR CON INDEX.HTML
+        const AREA_FILTRO = "Gestión de Proyectos";
 
         function updateClock() {
             const now = new Date();
@@ -223,11 +227,11 @@
                 const res = await fetch(API_GET);
                 const data = await res.json();
                 
-                // Filtramos por el área PMO
-                const equipo = data.filter(p => p.area.trim() === AREA_FILTRO);
+                // Filtrado por el nombre exacto enviado desde el formulario
+                const equipo = data.filter(p => p.area === AREA_FILTRO);
 
                 if(equipo.length === 0) {
-                    container.innerHTML = `<p style="text-align:center; padding: 40px; color:var(--text-muted);">No hay personal asignado a la división PMO.</p>`;
+                    container.innerHTML = `<p style="text-align:center; padding: 40px; color:var(--text-muted);">No hay personal registrado en Gestión de Proyectos todavía.</p>`;
                     return;
                 }
 
@@ -235,7 +239,7 @@
                     <div class="card-practicante">
                         <div class="info">
                             <strong>${p.apellidos.toUpperCase()}, ${p.nombres}</strong>
-                            <small>ID: ${String(p.id_practicantes).padStart(4, '0')} • ARGRAMETAL</small>
+                            <small>ID: ${String(p.id_practicantes).padStart(4, '0')} • DPTO. PROYECTOS</small>
                         </div>
                         <div class="actions">
                             <button class="btn-mark" onclick="register(${p.id_practicantes}, 'entrada', this)">
@@ -267,11 +271,12 @@
                     body: JSON.stringify({ tipo_registro: tipo })
                 });
 
+                const resData = await res.json();
+
                 if (res.ok) {
                     notify(`MARCACIÓN DE ${tipo} CORRECTA`);
                 } else {
-                    const errData = await res.json();
-                    notify(errData.message || "Error en proceso", true);
+                    notify(resData.message || "Error en proceso", true);
                 }
             } catch (e) { 
                 notify("Error de red: Intente de nuevo", true); 

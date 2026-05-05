@@ -217,6 +217,7 @@
                 <option value="Logística">Logística</option>
                 <option value="Mejora Continua">Mejora Continua</option>
                 <option value="Recursos Humanos">Recursos Humanos</option>
+                <!-- ÁREA NUEVA AÑADIDA AQUÍ -->
                 <option value="Gestión de Proyectos">Gestión de Proyectos</option>
             </select>
             <i class="fas fa-briefcase"></i>
@@ -261,7 +262,6 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // --- LÓGICA DE SEGURIDAD AUTO-DETECT ---
     function solicitarAcceso() {
         if (bloqueado) return;
         document.getElementById('modalSeguridad').style.display = 'flex';
@@ -275,11 +275,8 @@
         document.getElementById('intentosMsg').style.display = 'none';
     }
 
-    // Escuchar el input del PIN
     document.getElementById('pinAdmin').addEventListener('input', (e) => {
         const pinIngresado = e.target.value;
-        
-        // Si llega a los 5 dígitos, valida automáticamente
         if (pinIngresado.length === 5) {
             validarPin(pinIngresado);
         }
@@ -291,7 +288,6 @@
         } else {
             intentosFallidos++;
             const restantes = 3 - intentosFallidos;
-            
             if (intentosFallidos >= 3) {
                 bloquearSistema();
             } else {
@@ -310,13 +306,11 @@
         const status = document.getElementById('modalStatus');
         const icon = document.getElementById('modalIcon');
         const msg = document.getElementById('intentosMsg');
-        
         input.disabled = true;
         input.value = '';
         msg.style.display = 'none';
         icon.className = "fas fa-hourglass-half";
         icon.style.color = "var(--error)";
-        
         let segundos = 30;
         const intervalo = setInterval(() => {
             segundos--;
@@ -334,7 +328,6 @@
         const input = document.getElementById('pinAdmin');
         const status = document.getElementById('modalStatus');
         const icon = document.getElementById('modalIcon');
-        
         input.disabled = false;
         status.innerText = "Ingrese el PIN de administrador";
         icon.className = "fas fa-lock";
@@ -342,16 +335,13 @@
         input.focus();
     }
 
-    // --- GESTIÓN DE REGISTRO ---
     function mostrarToast(mensaje, tipo = 'success') {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
         toast.className = `toast`;
         toast.style.borderLeftColor = tipo === 'success' ? 'var(--success)' : 'var(--error)';
-        
         const icon = tipo === 'success' ? 'fa-check-circle' : 'fa-circle-xmark';
         const color = tipo === 'success' ? 'var(--success)' : 'var(--error)';
-        
         toast.innerHTML = `
             <i class="fas ${icon}" style="color: ${color}; font-size: 1.25rem;"></i> 
             <div>
@@ -359,7 +349,6 @@
                 <span style="color:var(--text-muted); font-size:0.8rem">${mensaje}</span>
             </div>`;
         container.appendChild(toast);
-        
         setTimeout(() => {
             toast.style.opacity = '0';
             toast.style.transform = 'translateX(20px)';
@@ -373,7 +362,6 @@
         const icon = document.getElementById('btnIcon');
         const spinner = document.getElementById('btnSpinner');
         const txtBtn = btn.querySelector('span:not(.spinner)');
-
         const nom = document.getElementById('txtNombres').value.trim();
         const ape = document.getElementById('txtApellidos').value.trim();
         const are = document.getElementById('selArea').value;
@@ -394,7 +382,6 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nombres: nom, apellidos: ape, area: are })
             });
-            
             if(res.ok) {
                 mostrarToast(`¡Bienvenido, ${nom}! Registro exitoso.`);
                 document.getElementById('txtNombres').value = "";
