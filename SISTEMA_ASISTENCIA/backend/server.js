@@ -1,14 +1,25 @@
 const express = require('express');
 const { Pool } = require('pg');
 const cors = require('cors');
+const path = require('path'); // Importante para manejar rutas de carpetas
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// --- CONFIGURACIÓN DE BASE DE DATOS ---
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false }
+});
+
+// --- SERVIR ARCHIVOS ESTÁTICOS (FRONTEND) ---
+// Esto permite que al entrar a /gestion_proyectos.html el servidor sepa dónde buscarlo
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// Redirigir la raíz al index.html por defecto
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
 // --- GESTIÓN DE PRACTICANTES ---
@@ -67,7 +78,6 @@ app.delete('/api/practicantes/:id', async (req, res) => {
 
 // --- GESTIÓN DE ASISTENCIA ---
 
-// NUEVO: Endpoint para obtener el historial detallado de un practicante (Soluciona el error 404)
 app.get('/api/asistencia/:id', async (req, res) => {
     const { id } = req.params;
     try {
@@ -159,16 +169,14 @@ app.delete('/api/reset', async (req, res) => {
     }
 });
 
-// --- MÓDULO DE PAGOS Y ENTREGABLES ---
+// --- MÓDULO DE PAGOS ---
 
 app.post('/api/pagos', async (req, res) => {
     const { nombre, entregables, monto_unidad, total } = req.body;
-    
     try {
         const query = 'INSERT INTO pagos (practicante, cant_entregables, monto_por_entregable, total_pagado, fecha) VALUES ($1, $2, $3, $4, NOW())';
         const values = [nombre, entregables, monto_unidad, total];
-        
-        await pool.query(query, values); // Usando el mismo pool configurado arriba
+        await pool.query(query, values);
         res.status(200).json({ message: "Pago guardado exitosamente" });
     } catch (err) {
         console.error("Error al registrar pago:", err);
@@ -177,7 +185,6 @@ app.post('/api/pagos', async (req, res) => {
 });
 
 // --- INICIO DEL SERVIDOR ---
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
