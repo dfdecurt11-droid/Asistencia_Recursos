@@ -24,234 +24,125 @@
             --border: rgba(255, 255, 255, 0.08);
             --glass: rgba(255, 255, 255, 0.03);
 
-            /* Colores de Áreas con alta saturación para legibilidad */
-            --color-pmo: #0056b3; 
+            /* Colores de Áreas */
+            --color-pmo: #3b82f6; 
             --color-ventas: #ef4444; 
             --color-finanzas: #10b981; 
-            --color-marketing: #8b5cf6;
+            --color-marketing: #a855f7;
             --color-logistica: #f59e0b; 
             --color-mejora: #06b6d4; 
             --color-rrhh: #ec4899;
             
-            /* Tiempos de transición */
-            --anim-fast: 0.2s ease;
             --anim-smooth: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* Reset y Optimización */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             min-height: 100vh; 
             background-color: var(--bg-body);
-            background-image: 
-                radial-gradient(circle at 50% -20%, rgba(59, 130, 246, 0.15), transparent 50%),
-                url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
             color: var(--text-main);
             display: flex;
             justify-content: center;
             padding: clamp(1rem, 5vw, 4rem);
-            overflow-x: hidden;
         }
 
-        .container { 
-            width: 100%; 
-            max-width: 1400px; 
-            display: flex; 
-            flex-direction: column; 
-        }
+        .container { width: 100%; max-width: 1400px; display: flex; flex-direction: column; }
 
-        /* Barra Superior */
         .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: clamp(2rem, 8vh, 4rem);
+            margin-bottom: 3rem;
             padding-bottom: 1.5rem;
             border-bottom: 1px solid var(--border);
         }
 
         .logo-section { display: flex; align-items: center; gap: 15px; }
-        .logo-section i { font-size: clamp(1.2rem, 3vw, 1.8rem); color: var(--accent); }
-        .logo-section h2 { 
-            font-size: clamp(1.1rem, 2.5vw, 1.5rem); 
-            font-weight: 800; 
-            letter-spacing: 1px; 
-            text-transform: uppercase; 
-        }
-        .logo-section span { color: var(--accent); opacity: 0.8; }
+        .logo-section h2 { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+        .logo-section span { color: var(--accent); }
 
         .btn-exit {
             background: var(--glass);
             border: 1px solid var(--border);
-            padding: 12px 24px;
-            border-radius: 14px;
+            padding: 10px 20px;
+            border-radius: 12px;
             color: var(--text-muted);
             text-decoration: none;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 700;
-            transition: var(--anim-smooth);
             text-transform: uppercase;
-            letter-spacing: 1px;
             display: flex;
-            align-items: center; gap: 10px;
+            align-items: center; gap: 8px;
         }
 
-        .btn-exit:hover { 
-            background: rgba(239, 68, 68, 0.1); 
-            border-color: #ef4444; 
-            color: #ef4444; 
-            transform: translateY(-2px); 
-        }
+        .page-intro { margin-bottom: 3rem; }
+        .page-intro h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .page-intro p { color: var(--text-muted); max-width: 600px; line-height: 1.6; }
 
-        /* Intro */
-        .page-intro { margin-bottom: 3.5rem; text-align: left; }
-        
-        /* Solución definitiva al error de la imagen image_cc535b.png */
-        .page-intro h1 { 
-            font-size: clamp(2rem, 8vw, 3.5rem); 
-            font-weight: 800; 
-            line-height: 1.1;
-            margin-bottom: 1rem; 
-            letter-spacing: -2px;
-            background-image: linear-gradient(135deg, #ffffff 30%, #64748b 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            color: transparent; /* Fallback */
-        }
-        .page-intro p { 
-            color: var(--text-muted); 
-            font-size: clamp(1rem, 2vw, 1.2rem); 
-            max-width: 650px; 
-            font-weight: 400;
-        }
-
-        /* Grid de Áreas - Súper Responsivo */
         .grid-areas { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
-            gap: clamp(1rem, 2vw, 2rem); 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 20px; 
         }
 
-        /* Tarjetas Estilo Enterprise */
         .area-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 28px;
-            padding: 2.5rem;
+            border-radius: 24px;
+            padding: 2rem;
+            text-decoration: none;
+            transition: var(--anim-smooth);
             display: flex;
             flex-direction: column;
-            transition: var(--anim-smooth);
-            text-decoration: none;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        .area-card:hover { 
-            transform: translateY(-12px) scale(1.02); 
-            border-color: var(--area-color); 
-            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.5); 
-        }
-
-        /* Brillo interno al hover */
-        .area-card::after {
-            content: ''; position: absolute; inset: 0; 
-            background: radial-gradient(circle at top right, var(--area-color), transparent 70%);
-            opacity: 0; transition: var(--anim-smooth); z-index: 0;
-        }
-        .area-card:hover::after { opacity: 0.05; }
-
-        .card-content { position: relative; z-index: 1; }
+        .area-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.2); }
 
         .card-icon {
-            width: 64px; height: 64px; 
-            background: var(--glass);
-            border-radius: 20px; 
+            width: 48px; height: 48px; 
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px; 
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.8rem; color: var(--area-color); 
-            border: 1px solid var(--border);
-            margin-bottom: 2rem; 
-            transition: var(--anim-smooth);
+            font-size: 1.2rem; color: var(--area-color); 
+            margin-bottom: 1.5rem; 
         }
 
-        .area-card:hover .card-icon { 
-            background: var(--area-color); 
-            color: white; 
-            transform: rotate(-5deg);
-            border-color: transparent;
-        }
-
-        .area-card h3 { 
-            font-size: 1.5rem; 
-            font-weight: 700; 
-            color: #ffffff; 
-            margin-bottom: 0.8rem; 
-        }
-
-        .area-card p { 
-            font-size: 0.95rem; 
-            color: var(--text-muted); 
-            margin-bottom: 2.5rem; 
-            min-height: 3em;
-        }
+        .area-card h3 { font-size: 1.4rem; font-weight: 700; color: #fff; margin-bottom: 0.6rem; }
+        .area-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2rem; line-height: 1.5; min-height: 45px; }
 
         .btn-action {
             width: 100%; 
-            padding: 16px; 
-            background: var(--glass);
+            padding: 14px 20px; 
+            background: #23262b;
             border: 1px solid var(--border); 
-            border-radius: 16px;
+            border-radius: 14px;
             color: #ffffff; 
-            font-size: 0.8rem; 
+            font-size: 0.75rem; 
             font-weight: 700;
             text-transform: uppercase; 
-            letter-spacing: 1.5px;
+            letter-spacing: 0.5px;
             display: flex; 
             align-items: center; 
-            justify-content: center; 
-            gap: 12px; 
-            transition: var(--anim-smooth);
+            justify-content: space-between; 
+            transition: 0.3s;
         }
 
-        .area-card:hover .btn-action { 
-            background: #ffffff; 
-            color: #000000; 
-            border-color: #ffffff; 
-            transform: scale(1.02);
-        }
+        .area-card:hover .btn-action { background: #2d3138; border-color: var(--area-color); }
 
         /* Tags de colores */
-        .pmo { --area-color: var(--color-pmo); }
         .vnt { --area-color: var(--color-ventas); }
         .fnz { --area-color: var(--color-finanzas); }
         .mkt { --area-color: var(--color-marketing); }
         .log { --area-color: var(--color-logistica); }
         .mjr { --area-color: var(--color-mejora); }
         .rrh { --area-color: var(--color-rrhh); }
+        .pmo { --area-color: var(--color-pmo); }
 
-        /* Adaptabilidad para Dispositivos Específicos */
-        
-        /* Tablet / iPad */
-        @media (max-width: 1024px) {
-            .grid-areas { grid-template-columns: 1fr 1fr; }
-        }
-
-        /* Celular */
         @media (max-width: 600px) {
-            body { padding: 1.5rem 1rem; }
             .grid-areas { grid-template-columns: 1fr; }
-            .area-card { padding: 1.8rem; }
-            .top-bar { flex-direction: row; justify-content: space-between; }
-            .btn-exit span { display: none; } /* Oculta texto en móviles pequeños */
-        }
-
-        /* Pantallas muy grandes (TV / Monitores Pro) */
-        @media (min-width: 2000px) {
-            .container { max-width: 1800px; }
-            .grid-areas { grid-template-columns: repeat(4, 1fr); }
         }
     </style>
 </head>
@@ -259,7 +150,7 @@
     <div class="container">
         <header class="top-bar">
             <div class="logo-section">
-                <i class="fas fa-screwdriver-wrench"></i>
+                <i class="fas fa-screwdriver-wrench" style="color:var(--accent)"></i>
                 <h2>ARGRAMETAL<span>.SIA</span></h2>
             </div>
             <a href="index.html" class="btn-exit">
@@ -275,71 +166,58 @@
         <main class="grid-areas">
             <!-- Ventas -->
             <a href="ventas.html" class="area-card vnt">
-                <div class="card-content">
-                    <div class="card-icon"><i class="fas fa-hand-holding-dollar"></i></div>
-                    <h3>Ventas</h3>
-                    <p>Desarrollo Comercial y Relaciones con el Cliente.</p>
-                    <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
-                </div>
+                <div class="card-icon"><i class="fas fa-hand-holding-dollar"></i></div>
+                <h3>Ventas</h3>
+                <p>Desarrollo Comercial y Relaciones con el Cliente.</p>
+                <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
             </a>
 
             <!-- Finanzas -->
             <a href="finanzas.html" class="area-card fnz">
-                <div class="card-content">
-                    <div class="card-icon"><i class="fas fa-building-columns"></i></div>
-                    <h3>Finanzas</h3>
-                    <p>Administración de Tesorería y Auditoría Contable.</p>
-                    <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
-                </div>
+                <div class="card-icon"><i class="fas fa-building-columns"></i></div>
+                <h3>Finanzas</h3>
+                <p>Administración de Tesorería y Auditoría Contable.</p>
+                <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
             </a>
 
             <!-- Marketing -->
             <a href="marketing.html" class="area-card mkt">
-                <div class="card-content">
-                    <div class="card-icon"><i class="fas fa-bullhorn"></i></div>
-                    <h3>Marketing</h3>
-                    <p>Comunicación Corporativa y Estrategia de Marca.</p>
-                    <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
-                </div>
+                <div class="card-icon"><i class="fas fa-bullhorn"></i></div>
+                <h3>Marketing</h3>
+                <p>Comunicación Corporativa y Estrategia de Marca.</p>
+                <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
             </a>
 
             <!-- Logística -->
             <a href="logistica.html" class="area-card log">
-                <div class="card-content">
-                    <div class="card-icon"><i class="fas fa-truck-fast"></i></div>
-                    <h3>Logística</h3>
-                    <p>Suministros, Almacén y Distribución Nacional.</p>
-                    <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
-                </div>
+                <div class="card-icon"><i class="fas fa-truck-fast"></i></div>
+                <h3>Logística</h3>
+                <p>Suministros, Almacén y Distribución Nacional.</p>
+                <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
             </a>
 
             <!-- Mejora Continua -->
             <a href="gestion_continua.html" class="area-card mjr">
-                <div class="card-content">
-                    <div class="card-icon"><i class="fas fa-chart-line"></i></div>
-                    <h3>Mejora Continua</h3>
-                    <p>Optimización de Procesos y Aseguramiento de Calidad.</p>
-                    <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
-                </div>
+                <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Mejora Continua</h3>
+                <p>Optimización de Procesos y Aseguramiento de Calidad.</p>
+                <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
             </a>
 
             <!-- Talento Humano -->
             <a href="recursos_humanos.html" class="area-card rrh">
-                <div class="card-content">
-                    <div class="card-icon"><i class="fas fa-users-gear"></i></div>
-                    <h3>Talento Humano</h3>
-                    <p>Gestión de Capital Humano y Clima Organizacional.</p>
-                    <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
-                </div>
+                <div class="card-icon"><i class="fas fa-users-gear"></i></div>
+                <h3>Talento Humano</h3>
+                <p>Gestión de Capital Humano y Clima Organizacional.</p>
+                <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
+            </a>
 
-                        <!-- PMO -->
+            <!-- PMO -->
             <a href="gestion_proyectos.html" class="area-card pmo">
-                <div class="card-content">
-                    <div class="card-icon"><i class="fas fa-diagram-project"></i></div>
-                    <h3>PMO</h3>
-                    <p>Oficina de Gestión de Proyectos y Control Estratégico.</p>
-                    <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
-                </div>
+                <div class="card-icon"><i class="fas fa-diagram-project"></i></div>
+                <h3>PMO</h3>
+                <p>Oficina de Gestión de Proyectos y Control Estratégico.</p>
+                <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
             </a>
         </main>
     </div>
