@@ -18,32 +18,41 @@
             --text-muted: #94a3b8;
             --border: rgba(255, 255, 255, 0.08);
             
+            /* Colores de marca por área */
             --ventas: #ef4444; 
             --finanzas: #10b981; 
             --marketing: #8b5cf6;
             --logistica: #f59e0b; 
             --mejora: #06b6d4; 
             --rrhh: #ec4899;
+            --pmo: #6366f1;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+        }
 
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             min-height: 100vh; 
             background-color: var(--bg-body);
             background-image: 
-                radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
                 url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
             color: var(--text-main);
             display: flex;
             justify-content: center;
-            padding: clamp(1rem, 5vh, 3rem) 1rem;
+            padding: clamp(1.5rem, 5vh, 4rem) 1rem;
+            line-height: 1.5;
         }
 
         .container { 
             width: 100%; 
-            max-width: 1200px; 
+            max-width: 1300px; 
             display: flex;
             flex-direction: column;
         }
@@ -59,59 +68,79 @@
             gap: 1rem;
         }
 
-        .logo-section { display: flex; align-items: center; gap: clamp(10px, 2vw, 15px); }
+        .logo-section { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+        }
+        
         .logo-section h2 { 
             font-size: clamp(1.1rem, 2.5vw, 1.4rem); 
             font-weight: 800; 
-            letter-spacing: 2px; 
+            letter-spacing: 1.5px; 
             text-transform: uppercase;
         }
+        
         .logo-section span { color: var(--accent); }
 
         .btn-exit {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border);
-            padding: 10px clamp(12px, 2vw, 22px);
-            border-radius: 8px;
+            padding: 10px 22px;
+            border-radius: 12px;
             color: var(--text-muted);
             text-decoration: none;
             font-size: 0.75rem;
             font-weight: 700;
-            transition: 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-transform: uppercase;
-            white-space: nowrap;
+            backdrop-filter: blur(8px);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn-exit:hover { 
             background: #ef4444; 
             border-color: #ef4444; 
             color: white; 
+            transform: translateX(-5px);
         }
 
-        .page-intro { margin-bottom: 2.5rem; }
+        /* --- INTRO --- */
+        .page-intro { margin-bottom: 3rem; }
+        
         .page-intro h1 { 
-            font-size: clamp(1.8rem, 5vw, 2.5rem); 
+            font-size: clamp(2rem, 6vw, 2.8rem); 
             font-weight: 800; 
-            margin-bottom: 0.5rem; 
-            letter-spacing: -1px; 
+            margin-bottom: 0.8rem; 
+            letter-spacing: -1.5px;
+            background: linear-gradient(to right, #ffffff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .page-intro p { color: var(--text-muted); font-size: clamp(0.9rem, 2vw, 1rem); }
+        
+        .page-intro p { 
+            color: var(--text-muted); 
+            font-size: clamp(1rem, 2vw, 1.1rem); 
+            max-width: 600px; 
+        }
 
-        /* --- GRID AJUSTADO --- */
+        /* --- GRID --- */
         .grid-areas {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(clamp(280px, 30vw, 350px), 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 1.5rem;
         }
 
         .area-card {
             background: var(--sidebar-bg);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: clamp(1.5rem, 3vw, 2.2rem);
+            border-radius: 24px;
+            padding: 2.2rem;
             display: flex;
             flex-direction: column;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             text-decoration: none;
             position: relative;
             overflow: hidden;
@@ -119,71 +148,80 @@
         }
 
         .area-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(255, 255, 255, 0.2);
-            background: #1e293b;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transform: translateY(-12px);
+            border-color: var(--area-color);
+            background: rgba(30, 41, 59, 0.8);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 
+                        0 0 20px -5px var(--area-color);
         }
 
-        .area-card::before {
+        /* Línea lateral decorativa */
+        .area-card::after {
             content: '';
             position: absolute;
-            left: 0; top: 0; height: 100%; width: 5px;
+            top: 0; left: 0; width: 4px; height: 0;
             background: var(--area-color);
-            opacity: 0.8;
+            transition: 0.4s ease;
         }
+        
+        .area-card:hover::after { height: 100%; }
 
         .card-icon {
-            width: 54px; height: 54px;
-            background: rgba(255,255,255,0.02);
-            border-radius: 14px;
+            width: 60px; height: 60px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 18px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             color: var(--area-color);
             border: 1px solid var(--border);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.8rem;
+            transition: all 0.4s ease;
+        }
+
+        .area-card:hover .card-icon {
+            background: var(--area-color);
+            color: white;
+            transform: scale(1.15) rotate(8deg);
         }
 
         .area-card h3 {
-            font-size: clamp(1.2rem, 2vw, 1.4rem);
+            font-size: 1.4rem;
             font-weight: 700;
-            color: #fff;
+            color: #ffffff;
             margin-bottom: 0.8rem;
         }
 
         .area-card p {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 2rem;
-            flex-grow: 1; /* Empuja el botón hacia abajo uniformemente */
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+            flex-grow: 1;
         }
 
-        .btn-action-white {
+        .btn-action {
             width: 100%;
-            padding: 14px;
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            border-radius: 10px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
             color: #ffffff;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: 0.3s ease;
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+            transition: all 0.3s ease;
         }
 
-        .area-card:hover .btn-action-white {
+        .area-card:hover .btn-action {
             background: #ffffff;
             color: #020617;
             border-color: #ffffff;
-            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15);
         }
 
+        /* Clases de Color */
+        .pmo { --area-color: var(--pmo); }
         .vnt { --area-color: var(--ventas); }
         .fnz { --area-color: var(--finanzas); }
         .mkt { --area-color: var(--marketing); }
@@ -192,10 +230,9 @@
         .rrh { --area-color: var(--rrhh); }
 
         @media (max-width: 480px) {
-            body { padding: 1rem 0.8rem; }
             .grid-areas { grid-template-columns: 1fr; }
-            .top-bar { margin-bottom: 1.5rem; }
-            .area-card { padding: 1.5rem; }
+            .page-intro h1 { font-size: 1.9rem; }
+            .top-bar { flex-direction: row; justify-content: space-between; }
         }
     </style>
 </head>
@@ -204,59 +241,73 @@
     <div class="container">
         <header class="top-bar">
             <div class="logo-section">
-                <i class="fas fa-screwdriver-wrench" style="color: var(--accent);"></i>
+                <i class="fas fa-screwdriver-wrench" style="color: var(--accent); font-size: 1.5rem;"></i>
                 <h2>ARGRAMETAL<span>.SIA</span></h2>
             </div>
-            <a href="index.html" class="btn-exit">←Volver al Inicio</a>
+            <a href="index.html" class="btn-exit"><i class="fas fa-arrow-left"></i> Regresar</a>
         </header>
 
-        <div class="page-intro">
+        <section class="page-intro">
             <h1>Panel de Asistencia</h1>
-            <p>Seleccione el área operativa para su registro habitual.</p>
-        </div>
+            <p>Acceda a su unidad operativa para registrar su jornada laboral de manera segura.</p>
+        </section>
 
         <main class="grid-areas">
             
+            <!-- PMO (Agregado) -->
+            <a href="pmo.html" class="area-card pmo">
+                <div class="card-icon"><i class="fas fa-diagram-project"></i></div>
+                <h3>PMO</h3>
+                <p>Supervisión de proyectos operativos y gestión estratégica del portafolio.</p>
+                <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
+            </a>
+
+            <!-- VENTAS -->
             <a href="ventas.html" class="area-card vnt">
                 <div class="card-icon"><i class="fas fa-hand-holding-dollar"></i></div>
                 <h3>Ventas</h3>
-                <p>Personal comercial y gestión de clientes externos.</p>
-                <div class="btn-action-white">Registrar Asistencia <i class="fas fa-id-badge"></i></div>
+                <p>Gestión comercial, seguimiento de leads y atención a clientes externos.</p>
+                <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
             </a>
 
+            <!-- FINANZAS -->
             <a href="finanzas.html" class="area-card fnz">
                 <div class="card-icon"><i class="fas fa-building-columns"></i></div>
                 <h3>Finanzas</h3>
-                <p>Contabilidad industrial y administración de recursos.</p>
-                <div class="btn-action-white">Registrar Asistencia <i class="fas fa-id-badge"></i></div>
+                <p>Control contable, tesorería y administración de flujo de caja industrial.</p>
+                <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
             </a>
 
+            <!-- MARKETING -->
             <a href="marketing.html" class="area-card mkt">
                 <div class="card-icon"><i class="fas fa-bullhorn"></i></div>
                 <h3>Marketing</h3>
-                <p>Publicidad e imagen corporativa de ARGRAMETAL.</p>
-                <div class="btn-action-white">Registrar Asistencia <i class="fas fa-id-badge"></i></div>
+                <p>Posicionamiento de marca, campañas digitales e imagen corporativa.</p>
+                <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
             </a>
 
+            <!-- LOGÍSTICA -->
             <a href="logistica.html" class="area-card log">
                 <div class="card-icon"><i class="fas fa-truck-fast"></i></div>
                 <h3>Logística</h3>
-                <p>Operarios de planta y control de inventarios.</p>
-                <div class="btn-action-white">Registrar Asistencia <i class="fas fa-id-badge"></i></div>
+                <p>Gestión de almacenes, despachos y control operativo de inventarios.</p>
+                <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
             </a>
 
+            <!-- MEJORA CONTINUA -->
             <a href="gestion_continua.html" class="area-card mjr">
                 <div class="card-icon"><i class="fas fa-chart-line"></i></div>
                 <h3>Mejora Continua</h3>
-                <p>Control de calidad y seguridad industrial.</p>
-                <div class="btn-action-white">Registrar Asistencia <i class="fas fa-id-badge"></i></div>
+                <p>Optimización de procesos operativos, calidad y seguridad industrial.</p>
+                <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
             </a>
 
+            <!-- RRHH -->
             <a href="recursos_humanos.html" class="area-card rrh">
                 <div class="card-icon"><i class="fas fa-users-gear"></i></div>
                 <h3>Talento Humano</h3>
-                <p>Bienestar y administración de personal.</p>
-                <div class="btn-action-white">Registrar Asistencia <i class="fas fa-id-badge"></i></div>
+                <p>Administración de personal, bienestar laboral y desarrollo organizacional.</p>
+                <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
             </a>
 
         </main>

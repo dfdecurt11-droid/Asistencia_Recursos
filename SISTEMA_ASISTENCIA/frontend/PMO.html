@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ARGRAMETAL | Área PMO</title>
+    
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/9440/9440939.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { 
+            --accent: #6366f1; /* Indigo para PMO */
+            --dark-bg: #020617;
+            --card-bg: #0f172a;
+            --border: rgba(255, 255, 255, 0.08);
+            --text-muted: #94a3b8;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            min-height: 100vh;
+            background-color: var(--dark-bg);
+            background-image: 
+                radial-gradient(circle at top right, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+                url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            color: white;
+            display: flex;
+            justify-content: center;
+            padding: clamp(10px, 3vw, 40px);
+        }
+
+        .container { 
+            width: 100%;
+            max-width: 1000px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- NAVEGACIÓN --- */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .btn-back { 
+            text-decoration: none; 
+            color: var(--text-muted); 
+            font-weight: 700; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+            transition: 0.3s;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-back:hover { color: white; transform: translateX(-5px); }
+
+        .clock { 
+            font-family: 'JetBrains Mono', monospace;
+            color: white;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            background: rgba(255,255,255,0.03);
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        /* --- TITULACIÓN --- */
+        .header-section { margin-bottom: 35px; }
+        .header-section span { 
+            color: var(--accent); 
+            font-weight: 800; 
+            font-size: 0.75rem; 
+            letter-spacing: 3px; 
+            text-transform: uppercase;
+        }
+        .header-section h1 { 
+            font-size: clamp(1.8rem, 5vw, 2.4rem); 
+            font-weight: 800; 
+            letter-spacing: -1px;
+            margin-top: 5px;
+        }
+
+        /* --- LISTADO DE PERSONAL --- */
+        #lista-asistencia { 
+            display: grid; 
+            gap: 12px; 
+            max-height: 60vh; 
+            overflow-y: auto; 
+            padding-right: 8px;
+        }
+
+        #lista-asistencia::-webkit-scrollbar { width: 4px; }
+        #lista-asistencia::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+        .card-practicante { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 22px 30px; 
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            transition: 0.3s ease; 
+        }
+
+        .card-practicante:hover { 
+            border-color: rgba(99, 102, 241, 0.4);
+            background: #1e293b;
+        }
+
+        .info strong { font-size: 1.15rem; color: #fff; display: block; margin-bottom: 2px; }
+        .info small { color: var(--text-muted); font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        .actions { display: flex; gap: 10px; }
+
+        /* --- BOTONES BLANCO PROFESIONAL --- */
+        .btn-mark { 
+            padding: 12px 18px; 
+            border-radius: 8px; 
+            border: 1px solid rgba(255, 255, 255, 0.7); 
+            background: transparent;
+            cursor: pointer; 
+            font-weight: 800; 
+            color: white; 
+            transition: 0.3s; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-mark:hover:not(:disabled) { 
+            background: white; 
+            color: var(--dark-bg); 
+            border-color: white;
+            box-shadow: 0 5px 15px rgba(255,255,255,0.1);
+        }
+
+        .btn-mark:disabled { opacity: 0.2; cursor: not-allowed; }
+
+        /* --- NOTIFICACIÓN --- */
+        #notification {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            padding: 15px 30px; border-radius: 12px; 
+            background: white; color: var(--dark-bg);
+            display: none; z-index: 1000; font-weight: 800; font-size: 0.85rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+
+        @media (max-width: 768px) {
+            .card-practicante { flex-direction: column; gap: 20px; text-align: center; padding: 25px; }
+            .actions { width: 100%; }
+            .btn-mark { flex: 1; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="notification"></div>
+
+    <div class="container">
+        <nav class="top-nav">
+            <a href="lista.html" class="btn-back"><i class="fas fa-arrow-left"></i> Áreas del Sistema</a>
+            <div id="reloj" class="clock">00:00:00</div>
+        </nav>
+        
+        <header class="header-section">
+            <span>ARGRAMETAL S.A.</span>
+            <h1>AREA <span style="color: var(--accent);">PMO</span></h1>
+        </header>
+
+        <div id="lista-asistencia">
+            <div style="text-align:center; padding: 60px; opacity: 0.4;">
+                <i class="fas fa-circle-notch fa-spin" style="font-size: 1.5rem;"></i>
+                <p style="margin-top: 15px; font-weight: 600; font-size: 0.8rem; letter-spacing: 2px;">SINCRONIZANDO EQUIPO PMO...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_GET = "https://asistencia-recursos.onrender.com/api/practicantes";
+        const API_POST = "https://asistencia-recursos.onrender.com/api/asistencia";
+        const AREA_FILTRO = "PMO"; // Filtro específico para esta área
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('reloj').innerText = now.toLocaleTimeString('es-PE', { 
+                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false 
+            });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function notify(msg, err = false) {
+            const n = document.getElementById('notification');
+            n.style.background = err ? '#ef4444' : '#ffffff';
+            n.style.color = err ? '#ffffff' : '#020617';
+            n.innerHTML = `<i class="fas ${err ? 'fa-triangle-exclamation' : 'fa-circle-check'}"></i> ${msg.toUpperCase()}`;
+            n.style.display = "block";
+            setTimeout(() => n.style.display = "none", 3000);
+        }
+
+        async function loadTeam() {
+            const container = document.getElementById('lista-asistencia');
+            try {
+                const res = await fetch(API_GET);
+                const data = await res.json();
+                
+                // Filtramos por el área PMO
+                const equipo = data.filter(p => p.area.trim() === AREA_FILTRO);
+
+                if(equipo.length === 0) {
+                    container.innerHTML = `<p style="text-align:center; padding: 40px; color:var(--text-muted);">No hay personal asignado a la división PMO.</p>`;
+                    return;
+                }
+
+                container.innerHTML = equipo.sort((a,b) => a.apellidos.localeCompare(b.apellidos)).map(p => `
+                    <div class="card-practicante">
+                        <div class="info">
+                            <strong>${p.apellidos.toUpperCase()}, ${p.nombres}</strong>
+                            <small>ID: ${String(p.id_practicantes).padStart(4, '0')} • ARGRAMETAL</small>
+                        </div>
+                        <div class="actions">
+                            <button class="btn-mark" onclick="register(${p.id_practicantes}, 'entrada', this)">
+                                Entrada
+                            </button>
+                            <button class="btn-mark" onclick="register(${p.id_practicantes}, 'salida', this)">
+                                Salida
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) { 
+                container.innerHTML = `<p style="text-align:center; color:#ef4444; font-weight:800; padding: 40px;">FALLO DE CONEXIÓN CON EL SERVIDOR</p>`;
+            }
+        }
+
+        async function register(id, tipo, btn) {
+            const actionsDiv = btn.closest('.actions');
+            const btns = actionsDiv.querySelectorAll('button');
+            const originalText = btn.innerText;
+            
+            btns.forEach(b => b.disabled = true);
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i>`;
+
+            try {
+                const res = await fetch(`${API_POST}/${id}`, { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tipo_registro: tipo })
+                });
+
+                if (res.ok) {
+                    notify(`MARCACIÓN DE ${tipo} CORRECTA`);
+                } else {
+                    const errData = await res.json();
+                    notify(errData.message || "Error en proceso", true);
+                }
+            } catch (e) { 
+                notify("Error de red: Intente de nuevo", true); 
+            } finally {
+                btns.forEach(b => b.disabled = false);
+                btn.innerText = originalText;
+            }
+        }
+
+        window.onload = loadTeam;
+    </script>
+</body>
+</html>
