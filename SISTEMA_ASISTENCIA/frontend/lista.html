@@ -5,9 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ARGRAMETAL | Gestión de Asistencia</title>
     
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2329/2329087.png">
+    
+    <!-- Preconectar para mejorar carga de fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Estilos Externos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -18,14 +25,14 @@
             --text-muted: #94a3b8;
             --border: rgba(255, 255, 255, 0.08);
             
-            /* Colores de marca por área */
-            --ventas: #ef4444; 
-            --finanzas: #10b981; 
-            --marketing: #8b5cf6;
-            --logistica: #f59e0b; 
-            --mejora: #06b6d4; 
-            --rrhh: #ec4899;
-            --pmo: #6366f1;
+            /* Paleta por áreas */
+            --color-pmo: #6366f1;
+            --color-ventas: #ef4444; 
+            --color-finanzas: #10b981; 
+            --color-marketing: #8b5cf6;
+            --color-logistica: #f59e0b; 
+            --color-mejora: #06b6d4; 
+            --color-rrhh: #ec4899;
         }
 
         * { 
@@ -47,12 +54,12 @@
             display: flex;
             justify-content: center;
             padding: clamp(1.5rem, 5vh, 4rem) 1rem;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         .container { 
             width: 100%; 
-            max-width: 1300px; 
+            max-width: 1280px; 
             display: flex;
             flex-direction: column;
         }
@@ -75,9 +82,9 @@
         }
         
         .logo-section h2 { 
-            font-size: clamp(1.1rem, 2.5vw, 1.4rem); 
+            font-size: clamp(1rem, 4vw, 1.4rem); 
             font-weight: 800; 
-            letter-spacing: 1.5px; 
+            letter-spacing: 1px; 
             text-transform: uppercase;
         }
         
@@ -86,13 +93,13 @@
         .btn-exit {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border);
-            padding: 10px 22px;
+            padding: 10px 20px;
             border-radius: 12px;
             color: var(--text-muted);
             text-decoration: none;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 700;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             text-transform: uppercase;
             backdrop-filter: blur(8px);
             display: inline-flex;
@@ -104,32 +111,32 @@
             background: #ef4444; 
             border-color: #ef4444; 
             color: white; 
-            transform: translateX(-5px);
+            transform: translateX(-3px);
         }
 
         /* --- INTRO --- */
         .page-intro { margin-bottom: 3rem; }
         
         .page-intro h1 { 
-            font-size: clamp(2rem, 6vw, 2.8rem); 
+            font-size: clamp(1.8rem, 7vw, 2.8rem); 
             font-weight: 800; 
-            margin-bottom: 0.8rem; 
-            letter-spacing: -1.5px;
-            background: linear-gradient(to right, #ffffff, var(--text-muted));
+            margin-bottom: 0.5rem; 
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #ffffff, #94a3b8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         
         .page-intro p { 
             color: var(--text-muted); 
-            font-size: clamp(1rem, 2vw, 1.1rem); 
+            font-size: clamp(0.95rem, 2vw, 1.1rem); 
             max-width: 600px; 
         }
 
         /* --- GRID --- */
         .grid-areas {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 1.5rem;
         }
 
@@ -137,10 +144,10 @@
             background: var(--sidebar-bg);
             border: 1px solid var(--border);
             border-radius: 24px;
-            padding: 2.2rem;
+            padding: 2rem;
             display: flex;
             flex-direction: column;
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
             text-decoration: none;
             position: relative;
             overflow: hidden;
@@ -148,69 +155,67 @@
         }
 
         .area-card:hover {
-            transform: translateY(-12px);
+            transform: translateY(-8px);
             border-color: var(--area-color);
-            background: rgba(30, 41, 59, 0.8);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 
-                        0 0 20px -5px var(--area-color);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
         }
 
-        /* Línea lateral decorativa */
-        .area-card::after {
+        /* Indicador visual de color al hover */
+        .area-card::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; width: 4px; height: 0;
+            top: 0; left: 0; width: 100%; height: 4px;
             background: var(--area-color);
-            transition: 0.4s ease;
+            opacity: 0.3;
+            transition: 0.3s;
         }
-        
-        .area-card:hover::after { height: 100%; }
+
+        .area-card:hover::before { opacity: 1; }
 
         .card-icon {
-            width: 60px; height: 60px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 18px;
+            width: 56px; height: 56px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: var(--area-color);
             border: 1px solid var(--border);
-            margin-bottom: 1.8rem;
+            margin-bottom: 1.5rem;
             transition: all 0.4s ease;
         }
 
         .area-card:hover .card-icon {
             background: var(--area-color);
             color: white;
-            transform: scale(1.15) rotate(8deg);
+            transform: scale(1.1) rotate(5deg);
         }
 
         .area-card h3 {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: #ffffff;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.7rem;
         }
 
         .area-card p {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
-            line-height: 1.7;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
             flex-grow: 1;
         }
 
         .btn-action {
             width: 100%;
-            padding: 16px;
+            padding: 14px;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
+            border-radius: 12px;
             color: #ffffff;
-            font-size: 0.8rem;
-            font-weight: 800;
+            font-size: 0.75rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            display: flex; align-items: center; justify-content: center; gap: 12px;
+            letter-spacing: 1px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
             transition: all 0.3s ease;
         }
 
@@ -220,19 +225,19 @@
             border-color: #ffffff;
         }
 
-        /* Clases de Color */
-        .pmo { --area-color: var(--pmo); }
-        .vnt { --area-color: var(--ventas); }
-        .fnz { --area-color: var(--finanzas); }
-        .mkt { --area-color: var(--marketing); }
-        .log { --area-color: var(--logistica); }
-        .mjr { --area-color: var(--mejora); }
-        .rrh { --area-color: var(--rrhh); }
+        /* Mapeo de colores a variables */
+        .pmo { --area-color: var(--color-pmo); }
+        .vnt { --area-color: var(--color-ventas); }
+        .fnz { --area-color: var(--color-finanzas); }
+        .mkt { --area-color: var(--color-marketing); }
+        .log { --area-color: var(--color-logistica); }
+        .mjr { --area-color: var(--color-mejora); }
+        .rrh { --area-color: var(--color-rrhh); }
 
         @media (max-width: 480px) {
+            body { padding: 1.5rem 0.8rem; }
             .grid-areas { grid-template-columns: 1fr; }
-            .page-intro h1 { font-size: 1.9rem; }
-            .top-bar { flex-direction: row; justify-content: space-between; }
+            .area-card { padding: 1.5rem; }
         }
     </style>
 </head>
@@ -241,21 +246,23 @@
     <div class="container">
         <header class="top-bar">
             <div class="logo-section">
-                <i class="fas fa-screwdriver-wrench" style="color: var(--accent); font-size: 1.5rem;"></i>
+                <i class="fas fa-screwdriver-wrench" style="color: var(--accent); font-size: 1.4rem;"></i>
                 <h2>ARGRAMETAL<span>.SIA</span></h2>
             </div>
-            <a href="index.html" class="btn-exit"><i class="fas fa-arrow-left"></i> Regresar</a>
+            <a href="index.html" class="btn-exit" aria-label="Regresar al inicio">
+                <i class="fas fa-arrow-left"></i> Regresar
+            </a>
         </header>
 
         <section class="page-intro">
             <h1>Panel de Asistencia</h1>
-            <p>Acceda a su unidad operativa para registrar su jornada laboral de manera segura.</p>
+            <p>Seleccione su unidad operativa para registrar ingreso o salida de su jornada laboral.</p>
         </section>
 
         <main class="grid-areas">
             
-            <!-- PMO (Agregado) -->
-            <a href="pmo.html" class="area-card pmo">
+            <!-- PMO -->
+            <a href="PMO.html" class="area-card pmo">
                 <div class="card-icon"><i class="fas fa-diagram-project"></i></div>
                 <h3>PMO</h3>
                 <p>Supervisión de proyectos operativos y gestión estratégica del portafolio.</p>
