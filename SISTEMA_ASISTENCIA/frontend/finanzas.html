@@ -32,7 +32,8 @@
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             padding: clamp(20px, 5vh, 50px) 20px;
         }
 
@@ -44,6 +45,29 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* --- BANNER DE RESTRICCIÓN DE HORARIO --- */
+        .time-lock-banner {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-shadow: 0 0 10px var(--glow);
+            box-shadow: inset 0 0 15px var(--glow);
+            animation: fadeIn 0.5s ease-out;
+        }
+
         /* --- NAVEGACIÓN PROFESIONAL --- */
         .nav-header {
             display: flex;
@@ -52,6 +76,7 @@
             margin-bottom: 40px;
             padding-bottom: 20px;
             border-bottom: 1px solid var(--border);
+            width: 100%;
         }
 
         .btn-back {
@@ -81,7 +106,7 @@
         }
 
         /* --- ENCABEZADO DE ÁREA --- */
-        .header-section { margin-bottom: 35px; }
+        .header-section { margin-bottom: 35px; width: 100%; }
         .header-section span { 
             font-size: 0.75rem; 
             color: var(--accent); 
@@ -103,6 +128,7 @@
             max-height: 58vh;
             overflow-y: auto;
             padding-right: 10px;
+            width: 100%;
         }
 
         .staff-grid::-webkit-scrollbar { width: 4px; }
@@ -195,6 +221,10 @@
 </head>
 <body>
 
+    <div id="banner-horario" class="time-lock-banner">
+        <i class="fas fa-lock"></i> DIVISIÓN BLOQUEADA: EL HORARIO DE REGISTRO PERMITIDO ES DE 6:00 AM A 10:00 PM.
+    </div>
+
     <div id="toast-panel"></div>
 
     <div class="container">
@@ -221,11 +251,37 @@
         const API_EP_POST = "https://asistencia-recursos.onrender.com/api/asistencia";
         const CURRENT_AREA = "Finanzas";
 
+        // Parámetros de Control Horario (6:00 AM - 10:00 PM)
+        const OPEN_HOUR = 6;
+        const CLOSE_HOUR = 22;
+
+        // Comprobación exacta con la zona horaria de Lima
+        function isOutsideWorkingHours() {
+            const serverHour = parseInt(
+                new Date().toLocaleString("es-PE", { hour: "2-digit", hour12: false, timeZone: "America/Lima" })
+            );
+            return (serverHour < OPEN_HOUR || serverHour >= CLOSE_HOUR);
+        }
+
         function startEngine() {
             setInterval(() => {
                 document.getElementById('live-clock').textContent = new Date().toLocaleTimeString('es-PE', { 
-                    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false 
+                    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: "America/Lima"
                 });
+
+                // Validación dinámica en caliente de los bloques de horario
+                const timeBanner = document.getElementById('banner-horario');
+                if (isOutsideWorkingHours()) {
+                    if (timeBanner.style.display !== "flex") {
+                        timeBanner.style.display = "flex";
+                        loadAreaTeam();
+                    }
+                } else {
+                    if (timeBanner.style.display === "flex") {
+                        timeBanner.style.display = "none";
+                        loadAreaTeam();
+                    }
+                }
             }, 1000);
         }
 
@@ -240,6 +296,19 @@
 
         async function loadAreaTeam() {
             const container = document.getElementById('staff-container');
+            
+            // Interrupción de renderizado si está fuera de horario
+            if (isOutsideWorkingHours()) {
+                document.getElementById('banner-horario').style.display = "flex";
+                container.innerHTML = `
+                    <div style="text-align:center; padding: 40px; color: var(--text-dim); width: 100%;">
+                        <i class="fas fa-clock-rotate-left" style="font-size: 2rem; color: var(--accent); margin-bottom: 15px; text-shadow: 0 0 10px var(--glow);"></i>
+                        <p style="font-weight:700; letter-spacing:1px;">TRANSMISIÓN SUSPENDIDA: FUERA DE HORARIO</p>
+                        <small style="display:block; margin-top:5px; color: var(--text-dim);">El ingreso de asistencia financiera está habilitado únicamente de 6:00 AM a 10:00 PM.</small>
+                    </div>`;
+                return;
+            }
+
             try {
                 const res = await fetch(API_EP_GET);
                 const data = await res.json();
@@ -274,6 +343,13 @@
         }
 
         async function executeRegistry(id, type, btn) {
+            // Capa estricta de seguridad en el cliente ante alteraciones del script
+            if (isOutsideWorkingHours()) {
+                systemAlert("Terminal inactiva: Canal cerrado", true);
+                loadAreaTeam();
+                return;
+            }
+
             const group = btn.closest('.btn-group');
             const btns = group.querySelectorAll('button');
             const label = btn.innerText;

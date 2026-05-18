@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ARGRAMETAL | Área Gestión de Proyectos</title>
     
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/9440/9440939.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link type="image/png" href="https://cdn-icons-png.flaticon.com/512/9440/9440939.png" rel="icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     
     <style>
@@ -14,6 +14,7 @@
             /* COLOR ACTUALIZADO A AZUL MARINO PROFUNDO */
             --accent: #001f3f; 
             --accent-glow: #003366;
+            --blue-bright: #3b82f6;
             --dark-bg: #020617;
             --card-bg: #0f172a;
             --border: rgba(255, 255, 255, 0.08);
@@ -31,7 +32,8 @@
                 url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
             color: white;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             padding: clamp(10px, 3vw, 40px);
         }
 
@@ -43,6 +45,27 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* --- BANNER DE RESTRICCIÓN DE HORARIO --- */
+        .time-lock-banner {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--blue-bright);
+            color: #93c5fd;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
         /* --- NAVEGACIÓN --- */
         .top-nav {
             display: flex;
@@ -51,6 +74,7 @@
             margin-bottom: 40px;
             padding-bottom: 20px;
             border-bottom: 1px solid var(--border);
+            width: 100%;
         }
 
         .btn-back { 
@@ -79,9 +103,9 @@
         }
 
         /* --- TITULACIÓN --- */
-        .header-section { margin-bottom: 35px; }
+        .header-section { margin-bottom: 35px; width: 100%; }
         .header-section span { 
-            color: #3b82f6; /* Azul brillante para el subtítulo */
+            color: var(--blue-bright); 
             font-weight: 800; 
             font-size: 0.75rem; 
             letter-spacing: 3px; 
@@ -101,6 +125,7 @@
             max-height: 65vh; 
             overflow-y: auto; 
             padding-right: 8px;
+            width: 100%;
         }
 
         #lista-asistencia::-webkit-scrollbar { width: 4px; }
@@ -118,7 +143,7 @@
         }
 
         .card-practicante:hover { 
-            border-color: #3b82f6;
+            border-color: var(--blue-bright);
             background: #1e293b;
         }
 
@@ -169,10 +194,15 @@
             .card-practicante { flex-direction: column; gap: 20px; text-align: center; padding: 25px; }
             .actions { width: 100%; }
             .btn-mark { flex: 1; justify-content: center; }
+            .top-nav { flex-direction: column-reverse; gap: 15px; }
         }
     </style>
 </head>
 <body>
+
+    <div id="banner-horario" class="time-lock-banner">
+        <i class="fas fa-lock"></i> SISTEMA DE ASISTENCIA CERRADO. EL HORARIO PERMITIDO ES DE 6:00 AM A 10:00 PM.
+    </div>
 
     <div id="notification"></div>
 
@@ -184,13 +214,12 @@
         
         <header class="header-section">
             <span>ARGRAMETAL S.A.C.</span>
-            <!-- TITULO ACTUALIZADO -->
-            <h1>ÁREA <span style="color: #3b82f6;">PROYECTOS</span></h1>
+            <h1>ÁREA <span style="color: var(--blue-bright);">PROYECTOS</span></h1>
         </header>
 
         <div id="lista-asistencia">
             <div style="text-align:center; padding: 60px; opacity: 0.4;">
-                <i class="fas fa-circle-notch fa-spin" style="font-size: 1.5rem;"></i>
+                <i class="fas fa-circle-notch fa-spin" style="font-size: 1.5rem; color: var(--blue-bright);"></i>
                 <p style="margin-top: 15px; font-weight: 600; font-size: 0.8rem; letter-spacing: 2px;">SINCRONIZANDO EQUIPO...</p>
             </div>
         </div>
@@ -200,17 +229,40 @@
         const API_GET = "https://asistencia-recursos.onrender.com/api/practicantes";
         const API_POST = "https://asistencia-recursos.onrender.com/api/asistencia";
         
-        // FILTRO EXACTO PARA COINCIDIR CON INDEX.HTML
         const AREA_FILTRO = "Gestión de Proyectos";
 
+        // Parámetros límites del control horario (6:00 AM - 10:00 PM)
+        const HORA_APERTURA = 6;
+        const HORA_CIERRE = 22;
+
+        // Comprobación de Zona Horaria oficial de Lima
+        function estaFueraDeHorario() {
+            const horaActual = parseInt(
+                new Date().toLocaleString("es-PE", { hour: "2-digit", hour12: false, timeZone: "America/Lima" })
+            );
+            return (horaActual < HORA_APERTURA || horaActual >= HORA_CIERRE);
+        }
+
         function updateClock() {
-            const now = new Date();
-            document.getElementById('reloj').innerText = now.toLocaleTimeString('es-PE', { 
-                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false 
+            document.getElementById('reloj').innerText = new Date().toLocaleTimeString('es-PE', { 
+                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: "America/Lima"
             });
+
+            // Control dinámico en tiempo real del banner y la interfaz
+            const banner = document.getElementById('banner-horario');
+            if (estaFueraDeHorario()) {
+                if (banner.style.display !== "flex") {
+                    banner.style.display = "flex";
+                    loadTeam(); // Ejecuta interfaz bloqueada
+                }
+            } else {
+                if (banner.style.display === "flex") {
+                    banner.style.display = "none";
+                    loadTeam(); // Restaura la interfaz normal si entra en hora
+                }
+            }
         }
         setInterval(updateClock, 1000);
-        updateClock();
 
         function notify(msg, err = false) {
             const n = document.getElementById('notification');
@@ -223,11 +275,23 @@
 
         async function loadTeam() {
             const container = document.getElementById('lista-asistencia');
+            
+            // Si el cliente está fuera del horario, bloquea el renderizado de la lista
+            if (estaFueraDeHorario()) {
+                document.getElementById('banner-horario').style.display = "flex";
+                container.innerHTML = `
+                    <div style="text-align:center; padding: 40px; color: var(--text-muted); width: 100%;">
+                        <i class="fas fa-clock" style="font-size: 2rem; color: var(--blue-bright); margin-bottom: 15px;"></i>
+                        <p style="font-weight:700; letter-spacing:1px;">REGISTRO FUERA DE HORARIO PERMITIDO</p>
+                        <small style="display:block; margin-top:5px;">El ingreso de marcaciones está habilitado de lunes a domingo de 6:00 AM a 10:00 PM.</small>
+                    </div>`;
+                return;
+            }
+
             try {
                 const res = await fetch(API_GET);
                 const data = await res.json();
                 
-                // Filtrado por el nombre exacto enviado desde el formulario
                 const equipo = data.filter(p => p.area === AREA_FILTRO);
 
                 if(equipo.length === 0) {
@@ -257,6 +321,13 @@
         }
 
         async function register(id, tipo, btn) {
+            // Protección de doble capa por consola o manipulación del DOM
+            if (estaFueraDeHorario()) {
+                notify("SISTEMA CERRADO: Registro denegado", true);
+                loadTeam();
+                return;
+            }
+
             const actionsDiv = btn.closest('.actions');
             const btns = actionsDiv.querySelectorAll('button');
             const originalText = btn.innerText;
@@ -286,7 +357,10 @@
             }
         }
 
-        window.onload = loadTeam;
+        window.onload = () => {
+            updateClock();
+            loadTeam();
+        };
     </script>
 </body>
 </html>

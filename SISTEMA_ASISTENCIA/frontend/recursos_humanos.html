@@ -34,7 +34,8 @@
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             padding: clamp(20px, 5vh, 50px) 20px;
         }
 
@@ -46,6 +47,27 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* --- BANNER DE RESTRICCIÓN DE HORARIO --- */
+        .time-lock-banner {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(244, 114, 182, 0.1);
+            border: 1px solid var(--accent);
+            color: #f9a8d4;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
         /* --- NAVEGACIÓN --- */
         .nav-header {
             display: flex;
@@ -54,6 +76,7 @@
             margin-bottom: 40px;
             padding-bottom: 20px;
             border-bottom: 1px solid var(--border);
+            width: 100%;
         }
 
         .btn-return {
@@ -82,7 +105,7 @@
         }
 
         /* --- TÍTULOS --- */
-        .header-main { margin-bottom: 35px; }
+        .header-main { margin-bottom: 35px; width: 100%; }
         .header-main span { 
             font-size: 0.75rem; 
             color: var(--accent); 
@@ -104,6 +127,7 @@
             max-height: 58vh;
             overflow-y: auto;
             padding-right: 10px;
+            width: 100%;
         }
 
         .staff-list::-webkit-scrollbar { width: 4px; }
@@ -199,6 +223,10 @@
 </head>
 <body>
 
+    <div id="banner-horario" class="time-lock-banner">
+        <i class="fas fa-lock"></i> SISTEMA DE ASISTENCIA CERRADO. EL HORARIO PERMITIDO ES DE 6:00 AM A 10:00 PM.
+    </div>
+
     <div id="notification-toast"></div>
 
     <div class="app-container">
@@ -226,13 +254,39 @@
         const URL_POST = "https://asistencia-recursos.onrender.com/api/asistencia";
         const AREA_OBJETIVO = "Recursos Humanos";
 
+        // Parámetros de configuración del sistema de horarios
+        const HORA_APERTURA = 6;
+        const HORA_CIERRE = 22;
+
+        // Validador de hora actual basado en la Zona Horaria de Lima
+        function estaFueraDeHorario() {
+            const horaActual = parseInt(
+                new Date().toLocaleString("es-PE", { hour: "2-digit", hour12: false, timeZone: "America/Lima" })
+            );
+            return (horaActual < HORA_APERTURA || horaActual >= HORA_CIERRE);
+        }
+
         // Reloj en tiempo real
         function initClock() {
             const clockEl = document.getElementById('reloj');
             setInterval(() => {
                 clockEl.textContent = new Date().toLocaleTimeString('es-PE', { 
-                    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false 
+                    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: "America/Lima"
                 });
+
+                // Verificar dinámicamente el estado del horario minuto a minuto
+                const banner = document.getElementById('banner-horario');
+                if (estaFueraDeHorario()) {
+                    if (banner.style.display !== "flex") {
+                        banner.style.display = "flex";
+                        fetchStaff(); // Bloquear interfaz frontend
+                    }
+                } else {
+                    if (banner.style.display === "flex") {
+                        banner.style.display = "none";
+                        fetchStaff(); // Habilitar interfaz frontend
+                    }
+                }
             }, 1000);
         }
 
@@ -249,6 +303,19 @@
         // Función Principal: Cargar y Filtrar Personal
         async function fetchStaff() {
             const container = document.getElementById('lista-asistencia');
+            
+            // Si el horario expiró, muestra el contenedor bloqueado y no realiza fetch
+            if (estaFueraDeHorario()) {
+                document.getElementById('banner-horario').style.display = "flex";
+                container.innerHTML = `
+                    <div style="text-align:center; padding: 40px; color: var(--text-dim); width: 100%;">
+                        <i class="fas fa-clock" style="font-size: 2rem; color: var(--accent); margin-bottom: 15px;"></i>
+                        <p style="font-weight:700; letter-spacing:1px;">REGISTRO FUERA DE HORARIO PERMITIDO</p>
+                        <small style="display:block; margin-top:5px;">Vuelva a intentarlo de lunes a domingo entre las 6:00 AM y las 10:00 PM.</small>
+                    </div>`;
+                return;
+            }
+
             try {
                 const response = await fetch(URL_GET);
                 const allData = await response.json();
@@ -287,6 +354,13 @@
 
         // Función de Marcación (POST)
         async function sendRegistry(id, tipo, button) {
+            // Protección adicional frontend ante ejecuciones maliciosas por consola
+            if (estaFueraDeHorario()) {
+                showNotify("SISTEMA CERRADO: Registro denegado", true);
+                fetchStaff();
+                return;
+            }
+
             const parent = button.closest('.btn-group');
             const allBtns = parent.querySelectorAll('button');
             const originalText = button.innerText;

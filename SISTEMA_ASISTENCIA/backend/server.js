@@ -109,6 +109,23 @@ app.post('/api/asistencia/:id', async (req, res) => {
     const { id } = req.params;
     const tipo = req.body.tipo_registro || req.body.tipo;
 
+    // --- NUEVA VALIDACIÓN DE HORARIO (6:00 AM a 10:00 PM) ---
+    // Forzamos que obtenga la hora actual de Lima, Perú (evita desfases en servidores en la nube)
+    const horaActual = parseInt(
+        new Date().toLocaleString("es-PE", { hour: "2-digit", hour12: false, timeZone: "America/Lima" })
+    );
+
+    const HORA_APERTURA = 6;  // 06:00 AM
+    const HORA_CIERRE = 22;   // 10:00 PM (Hora militar)
+
+    if (horaActual < HORA_APERTURA || horaActual >= HORA_CIERRE) {
+        return res.status(403).json({ 
+            error: 'Horario no permitido',
+            message: 'El sistema de asistencia está cerrado. El horario de atención es de 6:00 AM a 10:00 PM.' 
+        });
+    }
+    // --------------------------------------------------------
+
     try {
         if (tipo === 'entrada') {
             await pool.query(
