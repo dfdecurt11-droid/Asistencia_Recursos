@@ -7,7 +7,6 @@
     
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2329/2329087.png">
     
-    <!-- Fuentes y Iconos -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -92,9 +91,9 @@
             box-shadow: 0 0 10px rgba(255,255,255,0.2);
         }
         .status-dot.active {
-            background-color: #ef4444; /* Rojo para Laborando */
-            box-shadow: 0 0 12px #ef4444;
-            animation: pulse-red 2s infinite;
+            background-color: #10b981; /* Verde para Laborando */
+            box-shadow: 0 0 12px #10b981;
+            animation: pulse-green 2s infinite;
         }
         .status-dot.inactive {
             background-color: #f59e0b; /* Naranja para No Laborando */
@@ -102,10 +101,10 @@
             animation: pulse-orange 2s infinite;
         }
 
-        @keyframes pulse-red {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        @keyframes pulse-green {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
         @keyframes pulse-orange {
             0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
@@ -231,7 +230,6 @@
 </head>
 <body>
 
-    <!-- Contenedor dinámico de Alerta para los 3 segundos -->
     <div id="welcome-alert" class="alert-overlay" style="display: none;">
         <div class="alert-box">
             <i id="alert-icon" class="fas"></i>
@@ -248,7 +246,6 @@
             </div>
             
             <div class="right-actions">
-                <!-- Indicador visual solicitado -->
                 <div class="status-indicator-bar">
                     <span id="bar-dot" class="status-dot"></span>
                     <span id="bar-text">Verificando...</span>
@@ -266,7 +263,6 @@
         </section>
 
         <main class="grid-areas">
-            <!-- Ventas -->
             <a href="ventas.html" class="area-card vnt">
                 <div class="card-icon"><i class="fas fa-hand-holding-dollar"></i></div>
                 <h3>Ventas</h3>
@@ -274,7 +270,6 @@
                 <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
             </a>
 
-            <!-- Finanzas -->
             <a href="finanzas.html" class="area-card fnz">
                 <div class="card-icon"><i class="fas fa-building-columns"></i></div>
                 <h3>Finanzas</h3>
@@ -282,7 +277,6 @@
                 <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
             </a>
 
-            <!-- Marketing -->
             <a href="marketing.html" class="area-card mkt">
                 <div class="card-icon"><i class="fas fa-bullhorn"></i></div>
                 <h3>Marketing</h3>
@@ -290,7 +284,6 @@
                 <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
             </a>
 
-            <!-- Logística -->
             <a href="logistica.html" class="area-card log">
                 <div class="card-icon"><i class="fas fa-truck-fast"></i></div>
                 <h3>Logística</h3>
@@ -298,7 +291,6 @@
                 <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
             </a>
 
-            <!-- Mejora Continua -->
             <a href="gestion_continua.html" class="area-card mjr">
                 <div class="card-icon"><i class="fas fa-chart-line"></i></div>
                 <h3>Mejora Continua</h3>
@@ -306,7 +298,6 @@
                 <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
             </a>
 
-            <!-- Talento Humano -->
             <a href="recursos_humanos.html" class="area-card rrh">
                 <div class="card-icon"><i class="fas fa-users-gear"></i></div>
                 <h3>Talento Humano</h3>
@@ -314,7 +305,6 @@
                 <div class="btn-action">Registrar Acceso <i class="fas fa-fingerprint"></i></div>
             </a>
 
-            <!-- PMO -->
             <a href="gestion_proyectos.html" class="area-card pmo">
                 <div class="card-icon"><i class="fas fa-diagram-project"></i></div>
                 <h3>PMO</h3>
@@ -324,7 +314,6 @@
         </main>
     </div>
 
-    <!-- Lógica de Control de Tiempos y Mensajes -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // 1. Obtener la hora actual
@@ -334,40 +323,40 @@
             // Definir estados (De 6:00 AM [6] a 10:00 PM [22])
             const isWorkingHours = (currentHour >= 6 && currentHour < 22);
             
-            // 2. Configurar barra de estado superior fija
+            // 2. Configurar barra de estado superior fija con colores corregidos
             const barDot = document.getElementById('bar-dot');
             const barText = document.getElementById('bar-text');
             
             if (isWorkingHours) {
                 barDot.classList.add('active');
                 barText.innerText = "Laborando";
-                barText.style.color = "#ef4444"; 
+                barText.style.color = "#10b981"; // Verde para Laborando
             } else {
                 barDot.classList.add('inactive');
-                barText.innerText = "Fuera de Horario";
-                barText.style.color = "#f59e0b"; 
+                barText.innerText = "No Laborando"; // Sincronizado con tus directivas
+                barText.style.color = "#f59e0b"; // Naranja para No Laborando
             }
 
-            // 3. Evaluar procedencia (Solo si viene estrictamente de index.html)
-            const referrer = document.referrer;
-            const cameFromIndex = referrer.includes("index.html") || referrer === "" || window.performance.navigation.type === 0;
+            // 3. Evaluar procedencia estricta mediante URLSearchParams (?alerta=true)
+            const urlParams = new URLSearchParams(window.location.search);
+            const triggerAlert = urlParams.get('alerta') === 'true';
 
-            if (cameFromIndex) {
+            if (triggerAlert) {
                 const alertOverlay = document.getElementById('welcome-alert');
                 const alertIcon = document.getElementById('alert-icon');
                 const alertTitle = document.getElementById('alert-title');
                 const alertMessage = document.getElementById('alert-message');
                 
-                // Configurar contenido dinámico del cartel
+                // Configurar contenido dinámico del cartel según el horario laboral
                 if (isWorkingHours) {
-                    alertOverlay.querySelector('.alert-box').style.borderColor = "#ef4444";
-                    alertIcon.classList.add('fa-clock', 'fa-spin');
-                    alertIcon.style.color = "#ef4444";
+                    alertOverlay.querySelector('.alert-box').style.borderColor = "#10b981"; // Borde verde
+                    alertIcon.className = "fas fa-clock fa-spin";
+                    alertIcon.style.color = "#10b981";
                     alertTitle.innerText = "¡Atención Personal!";
                     alertMessage.innerText = "La asistencia se va a cerrar a las 10:00 PM. Registre su actividad a tiempo.";
                 } else {
-                    alertOverlay.querySelector('.alert-box').style.borderColor = "#f59e0b";
-                    alertIcon.classList.add('fa-lock');
+                    alertOverlay.querySelector('.alert-box').style.borderColor = "#f59e0b"; // Borde naranja
+                    alertIcon.className = "fas fa-lock";
                     alertIcon.style.color = "#f59e0b";
                     alertTitle.innerText = "Sistema Cerrado";
                     alertMessage.innerText = "La asistencia se abrirá nuevamente a las 6:00 AM. Gracias.";
@@ -380,7 +369,7 @@
                 setTimeout(function() {
                     alertOverlay.style.opacity = '0';
                     setTimeout(function() {
-                        alertOverlay.remove(); // Remueve el elemento por completo del DOM
+                        alertOverlay.remove(); // Limpieza del DOM
                     }, 500);
                 }, 3000);
             }
