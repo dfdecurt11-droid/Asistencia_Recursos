@@ -16,7 +16,7 @@
             --ventas: #ef4444;
             --finanzas: #059669; --marketing: #7c3aed;
             --logistica: #d97706; --mejora: #0891b2; --recursos: #be185d;
-            /* NUEVO COLOR AZUL MARINO PARA GESTIÓN DE PROYECTOS */
+            /* COLOR AZUL MARINO PARA GESTIÓN DE PROYECTOS */
             --proyectos: #001f3f; 
             --bg-body: #f8fafc;
             --surface: #ffffff;
@@ -193,7 +193,6 @@
             <button class="tab tab-logistica" onclick="setFilter('Logística', this)">LOGÍSTICA</button>
             <button class="tab tab-mejora" onclick="setFilter('Mejora Continua', this)">M. CONTINUA</button>
             <button class="tab tab-recursos" onclick="setFilter('Recursos Humanos', this)">RR.HH.</button>
-            <!-- NUEVA PESTAÑA DE GESTIÓN DE PROYECTOS -->
             <button class="tab tab-proyectos" onclick="setFilter('Gestión de Proyectos', this)">G. PROYECTOS</button>
         </div>
     </section>
@@ -216,7 +215,6 @@
     </div>
 </div>
 
-<!-- Ventanas Modales -->
 <div class="modal-overlay" id="modalEdit">
     <div class="modal-card">
         <div class="modal-header-pro">
@@ -286,7 +284,6 @@
     let currentArea = "Todos";
     let practicanteAEliminar = null;
 
-    // COLORES ACTUALIZADOS CON AZUL MARINO PARA GESTIÓN DE PROYECTOS
     const AREA_COLORS = {
         'Todos': [30, 41, 59], 
         'Ventas': [239, 68, 68], 
@@ -295,10 +292,9 @@
         'Logística': [217, 119, 6], 
         'Mejora Continua': [8, 145, 178], 
         'Recursos Humanos': [190, 24, 93],
-        'Gestión de Proyectos': [0, 31, 63] // Azul Marino Profundo (Navy)
+        'Gestión de Proyectos': [0, 31, 63] 
     };
 
-    // CLASES CSS PARA LOS BADGES
     const AREA_CLASSES = {
         'Ventas': 'bg-ventas', 
         'Finanzas': 'bg-finanzas', 

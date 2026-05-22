@@ -1,7 +1,8 @@
 const express = require('express');
 const { Pool } = require('pg');
 const cors = require('cors');
-const path = require('path'); // Importante para manejar rutas de carpetas
+const path = require('path');
+const cron = require('node-cron'); // Importación de la librería
 
 const app = express();
 app.use(cors());
@@ -14,10 +15,8 @@ const pool = new Pool({
 });
 
 // --- SERVIR ARCHIVOS ESTÁTICOS (FRONTEND) ---
-// Esto permite que al entrar a /gestion_proyectos.html el servidor sepa dónde buscarlo
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-// Redirigir la raíz al index.html por defecto
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
@@ -85,13 +84,10 @@ app.get('/api/asistencia/:id', async (req, res) => {
             SELECT 
                 id, 
                 hora_entrada, 
-                hora_salida,
-                COALESCE(
-                    TO_CHAR(
-                        (CEIL(EXTRACT(EPOCH FROM (COALESCE(hora_salida, CURRENT_TIMESTAMP) - hora_entrada)) / 60) * INTERVAL '1 minute'), 
-                        'HH24:MI'
-                    ), 
-                    '00:00'
+                COALESCE(hora_salida, (CURRENT_DATE + INTERVAL '22 hours')) AS hora_salida,
+                TO_CHAR(
+                    (CEIL(EXTRACT(EPOCH FROM (COALESCE(hora_salida, CURRENT_DATE + INTERVAL '22 hours') - hora_entrada)) / 60) * INTERVAL '1 minute'), 
+                    'HH24:MI'
                 ) AS horas_trabajadas
             FROM asistencia 
             WHERE id_practicantes = $1 
@@ -109,13 +105,11 @@ app.post('/api/asistencia/:id', async (req, res) => {
     const { id } = req.params;
     const tipo = req.body.tipo_registro || req.body.tipo;
 
-    // --- VALIDACIÓN DE HORARIO COMPLETA ---
-    // Extraemos la hora actual configurada estrictamente para la zona horaria de Lima, Perú
     const ahoraPeru = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Lima" }));
     const horaActual = ahoraPeru.getHours();
 
-    const HORA_APERTURA = 6;  // 06:00 AM
-    const HORA_CIERRE = 22;   // 10:00 PM
+    const HORA_APERTURA = 6;
+    const HORA_CIERRE = 22;
 
     if (horaActual < HORA_APERTURA || horaActual >= HORA_CIERRE) {
         return res.status(403).json({ 
@@ -123,7 +117,6 @@ app.post('/api/asistencia/:id', async (req, res) => {
             message: 'El sistema de asistencia está cerrado. El horario de atención es de 6:00 AM a 10:00 PM.' 
         });
     }
-    // --------------------------------------
 
     try {
         if (tipo === 'entrada') {
@@ -155,11 +148,11 @@ app.get('/api/reporte', async (req, res) => {
                 p.apellidos, 
                 p.area,
                 MAX(a.hora_entrada) AS hora_entrada, 
-                MAX(a.hora_salida) AS hora_salida,
+                COALESCE(MAX(a.hora_salida), (CURRENT_DATE + INTERVAL '22 hours')) AS hora_salida,
                 COALESCE(
                     TO_CHAR(
                         (SUM(
-                            CEIL(EXTRACT(EPOCH FROM (COALESCE(a.hora_salida, a.hora_entrada) - a.hora_entrada)) / 60)
+                            CEIL(EXTRACT(EPOCH FROM (COALESCE(a.hora_salida, CURRENT_DATE + INTERVAL '22 hours') - a.hora_entrada)) / 60)
                         ) * INTERVAL '1 minute'), 
                         'HH24:MI:SS'
                     ), 
@@ -185,8 +178,6 @@ app.delete('/api/reset', async (req, res) => {
     }
 });
 
-// --- MÓDULO DE PAGOS ---
-
 app.post('/api/pagos', async (req, res) => {
     const { nombre, entregables, monto_unidad, total } = req.body;
     try {
@@ -200,7 +191,22 @@ app.post('/api/pagos', async (req, res) => {
     }
 });
 
-// --- INICIO DEL SERVIDOR ---
+// --- CIERRE AUTOMÁTICO DE ASISTENCIA ---
+// Se ejecuta todos los días a las 22:05
+cron.schedule('5 22 * * *', async () => {
+    try {
+        console.log('🕒 Ejecutando cierre automático de asistencias...');
+        const result = await pool.query(`
+            UPDATE asistencia 
+            SET hora_salida = (CURRENT_DATE + INTERVAL '22 hours')
+            WHERE hora_salida IS NULL
+        `);
+        console.log(`✅ Se cerraron ${result.rowCount} registros pendientes.`);
+    } catch (error) {
+        console.error('❌ Error en el cierre automático:', error);
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);

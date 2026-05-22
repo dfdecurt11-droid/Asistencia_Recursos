@@ -224,10 +224,11 @@
 
 <script>
     let dbPracticantes = [];
-    let payments = {}; 
+    // --- CAMBIO PARA PERSISTENCIA ---
+    // Intentamos cargar los datos guardados en el navegador
+    let payments = JSON.parse(localStorage.getItem('argrametal_payments')) || {}; 
     const API_URL = "https://asistencia-recursos.onrender.com/api/practicantes";
 
-    // Función del Reloj 12h
     function updateClock() {
         const now = new Date();
         let hours = now.getHours();
@@ -236,7 +237,7 @@
         const ampm = hours >= 12 ? 'PM' : 'AM';
         
         hours = hours % 12;
-        hours = hours ? hours : 12; // el 0 es 12
+        hours = hours ? hours : 12;
         const strTime = `${String(hours).padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
         
         document.getElementById('clock').innerText = strTime;
@@ -259,9 +260,16 @@
                 opt.dataset.area = p.area;
                 select.appendChild(opt);
             });
+            // Al cargar, pintamos la tabla con los datos recuperados
+            renderTable();
         } catch (e) {
             console.error("Error cargando datos:", e);
         }
+    }
+
+    // --- FUNCIÓN PARA GUARDAR EN MEMORIA DEL NAVEGADOR ---
+    function savePayments() {
+        localStorage.setItem('argrametal_payments', JSON.stringify(payments));
     }
 
     function addPayment() {
@@ -282,6 +290,7 @@
         payments[nombre].total += (cant * monto);
         payments[nombre].entregables += cant;
 
+        savePayments(); // Guardar cambios
         renderTable();
         Swal.fire({ 
             icon: 'success', 
@@ -338,6 +347,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 delete payments[nom];
+                savePayments(); // Guardar cambios tras eliminar
                 renderTable();
             }
         });
